@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3498db"
+    android:paddingLeft="24dp"
+    android:paddingTop="24dp"
+    android:paddingRight="24dp"
+    android:paddingBottom="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textColor="#ffffff"
+        android:textSize="42sp"
+        android:textStyle="bold"
+        android:id="@+id/tvLogin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="cursive"/> <!-- Use your custom font here -->
+
+    <EditText
+        android:id="@+id/usernameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:hint="Username/Email"
+        android:inputType="text"
+        android:padding="12dp"
+        android:maxLength="14"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:layout_below="@id/tvLogin"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:maxLength="14"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:layout_below="@id/usernameEditText"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#2980b9"
+        android:text="Login"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:layout_below="@id/passwordEditText"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Clickable text for registration -->
+    <TextView
+        android:id="@+id/registerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Don't have an account? Register here."
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:layout_below="@id/loginButton"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+       />
+</RelativeLayout>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2ecc71"
+    android:paddingLeft="24dp"
+    android:paddingTop="24dp"
+    android:paddingRight="24dp"
+    android:paddingBottom="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textSize="42sp"
+        android:textStyle="bold"
+        android:id="@+id/tvRegister"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="cursive"/> <!-- Use your custom font here -->
+
+    <TableLayout
+        android:id="@+id/TableLayoutRegister"
+        android:layout_below="@id/tvRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="0">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/registerUsernameEditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.90"
+                android:background="#ffffff"
+                android:hint="Username"
+                android:inputType="text"
+                android:padding="12dp"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                />
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.10"
+                android:background="@color/white"
+                />
+        </TableRow>
+    </TableLayout>
+
+
+
+    <EditText
+        android:id="@+id/registerEmailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:maxLength="30"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:layout_below="@id/TableLayoutRegister"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/registerPasswordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:maxLength="14"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:layout_below="@id/registerEmailEditText"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/registerPasswordConfirmationEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:hint="Password Confirmation"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:maxLength="14"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:layout_below="@id/registerPasswordEditText"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#3498db"
+        android:text="Register"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:layout_below="@id/registerPasswordConfirmationEditText"
+        android:layout_marginTop="16dp"
+        android:onClick="onRegisterClick"/> <!-- Set the onClick method in your activity/fragment -->
+
+    <!-- Clickable text to go back to the login page -->
+    <TextView
+        android:id="@+id/loginText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Already have an account? Login here."
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:layout_below="@id/registerButton"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:onClick="onLoginClick"/> <!-- Set the onClick method in your activity/fragment -->
+
+        <Button
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#3498db"
+            android:text="Delete All Database Info (temp)"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:padding="12dp"
+            android:id="@+id/deleteAll"
+            android:layout_below="@id/loginText"
+            android:layout_marginTop="16dp"
+
+            />
+
+
+</RelativeLayout>
