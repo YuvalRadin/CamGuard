@@ -1,4 +1,4 @@
-package com.example.trashproject;
+package com.example.trashproject.UI.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +10,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.trashproject.DB.MyDatabaseHelper;
+import com.example.trashproject.FragmentsActivity;
+import com.example.trashproject.R;
+import com.example.trashproject.RegisterActivity;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView tvReg;
-    MyDatabaseHelper myDatabaserHelper;
+    modleLogin modle;
     Button btnLogin;
     EditText etUser, etPass;
 
@@ -32,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         etPass = findViewById(R.id.passwordEditText);
 
-        myDatabaserHelper = new MyDatabaseHelper(this);
+        modle = new modleLogin(this);
     }
 
     @Override
@@ -40,20 +45,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(view == btnLogin)
         {
-            if(etUser.getText().toString().contains("@"))
+            Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);
+            switch(modle.isExist(etUser,etPass))
             {
-                if (myDatabaserHelper.LoginUser(etUser.getText().toString(), etPass.getText().toString(), 2)) {
-                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                case 0:
+                {
                     startActivity(intent);
-                } else
-                    Toast.makeText(this, "invalid email / password", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                if (myDatabaserHelper.LoginUser(etUser.getText().toString(), etPass.getText().toString(), 1)) {
-                    Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);
-                    startActivity(intent);
-                } else
-                    Toast.makeText(this, "invalid username / password", Toast.LENGTH_SHORT).show();
+                }
+                case 1:
+                {
+                    etUser.setError("Username does not exist");
+                }
+                case 2:
+                {
+                    etUser.setError("Email does not exist");
+                }
             }
         }
 
