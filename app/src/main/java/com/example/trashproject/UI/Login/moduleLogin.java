@@ -1,17 +1,16 @@
 package com.example.trashproject.UI.Login;
 
 import android.content.Context;
-import android.content.Intent;
 import android.widget.EditText;
-import android.widget.Toast;
+
 import com.example.trashproject.repository.Repository;
 
-public class modleLogin {
+public class moduleLogin {
 
     Context context;
     Repository rp;
 
-    public modleLogin(Context context)
+    public moduleLogin(Context context)
     {
         this.context = context;
         rp = new Repository(this.context);

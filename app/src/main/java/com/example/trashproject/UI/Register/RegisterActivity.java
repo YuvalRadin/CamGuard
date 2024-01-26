@@ -1,4 +1,4 @@
-package com.example.trashproject;
+package com.example.trashproject.UI.Register;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,19 +6,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.trashproject.R;
 import com.example.trashproject.UI.GoogleMaps.FragmentsActivity;
 import com.example.trashproject.UI.Login.MainActivity;
-import com.example.trashproject.UI.Register.modleRegister;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView tvReg;
     EditText etUser, etEmail, etPassword, etPasswordConfirmation;
-    modleRegister modle;
+    moduleRegister module;
     Button btnRegister, DeleteAll;
 
 
@@ -30,7 +29,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         tvReg=findViewById(R.id.loginText);
         tvReg.setOnClickListener(this);
 
-        modle = new modleRegister(this);
+        module = new moduleRegister(this);
         etUser = findViewById(R.id.registerUsernameEditText);
         etEmail = findViewById(R.id.registerEmailEditText);
         etPassword = findViewById(R.id.registerPasswordEditText);
@@ -46,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         if(view == DeleteAll)
         {
-            modle.DeleteAllData();
+            module.DeleteAllData();
         }
 
         if(view == tvReg)
@@ -56,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
         if(view == btnRegister)
         {
-            if(!modle.CheckUps(etUser,etEmail,etPassword,etPasswordConfirmation))
+            if(!module.CheckUps(etUser,etEmail,etPassword,etPasswordConfirmation))
             {
                 return;
             }

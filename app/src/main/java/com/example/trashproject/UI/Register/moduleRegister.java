@@ -1,35 +1,31 @@
 package com.example.trashproject.UI.Register;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.tv.TvContract;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.trashproject.RegisterActivity;
-import com.example.trashproject.UI.GoogleMaps.FragmentsActivity;
 import com.example.trashproject.repository.Repository;
 
 
-public class modleRegister {
+public class moduleRegister {
 
     Context context;
     Repository rp;
 
-    public modleRegister(Context context)
+    public moduleRegister(Context context)
     {
         this.context = context;
         rp = new Repository(this.context);
     }
 
-    public void SharedPrefrences(EditText etUser, EditText etEmail, EditText etPassword)
+    public void SharedPreferences(EditText etUser, EditText etEmail, EditText etPassword)
     {
         SharedPreferences sharedPreferences = context.getSharedPreferences("Main",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("username", etUser.getText().toString());
         editor.putString("email", etEmail.getText().toString());
         editor.putString("password", etPassword.getText().toString());
+        editor.apply();
     }
 
 

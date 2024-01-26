@@ -37,7 +37,7 @@
             android:name=".UI.GoogleMaps.FragmentsActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".UI.Register.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".UI.Login.MainActivity"

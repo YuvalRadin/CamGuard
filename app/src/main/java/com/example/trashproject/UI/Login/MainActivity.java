@@ -1,26 +1,23 @@
 package com.example.trashproject.UI.Login;
 
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trashproject.DB.MyDatabaseHelper;
 import com.example.trashproject.R;
-import com.example.trashproject.RegisterActivity;
 import com.example.trashproject.UI.GoogleMaps.FragmentsActivity;
+import com.example.trashproject.UI.Register.RegisterActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView tvReg;
-    modleLogin modle;
+    moduleLogin module;
     Button btnLogin;
     EditText etUser, etPass;
 
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-        modle = new modleLogin(this);
+        module = new moduleLogin(this);
     }
 
     @Override
@@ -50,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(view == btnLogin)
         {
             Intent intent = new Intent(MainActivity.this, FragmentsActivity.class);
-            switch(modle.isExist(etUser,etPass))
+            switch(module.isExist(etUser,etPass))
             {
                 case 0:
                 {
