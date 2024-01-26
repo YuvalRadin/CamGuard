@@ -1,10 +1,13 @@
 package com.example.trashproject.UI.Register;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.tv.TvContract;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.trashproject.RegisterActivity;
+import com.example.trashproject.UI.GoogleMaps.FragmentsActivity;
 import com.example.trashproject.repository.Repository;
 
 public class modleRegister {
@@ -85,8 +88,17 @@ public class modleRegister {
         }
 
         rp.getMyDatabaseHelper().addUser(etUser.getText().toString(),etPassword.getText().toString(),etEmail.getText().toString());
+        etPassword.setText("");
+        etPasswordConfirmation.setText("");
+        etUser.setText("");
+        etEmail.setText("");
 
 
         return true;
+    }
+
+    public void DeleteAllData()
+    {
+        rp.getMyDatabaseHelper().deleteAllData();
     }
 }

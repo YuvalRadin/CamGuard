@@ -34,13 +34,13 @@
         -->
 
         <activity
-            android:name=".FragmentsActivity"
+            android:name=".UI.GoogleMaps.FragmentsActivity"
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".UI.Login.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

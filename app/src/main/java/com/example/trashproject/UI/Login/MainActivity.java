@@ -11,9 +11,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trashproject.DB.MyDatabaseHelper;
-import com.example.trashproject.FragmentsActivity;
 import com.example.trashproject.R;
 import com.example.trashproject.RegisterActivity;
+import com.example.trashproject.UI.GoogleMaps.FragmentsActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -54,11 +54,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 case 1:
                 {
-                    etUser.setError("Username does not exist");
+                    etUser.setError("Invalid username/password");
+                    return;
                 }
                 case 2:
                 {
-                    etUser.setError("Email does not exist");
+                    etUser.setError("invalid email/password");
+                    return;
                 }
             }
         }

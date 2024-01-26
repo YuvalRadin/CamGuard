@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.trashproject.UI.GoogleMaps.FragmentsActivity;
 import com.example.trashproject.UI.Login.MainActivity;
 import com.example.trashproject.UI.Register.modleRegister;
 
@@ -45,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         if(view == DeleteAll)
         {
-//            myDatabaseHelper.deleteAllData();
+            modle.DeleteAllData();
         }
 
         if(view == tvReg)
@@ -59,11 +60,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             {
                 return;
             }
-            etPassword.setText("");
-            etPasswordConfirmation.setText("");
-            etUser.setText("");
-            etEmail.setText("");
-            Intent intent = new Intent(RegisterActivity.this, com.example.trashproject.FragmentsActivity.class);
+
+            Intent intent = new Intent(RegisterActivity.this, FragmentsActivity.class);
             startActivity(intent);
 
         }

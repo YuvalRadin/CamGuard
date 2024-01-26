@@ -1,4 +1,4 @@
-package com.example.trashproject;
+package com.example.trashproject.UI.GoogleMaps;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.trashproject.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
