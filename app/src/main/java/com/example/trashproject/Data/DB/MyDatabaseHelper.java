@@ -1,4 +1,4 @@
-package com.example.trashproject.DB;
+package com.example.trashproject.Data.DB;
 
 import android.content.ContentValues;
 import android.content.Context;

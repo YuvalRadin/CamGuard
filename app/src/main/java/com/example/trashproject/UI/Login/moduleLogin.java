@@ -3,7 +3,7 @@ package com.example.trashproject.UI.Login;
 import android.content.Context;
 import android.widget.EditText;
 
-import com.example.trashproject.repository.Repository;
+import com.example.trashproject.Data.Repository.Repository;
 
 public class moduleLogin {
 

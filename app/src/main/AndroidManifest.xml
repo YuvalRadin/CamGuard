@@ -19,7 +19,9 @@
         >
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDljglnsLW5IOp0NhjtW9y9b0UB0UBEfNU"></meta-data>
+            android:value="AIzaSyDljglnsLW5IOp0NhjtW9y9b0UB0UBEfNU">
+
+        </meta-data>
 
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
