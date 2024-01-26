@@ -1,6 +1,8 @@
 package com.example.trashproject.UI.Login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         etPass = findViewById(R.id.passwordEditText);
 
+
+
         modle = new modleLogin(this);
     }
 
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 case 0:
                 {
                     startActivity(intent);
+                    return;
                 }
                 case 1:
                 {

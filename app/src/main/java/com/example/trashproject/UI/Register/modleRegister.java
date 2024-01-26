@@ -2,6 +2,7 @@ package com.example.trashproject.UI.Register;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.tv.TvContract;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 import com.example.trashproject.RegisterActivity;
 import com.example.trashproject.UI.GoogleMaps.FragmentsActivity;
 import com.example.trashproject.repository.Repository;
+
 
 public class modleRegister {
 
@@ -21,11 +23,20 @@ public class modleRegister {
         rp = new Repository(this.context);
     }
 
+    public void SharedPrefrences(EditText etUser, EditText etEmail, EditText etPassword)
+    {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Main",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("username", etUser.getText().toString());
+        editor.putString("email", etEmail.getText().toString());
+        editor.putString("password", etPassword.getText().toString());
+    }
+
 
     public Boolean CheckUps(EditText etUser, EditText etEmail, EditText etPassword, EditText etPasswordConfirmation)
     {
         // username validity checkups
-        if(etUser.getText().toString().equals(""))
+        if(etUser.getText().toString().isEmpty())
         {
             etUser.setError("Fill Username");
             return false;
