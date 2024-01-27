@@ -1,6 +1,8 @@
 package com.example.trashproject.Data.Repository;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.example.trashproject.Data.DB.MyDatabaseHelper;
 
@@ -15,8 +17,12 @@ public class Repository {
         myDatabaseHelper = new MyDatabaseHelper(this.context);
     }
 
-    public MyDatabaseHelper getMyDatabaseHelper()
-    {
-        return myDatabaseHelper;
-    }
+    public boolean FindUser(String user) { return myDatabaseHelper.FindUser(user);}
+
+    public boolean LoginUser(String user, String password, int EmailLogin) { return myDatabaseHelper.LoginUser(user, password, EmailLogin); }
+
+    public void addUser(String Username, String Email, String Password) { myDatabaseHelper.addUser(Username, Email, Password);}
+
+    public void deleteAllData() { myDatabaseHelper.deleteAllData(); }
+
 }

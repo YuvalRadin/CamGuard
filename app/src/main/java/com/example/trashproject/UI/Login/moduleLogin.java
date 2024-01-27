@@ -20,14 +20,14 @@ public class moduleLogin {
     {
         if(etUser.getText().toString().contains("@"))
         {
-            if (!rp.getMyDatabaseHelper().LoginUser(etUser.getText().toString(), etPass.getText().toString(), 2)) {
+            if (!rp.LoginUser(etUser.getText().toString(), etPass.getText().toString(), 2)) {
                 return 2;
             } else
                 return 0;
 
         }
         else {
-            if (!rp.getMyDatabaseHelper().LoginUser(etUser.getText().toString(), etPass.getText().toString(), 1)) {
+            if (!rp.LoginUser(etUser.getText().toString(), etPass.getText().toString(), 1)) {
                 return 1;
             } else
                 return 0;

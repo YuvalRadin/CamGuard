@@ -88,13 +88,13 @@ public class moduleRegister {
             etPassword.setError("Password Confirmation does not match");
             return false;
         }
-        if(!(rp.getMyDatabaseHelper().FindUser(etUser.getText().toString())))
+        if(!(rp.FindUser(etUser.getText().toString())))
         {
             etUser.setError("Username already exists");
             return false;
         }
 
-        rp.getMyDatabaseHelper().addUser(etUser.getText().toString(),etPassword.getText().toString(),etEmail.getText().toString());
+        rp.addUser(etUser.getText().toString(),etPassword.getText().toString(),etEmail.getText().toString());
         etPassword.setText("");
         etPasswordConfirmation.setText("");
         etUser.setText("");
@@ -106,6 +106,6 @@ public class moduleRegister {
 
     public void DeleteAllData()
     {
-        rp.getMyDatabaseHelper().deleteAllData();
+        rp.deleteAllData();
     }
 }
