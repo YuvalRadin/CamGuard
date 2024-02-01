@@ -118,6 +118,22 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return isUnique;
     }
 
+    public Cursor getUserByName(String user)
+    {
+        boolean isUnique = false;
+        Cursor cursor = null;
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM "+ TABLE_NAME + " WHERE " + COLUMN_USERNAME + " = ?";
+
+        cursor = db.rawQuery(query, new String[]{user});
+        cursor.moveToFirst();
+        if(cursor==null)
+        {
+            return null;
+        }
+        return cursor;
+    }
+
     public boolean LoginUser(String user, String password, int EmailLogin)
     {
         boolean isExist = false;

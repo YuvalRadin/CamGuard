@@ -48,6 +48,16 @@
         android:layout_below="@id/usernameEditText"
         android:layout_marginTop="8dp"/>
 
+    <!-- Remember Me Checkbox -->
+    <CheckBox
+        android:id="@+id/rememberMeCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/passwordEditText"
+        android:text="Remember Me"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
     <Button
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
@@ -57,7 +67,7 @@
         android:textColor="#ffffff"
         android:textSize="18sp"
         android:padding="12dp"
-        android:layout_below="@id/passwordEditText"
+        android:layout_below="@id/rememberMeCheckbox"
         android:layout_marginTop="16dp"/>
 
     <!-- Clickable text for registration -->

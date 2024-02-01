@@ -2,6 +2,7 @@ package com.example.trashproject.UI.GoogleMaps;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -12,10 +13,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.trashproject.R;
+import com.example.trashproject.UI.User.UserActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,7 +31,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 
-public class FragmentsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
+public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
 
 
     BottomNavigationView bottomNavigationView;
@@ -56,12 +57,6 @@ public class FragmentsActivity extends AppCompatActivity implements OnMapReadyCa
         mapFragment.getMapAsync(this);
 
 
-        Fragment accountFragment = new Fragment();
-
-        Fragment cameraFragment = new Fragment();
-
-        mapFragment.setRetainInstance(true);
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -75,12 +70,12 @@ public class FragmentsActivity extends AppCompatActivity implements OnMapReadyCa
                 else if(item.getItemId() == R.id.menu_account)
                 {
 
-                    fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, accountFragment, null).commit();
+                    Intent intent = new Intent(FragmentMap.this, UserActivity.class);
+                    startActivity(intent);
 
                 }
                 else if(item.getItemId() == R.id.menu_camera)
                 {
-                    fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, cameraFragment, null).commit();
 
                 }
                 return true;

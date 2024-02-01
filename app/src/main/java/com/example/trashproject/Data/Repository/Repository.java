@@ -25,4 +25,6 @@ public class Repository {
 
     public void deleteAllData() { myDatabaseHelper.deleteAllData(); }
 
+    public Cursor getUserByName(String user){ return myDatabaseHelper.getUserByName(user);}
+
 }

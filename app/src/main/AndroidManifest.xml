@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
@@ -15,14 +15,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TrashProject"
-        tools:targetApi="31"
-        >
+        tools:targetApi="31" >
+        <activity
+            android:name=".UI.User.UserActivity"
+            android:exported="false" />
 
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDljglnsLW5IOp0NhjtW9y9b0UB0UBEfNU">
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDljglnsLW5IOp0NhjtW9y9b0UB0UBEfNU" >
         </meta-data>
-
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -34,16 +35,15 @@
              project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
              "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
         -->
-
         <activity
-            android:name=".UI.GoogleMaps.FragmentsActivity"
+            android:name=".UI.GoogleMaps.FragmentMap"
             android:exported="false" />
         <activity
             android:name=".UI.Register.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".UI.Login.MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

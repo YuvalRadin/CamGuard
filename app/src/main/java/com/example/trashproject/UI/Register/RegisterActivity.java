@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trashproject.R;
-import com.example.trashproject.UI.GoogleMaps.FragmentsActivity;
+import com.example.trashproject.UI.GoogleMaps.FragmentMap;
 import com.example.trashproject.UI.Login.MainActivity;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -60,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 return;
             }
 
-            Intent intent = new Intent(RegisterActivity.this, FragmentsActivity.class);
+            Intent intent = new Intent(RegisterActivity.this, FragmentMap.class);
             startActivity(intent);
 
         }
