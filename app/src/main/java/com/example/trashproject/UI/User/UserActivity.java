@@ -1,5 +1,6 @@
 package com.example.trashproject.UI.User;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -21,8 +22,9 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     ModuleUser module;
     BottomNavigationView bottomNavigationView;
     static String[] Credentials;
-    TextView tvUsername, tvEmail;
+    TextView tvUsername, tvEmail, tvReports;
     Button btnLogout;
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +37,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
         tvUsername = findViewById(R.id.nameTextView);
         tvEmail = findViewById(R.id.emailTextView);
+        tvReports = findViewById(R.id.reportCountTextView);
         btnLogout = findViewById(R.id.LogOutButton);
         btnLogout.setOnClickListener(this);
 
@@ -57,9 +60,12 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         }
             tvUsername.setText(Credentials[0]);
             tvEmail.setText(Credentials[1]);
+            tvReports.setText("Reports: " + module.getReports(Credentials[0]));
             if (!module.DoesRemember()) {
                 module.DoNotRemember();
             }
+
+
 
 
 

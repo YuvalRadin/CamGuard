@@ -35,6 +35,8 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
 
     LatLng latLng;
 
+    moduleMap module;
+
 
     private FusedLocationProviderClient fusedLocationClient;
     @Override
@@ -47,16 +49,16 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        module = new moduleMap(this);
+
         SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.fragmentContainerView);
         mapFragment.getMapAsync(this);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if(item.getItemId() == R.id.menu_account)
             {
-
                 Intent intent = new Intent(FragmentMap.this, UserActivity.class);
                 startActivity(intent);
-
             }
             else if(item.getItemId() == R.id.menu_camera)
             {
@@ -64,6 +66,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
             }
             return true;
         });
+        bottomNavigationView.setSelectedItemId(R.id.menu_map);
 
 
 

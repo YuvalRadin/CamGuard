@@ -12,13 +12,16 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private final Context context;
     private static final String DATABASE_NAME = "Users.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
-    private static final String TABLE_NAME = "my_library";
+    private static final String TABLE_NAME = "users";
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_USERNAME = "column_username";
     private static final String COLUMN_PASSWORD = "column_password";
     private static final String COLUMN_EMAIL = "column_email";
+    private static final String COLUMN_REPORTS = "column_reports";
+
+
 
 
 
@@ -35,7 +38,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_USERNAME + " TEXT, " +
                 COLUMN_PASSWORD + " TEXT," +
-                COLUMN_EMAIL + " TEXT )";
+                COLUMN_EMAIL + " TEXT," +
+                COLUMN_REPORTS + " INTEGER )";
         db.execSQL(query);
     }
     @Override
@@ -51,6 +55,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_USERNAME, Username);
         cv.put(COLUMN_PASSWORD, Password);
         cv.put(COLUMN_EMAIL, Email);
+        cv.put(COLUMN_REPORTS, 0);
 
         long result = db.insert(TABLE_NAME,null, cv);
         if(result == -1){
@@ -104,6 +109,34 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         Toast.makeText(context, "All data has been successfully deleted", Toast.LENGTH_SHORT).show();
     }
 
+    public String getIdByName(String user)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT "+  COLUMN_ID +" FROM "+ TABLE_NAME + " WHERE " + COLUMN_USERNAME + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{user});
+        if(cursor.getCount() == -1)
+        {
+            return null;
+        }
+        cursor.moveToFirst();
+        return cursor.getString(0);
+    }
+
+    public String getNameByEmail(String email)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT "+  COLUMN_USERNAME +" FROM "+ TABLE_NAME + " WHERE " + COLUMN_EMAIL + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{email});
+        if(cursor.getCount() == -1)
+        {
+            return null;
+        }
+        cursor.moveToFirst();
+        return cursor.getString(0);
+    }
+
     public boolean FindUser(String user)
     {
         boolean isUnique;
@@ -131,6 +164,21 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
         return isUnique;
     }
+
+    public int getReportsByID(String ID)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT "+  COLUMN_REPORTS +" FROM "+ TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{ID});
+        if(cursor.getCount() == -1)
+        {
+            return -1;
+        }
+        cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+
 
     public Cursor getUserByName(String user)
     {

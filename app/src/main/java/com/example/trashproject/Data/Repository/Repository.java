@@ -27,4 +27,12 @@ public class Repository {
 
     public Cursor getUserByName(String user){ return myDatabaseHelper.getUserByName(user);}
 
+    public int getReportsByID(String ID) { return myDatabaseHelper.getReportsByID(ID);}
+
+    public String getIdByName(String user) { return myDatabaseHelper.getIdByName(user);}
+
+    public String getNameByEmail(String email) { return myDatabaseHelper.getNameByEmail(email);}
+
+
+
 }

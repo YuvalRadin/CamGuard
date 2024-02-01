@@ -87,8 +87,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             {
                 case 0:
                 {
+                    if(etUser.getText().toString().contains("@"))
+                    {
+                        etUser.setText(module.getNameByEmail(etUser.getText().toString()));
+                    }
                     module.SaveUser(etUser);
                     module.RememberMe(cb.isChecked());
+                    etUser.setText("");
+                    etPass.setText("");
                     startActivity(intent);
                     return;
                 }

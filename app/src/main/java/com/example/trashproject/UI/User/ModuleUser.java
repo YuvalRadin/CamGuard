@@ -28,6 +28,8 @@ public class ModuleUser {
 
     public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
 
+    public int getReports(String user) { return repository.getReportsByID(repository.getIdByName(user));}
+
     public void DoNotRemember()
     {
         editor.remove("username");
