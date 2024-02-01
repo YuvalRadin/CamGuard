@@ -22,5 +22,21 @@ public class moduleMap {
         editor = sharedPreferences.edit();
     }
 
+    public void DoNotRemember()
+    {
+        editor.remove("username");
+        editor.remove("password");
+        editor.remove("Remember");
+        editor.apply();
+    }
+
+    public boolean DoesRemember()
+    {
+        return sharedPreferences.getBoolean("Remember", false);
+    }
+
+    public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
+
+
 
 }

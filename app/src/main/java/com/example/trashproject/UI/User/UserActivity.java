@@ -58,6 +58,12 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         if(module.CredentialsExist()) {
             Credentials = module.getCredentials();
         }
+        else if (!getIntent().getStringExtra("username").equals(""))
+        {
+            Credentials = new String[2];
+            Credentials[0] = getIntent().getStringExtra("username");
+            Credentials[1] = getIntent().getStringExtra("email");
+        }
             tvUsername.setText(Credentials[0]);
             tvEmail.setText(Credentials[1]);
             tvReports.setText("Reports: " + module.getReports(Credentials[0]));

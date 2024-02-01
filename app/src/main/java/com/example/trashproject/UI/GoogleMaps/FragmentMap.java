@@ -50,6 +50,13 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         module = new moduleMap(this);
+        Intent intent = new Intent(FragmentMap.this, UserActivity.class);
+        if(!module.DoesRemember() && !module.getCredentials()[0].equals(""))
+        {
+            intent.putExtra("username", module.getCredentials()[0]);
+            intent.putExtra("email", module.getCredentials()[1]);
+            module.DoNotRemember();
+        }
 
         SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.fragmentContainerView);
         mapFragment.getMapAsync(this);
@@ -57,7 +64,6 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if(item.getItemId() == R.id.menu_account)
             {
-                Intent intent = new Intent(FragmentMap.this, UserActivity.class);
                 startActivity(intent);
             }
             else if(item.getItemId() == R.id.menu_camera)
