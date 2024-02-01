@@ -24,7 +24,6 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     static String[] Credentials;
     TextView tvUsername, tvEmail, tvReports;
     Button btnLogout;
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +57,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         if(module.CredentialsExist()) {
             Credentials = module.getCredentials();
         }
-        else if (!getIntent().getStringExtra("username").equals(""))
+        else if (getIntent().getStringExtra("username") != null && !getIntent().getStringExtra("username").equals(""))
         {
             Credentials = new String[2];
             Credentials[0] = getIntent().getStringExtra("username");
