@@ -52,6 +52,19 @@
         android:textSize="18sp"
         android:paddingBottom="16dp"/>
 
+    <Button
+        android:id="@+id/LogOutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#2980b9"
+        android:text="Log Out"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_marginBottom="16dp"/>
+
+
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

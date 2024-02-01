@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
-    private Context context;
+    private final Context context;
     private static final String DATABASE_NAME = "Users.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -106,8 +106,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     public boolean FindUser(String user)
     {
-        boolean isUnique = false;
-        Cursor cursor = null;
+        boolean isUnique;
+        Cursor cursor;
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT "+  COLUMN_USERNAME +" FROM "+ TABLE_NAME + " WHERE " + COLUMN_USERNAME + " = ?";
 
@@ -118,26 +118,39 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return isUnique;
     }
 
+    public boolean FindEmail(String email)
+    {
+        boolean isUnique;
+        Cursor cursor;
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT "+  COLUMN_EMAIL +" FROM "+ TABLE_NAME + " WHERE " + COLUMN_EMAIL + " = ?";
+
+        cursor = db.rawQuery(query, new String[]{email});
+        isUnique = cursor.getCount() == 0;
+        cursor.close();
+
+        return isUnique;
+    }
+
     public Cursor getUserByName(String user)
     {
-        boolean isUnique = false;
-        Cursor cursor = null;
+        Cursor cursor;
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM "+ TABLE_NAME + " WHERE " + COLUMN_USERNAME + " = ?";
 
         cursor = db.rawQuery(query, new String[]{user});
-        cursor.moveToFirst();
         if(cursor==null)
         {
             return null;
         }
+        cursor.moveToFirst();
         return cursor;
     }
 
     public boolean LoginUser(String user, String password, int EmailLogin)
     {
         boolean isExist = false;
-        Cursor cursor = null;
+        Cursor cursor;
         SQLiteDatabase db = this.getWritableDatabase();
         String query1 = "SELECT "+  COLUMN_USERNAME +" FROM "+ TABLE_NAME + " WHERE " + COLUMN_USERNAME + " = ? AND " + COLUMN_PASSWORD + " = ?";
         String query2 = "SELECT "+  COLUMN_EMAIL +" FROM "+ TABLE_NAME + " WHERE " + COLUMN_EMAIL + " = ? AND " + COLUMN_PASSWORD + " = ?";

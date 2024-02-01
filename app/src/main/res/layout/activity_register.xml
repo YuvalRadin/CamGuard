@@ -22,40 +22,18 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="cursive"/> <!-- Use your custom font here -->
 
-    <TableLayout
-        android:id="@+id/TableLayoutRegister"
-        android:layout_below="@id/tvRegister"
+
+    <EditText
+        android:id="@+id/registerUsernameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="0">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center">
-
-            <EditText
-                android:id="@+id/registerUsernameEditText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.90"
-                android:background="#ffffff"
-                android:hint="Username"
-                android:inputType="text"
-                android:padding="12dp"
-                android:textColor="#333333"
-                android:textSize="16sp"
-                />
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.10"
-                android:background="@color/white"
-                />
-        </TableRow>
-    </TableLayout>
-
+        android:layout_below="@id/tvRegister"
+        android:background="#ffffff"
+        android:hint="Username"
+        android:inputType="text"
+        android:padding="12dp"
+        android:textColor="#333333"
+        android:textSize="16sp" />
 
 
     <EditText
@@ -69,7 +47,7 @@
         android:maxLength="30"
         android:textColor="#333333"
         android:textSize="16sp"
-        android:layout_below="@id/TableLayoutRegister"
+        android:layout_below="@id/registerUsernameEditText"
         android:layout_marginTop="8dp"/>
 
     <EditText
@@ -92,6 +70,7 @@
         android:layout_height="wrap_content"
         android:background="#ffffff"
         android:hint="Password Confirmation"
+        android:autofillHints="false"
         android:inputType="textPassword"
         android:padding="12dp"
         android:maxLength="14"
@@ -99,6 +78,15 @@
         android:textSize="16sp"
         android:layout_below="@id/registerPasswordEditText"
         android:layout_marginTop="8dp"/>
+
+    <CheckBox
+        android:id="@+id/rememberMeCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/registerPasswordConfirmationEditText"
+        android:text="Remember Me"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
 
     <Button
         android:id="@+id/registerButton"
@@ -109,9 +97,8 @@
         android:textColor="#ffffff"
         android:textSize="18sp"
         android:padding="12dp"
-        android:layout_below="@id/registerPasswordConfirmationEditText"
-        android:layout_marginTop="16dp"
-        android:onClick="onRegisterClick"/> <!-- Set the onClick method in your activity/fragment -->
+        android:layout_below="@id/rememberMeCheckbox"
+        android:layout_marginTop="16dp" />
 
     <!-- Clickable text to go back to the login page -->
     <TextView
@@ -123,12 +110,9 @@
         android:textSize="16sp"
         android:layout_below="@id/registerButton"
         android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"
-        android:clickable="true"
-        android:onClick="onLoginClick"/> <!-- Set the onClick method in your activity/fragment -->
+        android:layout_centerHorizontal="true" />
 
         <Button
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#3498db"
@@ -139,7 +123,6 @@
             android:id="@+id/deleteAll"
             android:layout_below="@id/loginText"
             android:layout_marginTop="16dp"
-
             />
 
 

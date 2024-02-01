@@ -2,7 +2,6 @@ package com.example.trashproject.Data.Repository;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.example.trashproject.Data.DB.MyDatabaseHelper;
 
@@ -18,6 +17,7 @@ public class Repository {
     }
 
     public boolean FindUser(String user) { return myDatabaseHelper.FindUser(user);}
+    public boolean FindEmail(String email) { return myDatabaseHelper.FindEmail(email);}
 
     public boolean LoginUser(String user, String password, int EmailLogin) { return myDatabaseHelper.LoginUser(user, password, EmailLogin); }
 

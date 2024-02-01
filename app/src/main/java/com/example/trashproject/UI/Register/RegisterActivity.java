@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     EditText etUser, etEmail, etPassword, etPasswordConfirmation;
     moduleRegister module;
     Button btnRegister, DeleteAll;
+    CheckBox cb;
 
 
     @Override
@@ -38,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         btnRegister.setOnClickListener(this);
         DeleteAll = findViewById(R.id.deleteAll);
         DeleteAll.setOnClickListener(this);
+        cb = findViewById(R.id.rememberMeCheckbox);
 
     }
 
@@ -50,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         if(view == tvReg)
         {
+
             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
             startActivity(intent);
         }
@@ -59,6 +63,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             {
                 return;
             }
+            module.SaveUser(etUser, etEmail);
+            module.RememberMe(cb.isChecked());
+            etPassword.setText("");
+            etPasswordConfirmation.setText("");
+            etUser.setText("");
+            etEmail.setText("");
 
             Intent intent = new Intent(RegisterActivity.this, FragmentMap.class);
             startActivity(intent);

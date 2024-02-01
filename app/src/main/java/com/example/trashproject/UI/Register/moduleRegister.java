@@ -12,22 +12,15 @@ public class moduleRegister {
     Context context;
     Repository rp;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     public moduleRegister(Context context)
     {
         this.context = context;
         rp = new Repository(this.context);
+        sharedPreferences = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
-
-    public void SharedPreferences(EditText etUser, EditText etEmail, EditText etPassword)
-    {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("Main",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("username", etUser.getText().toString());
-        editor.putString("email", etEmail.getText().toString());
-        editor.putString("password", etPassword.getText().toString());
-        editor.apply();
-    }
-
 
     public Boolean CheckUps(EditText etUser, EditText etEmail, EditText etPassword, EditText etPasswordConfirmation)
     {
@@ -88,18 +81,22 @@ public class moduleRegister {
             etPassword.setError("Password Confirmation does not match");
             return false;
         }
+
+
+        //Username & Email Availability checks
         if(!(rp.FindUser(etUser.getText().toString())))
         {
             etUser.setError("Username already exists");
             return false;
         }
+        if(!(rp.FindEmail(etEmail.getText().toString())))
+        {
+            etEmail.setError("Email already exists");
+            return false;
+        }
+
 
         rp.addUser(etUser.getText().toString(),etPassword.getText().toString(),etEmail.getText().toString());
-        etPassword.setText("");
-        etPasswordConfirmation.setText("");
-        etUser.setText("");
-        etEmail.setText("");
-
 
         return true;
     }
@@ -108,4 +105,17 @@ public class moduleRegister {
     {
         rp.deleteAllData();
     }
+
+    public void RememberMe(boolean flag){
+        editor.putBoolean("Remember", flag);
+        editor.apply();
+    }
+    public void SaveUser(EditText etUser, EditText etEmail)
+    {
+        editor.putString("username", etUser.getText().toString());
+        editor.putString("email", etEmail.getText().toString());
+        editor.apply();
+    }
+
+
 }

@@ -8,7 +8,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +39,6 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
 
     LatLng latLng;
 
-    boolean flag = true;
 
     private FusedLocationProviderClient fusedLocationClient;
     @Override
@@ -55,32 +53,23 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
 
         SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.fragmentContainerView);
         mapFragment.getMapAsync(this);
-
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if(item.getItemId() == R.id.menu_account)
+            {
 
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(item.getItemId() ==  R.id.menu_map)
-                {
-                    fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, mapFragment, null).commit();
-                    getLastLocation();
-                }
-                else if(item.getItemId() == R.id.menu_account)
-                {
+                Intent intent = new Intent(FragmentMap.this, UserActivity.class);
+                startActivity(intent);
 
-                    Intent intent = new Intent(FragmentMap.this, UserActivity.class);
-                    startActivity(intent);
-
-                }
-                else if(item.getItemId() == R.id.menu_camera)
-                {
-
-                }
-                return true;
             }
-         });
+            else if(item.getItemId() == R.id.menu_camera)
+            {
+
+            }
+            return true;
+        });
+
+
 
 
     }
@@ -101,21 +90,16 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
         }
         mMap.setMyLocationEnabled(true);
         fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location)
-                    {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            latLng = new LatLng(location.getLatitude(),location.getLongitude());
+                .addOnSuccessListener(this, location -> {
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        latLng = new LatLng(location.getLatitude(),location.getLongitude());
 
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
-                            mMap.addMarker(new MarkerOptions()
-                                    .position(latLng)
-                                    .title("Your Location")
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                            Toast.makeText(context, latLng.toString() + "", Toast.LENGTH_SHORT).show();
-                        }
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
+                        mMap.addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .title("Your Location")
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     }
                 });
     }

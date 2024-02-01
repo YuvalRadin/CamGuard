@@ -11,11 +11,17 @@ public class moduleLogin {
 
     Context context;
     Repository rp;
+    SharedPreferences sharedPreferences;
+
+    SharedPreferences.Editor editor;
+
 
     public moduleLogin(Context context)
     {
         this.context = context;
         rp = new Repository(this.context);
+        sharedPreferences = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 
     public int isExist(EditText etUser, EditText etPass)
@@ -35,15 +41,26 @@ public class moduleLogin {
                 return 0;
         }
     }
-        public void RememberMe(EditText etUser){
-            SharedPreferences sharedPreferences = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("username", etUser.getText().toString());
-            editor.putString("email", getUserByName(etUser.getText().toString()).getString(3));
-            editor.apply();
-        }
+    public void RememberMe(boolean flag){
+        editor.putBoolean("Remember", flag);
+        editor.apply();
+    }
 
     public Cursor getUserByName(String user){ return rp.getUserByName(user);}
+
+    public void SaveUser(EditText etUser)
+    {
+        editor.putString("username", etUser.getText().toString());
+        editor.putString("email", getUserByName(etUser.getText().toString()).getString(3));
+        editor.apply();
+    }
+    public boolean CredentialsExist()
+        {
+            return sharedPreferences.contains("username");
+        }
+
+
+
 
 
 
