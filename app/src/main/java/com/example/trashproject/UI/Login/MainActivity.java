@@ -45,12 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         module = new moduleLogin(this);
 
-        if(module.CredentialsExist())
-        {
-            Intent intent = new Intent(MainActivity.this, FragmentMap.class);
-            startActivity(intent);
-        }
-
         //Asking if Location Permission is Granted
         ActivityResultLauncher<String[]> locationPermissionRequest =
                 registerForActivityResult(new ActivityResultContracts
@@ -74,6 +68,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Manifest.permission.ACCESS_COARSE_LOCATION
         });
 
+        //if username is already connected log-in immediately.
+        if(module.CredentialsExist())
+        {
+            Intent intent = new Intent(MainActivity.this, FragmentMap.class);
+            startActivity(intent);
+        }
 
     }
 
