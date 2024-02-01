@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 
 public class FragmentsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
@@ -63,10 +64,9 @@ public class FragmentsActivity extends AppCompatActivity implements OnMapReadyCa
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
                 if(item.getItemId() ==  R.id.menu_map)
                 {
                     fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, mapFragment, null).commit();
@@ -85,7 +85,8 @@ public class FragmentsActivity extends AppCompatActivity implements OnMapReadyCa
                 }
                 return true;
             }
-        });
+         });
+
 
     }
 
