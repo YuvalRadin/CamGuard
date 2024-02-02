@@ -1,10 +1,10 @@
-package com.example.trashproject.UI.Register;
+package com.example.camguard.UI.Register;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.EditText;
 
-import com.example.trashproject.Data.Repository.Repository;
+import com.example.camguard.Data.Repository.Repository;
 
 
 public class moduleRegister {

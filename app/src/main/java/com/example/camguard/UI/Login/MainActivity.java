@@ -1,6 +1,7 @@
-package com.example.trashproject.UI.Login;
+package com.example.camguard.UI.Login;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,14 +9,15 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.Manifest;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trashproject.R;
-import com.example.trashproject.UI.GoogleMaps.FragmentMap;
-import com.example.trashproject.UI.Register.RegisterActivity;
+
+import com.example.camguard.UI.GoogleMaps.FragmentMap;
+import com.example.camguard.UI.Register.RegisterActivity;
+import com.example.camguard.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

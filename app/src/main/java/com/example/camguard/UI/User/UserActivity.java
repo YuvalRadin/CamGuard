@@ -1,21 +1,17 @@
-package com.example.trashproject.UI.User;
+package com.example.camguard.UI.User;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trashproject.R;
-import com.example.trashproject.UI.GoogleMaps.FragmentMap;
-import com.example.trashproject.UI.Login.MainActivity;
+import com.example.camguard.R;
+import com.example.camguard.UI.GoogleMaps.FragmentMap;
+import com.example.camguard.UI.Login.MainActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 public class UserActivity extends AppCompatActivity implements View.OnClickListener {
 

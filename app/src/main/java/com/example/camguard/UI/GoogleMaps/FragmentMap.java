@@ -1,4 +1,4 @@
-package com.example.trashproject.UI.GoogleMaps;
+package com.example.camguard.UI.GoogleMaps;
 
 import android.Manifest;
 import android.content.Context;
@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.trashproject.R;
-import com.example.trashproject.UI.User.UserActivity;
+import com.example.camguard.R;
+import com.example.camguard.UI.User.UserActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;

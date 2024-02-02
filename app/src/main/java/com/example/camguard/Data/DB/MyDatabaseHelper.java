@@ -1,4 +1,4 @@
-package com.example.trashproject.Data.DB;
+package com.example.camguard.Data.DB;
 
 import android.content.ContentValues;
 import android.content.Context;

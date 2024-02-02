@@ -1,4 +1,4 @@
-package com.example.trashproject;
+package com.example.camguard;
 
 import org.junit.Test;
 

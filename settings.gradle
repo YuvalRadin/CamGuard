@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TrashProject"
+rootProject.name = "CamGuard"
 include ':app'

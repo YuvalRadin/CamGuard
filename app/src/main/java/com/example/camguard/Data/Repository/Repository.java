@@ -1,9 +1,9 @@
-package com.example.trashproject.Data.Repository;
+package com.example.camguard.Data.Repository;
 
 import android.content.Context;
 import android.database.Cursor;
 
-import com.example.trashproject.Data.DB.MyDatabaseHelper;
+import com.example.camguard.Data.DB.MyDatabaseHelper;
 
 public class Repository {
     Context context;

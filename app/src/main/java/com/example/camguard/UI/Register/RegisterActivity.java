@@ -1,4 +1,4 @@
-package com.example.trashproject.UI.Register;
+package com.example.camguard.UI.Register;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trashproject.R;
-import com.example.trashproject.UI.GoogleMaps.FragmentMap;
-import com.example.trashproject.UI.Login.MainActivity;
+import com.example.camguard.R;
+import com.example.camguard.UI.GoogleMaps.FragmentMap;
+import com.example.camguard.UI.Login.MainActivity;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 

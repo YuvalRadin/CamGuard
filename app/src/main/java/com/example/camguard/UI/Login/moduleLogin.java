@@ -1,14 +1,11 @@
-package com.example.trashproject.UI.Login;
+package com.example.camguard.UI.Login;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.widget.EditText;
-import android.Manifest;
-import androidx.core.content.ContextCompat;
 
-import com.example.trashproject.Data.Repository.Repository;
+import com.example.camguard.Data.Repository.Repository;
 
 public class moduleLogin {
 

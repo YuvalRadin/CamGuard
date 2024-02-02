@@ -1,34 +1,26 @@
-package com.example.trashproject.UI.User;
+package com.example.camguard.UI.GoogleMaps;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.trashproject.Data.Repository.Repository;
+import com.example.camguard.Data.Repository.Repository;
 
-public class ModuleUser {
+public class moduleMap {
 
-    Repository repository;
     Context context;
-
+    Repository rp;
     SharedPreferences sharedPreferences;
 
     SharedPreferences.Editor editor;
-    public ModuleUser(Context context)
+
+
+    public moduleMap(Context context)
     {
         this.context = context;
-        repository = new Repository(context);
+        rp = new Repository(this.context);
         sharedPreferences = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
-
-    public boolean CredentialsExist()
-    {
-        return sharedPreferences.contains("username");
-    }
-
-    public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
-
-    public int getReports(String user) { return repository.getReportsByID(repository.getIdByName(user));}
 
     public void DoNotRemember()
     {
@@ -42,5 +34,9 @@ public class ModuleUser {
     {
         return sharedPreferences.getBoolean("Remember", false);
     }
+
+    public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
+
+
 
 }
