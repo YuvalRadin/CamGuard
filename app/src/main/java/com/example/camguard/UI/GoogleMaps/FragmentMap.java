@@ -32,7 +32,6 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
     BottomNavigationView bottomNavigationView;
     GoogleMap mMap;
     Context context;
-
     LatLng latLng;
 
     moduleMap module;
