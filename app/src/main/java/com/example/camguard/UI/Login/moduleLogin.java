@@ -61,7 +61,9 @@ public class moduleLogin {
             return sharedPreferences.contains("username");
         }
 
+    public String getSharedName() { return sharedPreferences.getString("username", "");}
 
+    public boolean isExist(String user) { return !rp.FindUser(user);}
 
 
 

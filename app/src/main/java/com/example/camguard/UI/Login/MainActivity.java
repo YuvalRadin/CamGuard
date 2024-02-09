@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         //if username is already connected log-in immediately.
-        if(module.CredentialsExist())
+        if(module.CredentialsExist() && module.isExist(module.getSharedName()))
         {
             Intent intent = new Intent(MainActivity.this, FragmentMap.class);
             startActivity(intent);
