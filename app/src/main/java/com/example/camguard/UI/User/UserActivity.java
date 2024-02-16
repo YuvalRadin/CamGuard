@@ -1,6 +1,7 @@
 package com.example.camguard.UI.User;
 
 import android.content.Intent;
+import android.graphics.Camera;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.camguard.R;
+import com.example.camguard.UI.Camera.CameraActivity;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Login.MainActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -45,7 +47,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
             }
             else if(item.getItemId() == R.id.menu_camera)
             {
-
+                Intent intent = new Intent(UserActivity.this, CameraActivity.class);
+                startActivity(intent);
             }
             return true;
         });

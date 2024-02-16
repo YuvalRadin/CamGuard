@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.camguard.R;
+import com.example.camguard.UI.Camera.CameraActivity;
 import com.example.camguard.UI.User.UserActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -50,10 +51,13 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
 
         module = new moduleMap(this);
         Intent intent = new Intent(FragmentMap.this, UserActivity.class);
+        Intent intent2 = new Intent(FragmentMap.this, CameraActivity.class);
         if(!module.DoesRemember() && !module.getCredentials()[0].equals(""))
         {
             intent.putExtra("username", module.getCredentials()[0]);
             intent.putExtra("email", module.getCredentials()[1]);
+            intent2.putExtra("username", module.getCredentials()[0]);
+            intent2.putExtra("email", module.getCredentials()[1]);
             module.DoNotRemember();
         }
 
@@ -67,7 +71,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
             }
             else if(item.getItemId() == R.id.menu_camera)
             {
-
+                startActivity(intent2);
             }
             return true;
         });
@@ -98,7 +102,6 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                     // Got last known location. In some rare situations this can be null.
                     if (location != null) {
                         latLng = new LatLng(location.getLatitude(),location.getLongitude());
-
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
                         mMap.addMarker(new MarkerOptions()
                                 .position(latLng)
