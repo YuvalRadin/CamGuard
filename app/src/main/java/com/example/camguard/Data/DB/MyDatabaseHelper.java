@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.TableLayout;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 
@@ -193,6 +194,18 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.moveToFirst();
         return cursor;
+    }
+
+    public void AddReport(String id)
+    {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        String query = "SELECT " + COLUMN_REPORTS + " FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{id});
+        cursor.moveToFirst();
+        cv.put(COLUMN_REPORTS, cursor.getInt(0) + 1);
+        db.update(TABLE_NAME, cv, "_id=?", new String[]{id});
     }
 
     public boolean LoginUser(String user, String password, int EmailLogin)

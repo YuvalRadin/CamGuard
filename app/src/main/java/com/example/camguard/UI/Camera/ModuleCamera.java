@@ -42,4 +42,9 @@ public class ModuleCamera {
     {
         return sharedPreferences.getBoolean("Remember", false);
     }
+
+    public void AddReport(String id) { repository.AddReport(id);}
+
+    public String getIdByName(String user) { return repository.getIdByName(user);}
+
 }

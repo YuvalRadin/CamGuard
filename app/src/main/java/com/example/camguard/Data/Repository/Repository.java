@@ -33,6 +33,8 @@ public class Repository {
 
     public String getNameByEmail(String email) { return myDatabaseHelper.getNameByEmail(email);}
 
+    public void AddReport(String id) { myDatabaseHelper.AddReport(id);}
+
 
 
 }
