@@ -52,7 +52,7 @@ public class moduleRegister {
             etEmail.setError("invalid email (.@)");
             return false;
         }
-        if(etEmail.getText().toString().indexOf(".") != etEmail.getText().toString().lastIndexOf("."))
+        if(!etEmail.getText().toString().contains(".co.")&&etEmail.getText().toString().indexOf(".") != etEmail.getText().toString().lastIndexOf("."))
         {
             etEmail.setError("invalid email (..)");
             return false;

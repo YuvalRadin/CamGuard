@@ -6,11 +6,42 @@
     android:layout_height="match_parent"
     tools:context=".UI.Camera.CameraActivity">
 
-    <ImageView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_above="@id/bottom_navigation">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+        <ImageView
+        android:layout_width="400dp"
+        android:layout_height="460dp"
         android:id="@+id/ivCamera"
-        android:layout_above="@id/bottom_navigation"/>
+            android:layout_centerHorizontal="true"/>
+
+
+            <EditText
+                android:id="@+id/etReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="description"
+                android:layout_below="@id/ivCamera"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/etReport"
+                android:text="Submit Report"
+                />
+
+        </RelativeLayout>
+</ScrollView>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
