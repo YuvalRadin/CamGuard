@@ -1,36 +1,23 @@
 package com.example.camguard.UI.Camera;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.accounts.Account;
-import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Camera;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.camguard.R;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.User.UserActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import kotlinx.coroutines.internal.ConcurrentLinkedListKt;
 
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,7 +26,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     Button btnSubmit;
     EditText etReport;
     ModuleCamera module;
-
+    Bitmap photo;
     Intent intent;
 
     BottomNavigationView bottomNavigationView;
@@ -52,6 +39,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
 
         imageView = findViewById(R.id.ivCamera);
+        imageView.setTag("NoPic");
         btnSubmit = findViewById(R.id.btnSubmit);
         etReport = findViewById(R.id.etReport);
         module = new ModuleCamera(this);
@@ -59,26 +47,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         btnSubmit.setOnClickListener(this);
         imageView.setClickable(true);
         imageView.setOnClickListener(this);
-
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK)
-        {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(photo);
-
-            int height = Integer.parseInt(String.valueOf(Math.round(this.getResources().getDisplayMetrics().density * 460)));
-            int width = Integer.parseInt(String.valueOf(Math.round(this.getResources().getDisplayMetrics().density * 400)));
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width,height);
-            imageView.setLayoutParams(params);
-        }
-        else {
-            Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
-            super.onActivityResult(requestCode, resultCode, data);
-        }
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -103,6 +71,26 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK)
+        {
+            photo = (Bitmap) data.getExtras().get("data");
+            imageView.setImageBitmap(photo);
+            imageView.setTag("Pic");
+
+            int height = Integer.parseInt(String.valueOf(Math.round(this.getResources().getDisplayMetrics().density * 320)));
+            int width = Integer.parseInt(String.valueOf(Math.round(this.getResources().getDisplayMetrics().density * 240)));
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width,height);
+            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            imageView.setLayoutParams(params);
+        }
+        else {
+            Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         if(view == imageView)
         {
@@ -111,10 +99,20 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         }
         if(view == btnSubmit)
         {
-            module.AddReport(module.getIdByName(module.getCredentials()[0]));
-            Toast.makeText(this, "Report Submitted successfully", Toast.LENGTH_SHORT).show();
-            etReport.setText("");
+            if(imageView.getTag().equals("NoPic"))
+            {
+                Toast.makeText(this, "you must add a picture before submitting!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(etReport.getText().toString().isEmpty())
+            {
+                etReport.setError("you must add a description");
+                return;
+            }
             intent = new Intent(CameraActivity.this, FragmentMap.class);
+            intent.putExtra("Description", etReport.getText().toString());
+            intent.putExtra("Picture", photo);
+            intent.putExtra("NewReport", true);
             if (!module.CredentialsExist() && getIntent().getStringExtra("username") != null && !getIntent().getStringExtra("username").equals(""))
             {
                 intent.putExtra("username",getIntent().getStringExtra("username"));

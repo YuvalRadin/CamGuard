@@ -19,7 +19,7 @@
 
         <ImageView
         android:layout_width="120dp"
-        android:layout_height="460dp"
+        android:layout_height="320dp"
         android:id="@+id/ivCamera"
         android:layout_centerHorizontal="true"
         android:src="@drawable/camera"
@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="description"
+                android:layout_margin="25dp"
                 android:layout_below="@id/ivCamera"
                 />
 
@@ -38,6 +39,7 @@
                 android:id="@+id/btnSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="15dp"
                 android:layout_below="@id/etReport"
                 android:text="Submit Report"
                 />
