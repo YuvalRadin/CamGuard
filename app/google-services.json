@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "959696536483",
+    "project_id": "camguard-1d482",
+    "storage_bucket": "camguard-1d482.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959696536483:android:75fd704b92550dc39c1016",
+        "android_client_info": {
+          "package_name": "com.example.camguard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBikmjHGNj7OPzHdyaGnt6FdrwCGYN_sfo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
