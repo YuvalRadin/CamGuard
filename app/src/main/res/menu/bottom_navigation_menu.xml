@@ -12,6 +12,6 @@
 
     <item
         android:id="@+id/menu_camera"
-        android:title="Camera"
+        android:title="New Report"
         android:icon="@drawable/ic_camera" />
 </menu>
