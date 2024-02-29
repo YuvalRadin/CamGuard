@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.camguard.Data.CustomMarker.CustomMarker;
 import com.example.camguard.Data.CustomMarkerAdapter.CustomInfoWindowAdapter;
 import com.example.camguard.R;
 import com.example.camguard.UI.Camera.CameraActivity;
@@ -39,7 +38,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.api.CustomHttpPatternOrBuilder;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -53,12 +51,9 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import kotlin.DeepRecursiveScope;
 
 
 public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
@@ -74,7 +69,8 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
     FirebaseFirestore db;
     FirebaseStorage storage;
     StorageReference storageReference;
-    List<CustomMarker> markerList = new LinkedList<>();
+
+    static String credentials[];
 
 
 
@@ -94,6 +90,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        credentials = new String[2];
 
 
 
@@ -106,7 +103,13 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
             intent.putExtra("email", module.getCredentials()[1]);
             intent2.putExtra("username", module.getCredentials()[0]);
             intent2.putExtra("email", module.getCredentials()[1]);
+            credentials[0] = module.getCredentials()[0];
+            credentials[1] = module.getCredentials()[1];
             module.DoNotRemember();
+        }
+        else {
+            credentials[0] = module.getCredentials()[0];
+            credentials[1] = module.getCredentials()[1];
         }
 
         SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.fragmentContainerView);
@@ -153,9 +156,6 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
     public void CreateCustomMarkers(List<String> documentIds) {
         processMarkersRecursive(documentIds, 0);
     }
-    public interface MarkersCreationCallback {
-        void onMarkersCreationComplete(List<CustomMarker> markers);
-    }
 
     public void processMarkersRecursive(List<String> documentIds, int index) {
         if (index < documentIds.size()) {
@@ -181,10 +181,6 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                                     .position(latLng));
 
                             marker.setTag(uri.toString());
-
-
-                            CustomMarker customMarker = new CustomMarker(latLng, description, customInfoWindowAdapter,uri);
-                            markerList.add(customMarker);
 
                             // Process the next marker
                             processMarkersRecursive(documentIds, index + 1);
@@ -260,6 +256,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                                     public void onSuccess(DocumentReference documentReference) {
                                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                                         Toast.makeText(context, "Report Added Successfully", Toast.LENGTH_SHORT).show();
+                                        module.AddReport(module.getIdByName(credentials[0]));
                                         getAllDocumentIds(new DocumentIdCallback() {
                                             @Override
                                             public void onDocumentIdListLoaded(List<String> documentIds) {

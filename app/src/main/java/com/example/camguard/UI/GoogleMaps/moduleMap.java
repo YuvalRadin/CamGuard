@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.example.camguard.Data.Repository.Repository;
 
+import java.sql.PreparedStatement;
+
 public class moduleMap {
 
     Context context;
@@ -36,7 +38,7 @@ public class moduleMap {
     }
 
     public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
-
-
+    public void AddReport(String id) { rp.AddReport(id);}
+    public String getIdByName(String user) { return rp.getIdByName(user);}
 
 }
