@@ -8,23 +8,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
-import com.bumptech.glide.Glide;
+import com.example.camguard.Data.CustomMarker.CustomMarker;
 import com.example.camguard.Data.CustomMarkerAdapter.CustomInfoWindowAdapter;
 import com.example.camguard.R;
 import com.example.camguard.UI.Camera.CameraActivity;
@@ -44,13 +39,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.AggregateQuery;
-import com.google.firebase.firestore.AggregateQuerySnapshot;
-import com.google.firebase.firestore.AggregateSource;
+import com.google.api.CustomHttpPatternOrBuilder;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -59,18 +51,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.BufferUnderflowException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import kotlin.DeepRecursiveScope;
 
 
 public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
@@ -79,15 +67,14 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
     BottomNavigationView bottomNavigationView;
     static GoogleMap mMap;
     Context context;
-    static LatLng latLng;
+    LatLng latLng;
     Bitmap reportImage;
     moduleMap module;
     boolean isNewReport;
     FirebaseFirestore db;
     FirebaseStorage storage;
     StorageReference storageReference;
-    Uri imageURL;
-    List<String> markersList = new ArrayList<>();;
+    List<CustomMarker> markerList = new LinkedList<>();
 
 
 
@@ -157,39 +144,55 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onDocumentIdListLoaded(List<String> documentIds) {
                 // Process the list of document IDs here
-                for (String documentId : documentIds) {
-                    AddMarker(documentId);
-                }
+                CreateCustomMarkers(documentIds);
             }
         });
 
     }
 
-    public void AddMarker(String id)
-    {
-        db.collection("markers").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot document = task.getResult();
-                LatLng latLng = new LatLng((double) document.getData().get("Latitude"), (double) document.getData().get("Longitude"));
-                String description = (String) document.getData().get("Description");
-                String picPath = (String) document.getData().get("PictureKey");
-                StorageReference reportImageRef = storage.getReferenceFromUrl("gs://camguard-1d482.appspot.com/" + picPath);
-                reportImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(getBaseContext(), uri);
-                        mMap.setInfoWindowAdapter(customInfoWindowAdapter);
-                        mMap.addMarker(new MarkerOptions()
-                                .title(description)
-                                .position(latLng)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    }
-                });
-            }
-        });
+    public void CreateCustomMarkers(List<String> documentIds) {
+        processMarkersRecursive(documentIds, 0);
+    }
+    public interface MarkersCreationCallback {
+        void onMarkersCreationComplete(List<CustomMarker> markers);
+    }
+
+    public void processMarkersRecursive(List<String> documentIds, int index) {
+        if (index < documentIds.size()) {
+            String documentID = documentIds.get(index);
+
+            db.collection("markers").document(documentID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot document = task.getResult();
+                    LatLng latLng = new LatLng((double) document.getData().get("Latitude"), (double) document.getData().get("Longitude"));
+                    String description = (String) document.getData().get("Description");
+                    String picPath = (String) document.getData().get("PictureKey");
+                    StorageReference reportImageRef = storage.getReferenceFromUrl("gs://camguard-1d482.appspot.com/" + picPath);
+
+                    reportImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(getBaseContext(), uri);
+                            mMap.setInfoWindowAdapter(customInfoWindowAdapter);
+                            Marker marker = mMap.addMarker(new MarkerOptions()
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                                    .title(description)
+                                    .position(latLng));
+
+                            marker.setTag(uri.toString());
 
 
+                            CustomMarker customMarker = new CustomMarker(latLng, description, customInfoWindowAdapter,uri);
+                            markerList.add(customMarker);
+
+                            // Process the next marker
+                            processMarkersRecursive(documentIds, index + 1);
+                        }
+                    });
+                }
+            });
+        }
     }
     public interface DocumentIdCallback {
         void onDocumentIdListLoaded(List<String> documentIds);
@@ -257,6 +260,13 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                                     public void onSuccess(DocumentReference documentReference) {
                                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                                         Toast.makeText(context, "Report Added Successfully", Toast.LENGTH_SHORT).show();
+                                        getAllDocumentIds(new DocumentIdCallback() {
+                                            @Override
+                                            public void onDocumentIdListLoaded(List<String> documentIds) {
+                                                // Process the list of document IDs here
+                                                CreateCustomMarkers(documentIds);
+                                            }
+                                        });
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -268,6 +278,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                                 });
                     }
                 });
+
     }
 
 

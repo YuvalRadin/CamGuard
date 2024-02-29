@@ -39,6 +39,10 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     }
 
+    public Uri getUrl() {
+        return url;
+    }
+
     @Nullable
     @Override
     public View getInfoContents(@NonNull Marker marker) {
@@ -50,7 +54,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         ImageView imageView = view.findViewById(R.id.MarkerImage);
 
         // Use Glide to load the image
-        Glide.with(context).load(url).placeholder(context.getDrawable(R.drawable.ic_camera)).centerCrop().listener(new RequestListener<Drawable>() {
+        Glide.with(context).load(marker.getTag().toString()).placeholder(context.getDrawable(R.drawable.ic_camera)).centerCrop().listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 Log.e("ImageLoading", "Image load failed: " + e.getMessage());
@@ -59,7 +63,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                Log.d("ImageLoading", "Image load successful");
+                Log.d("ImageLoading", "Image load successful " + url.getLastPathSegment().toString());
                 imageView.setImageDrawable(resource);
                 return false;
             }
@@ -83,7 +87,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         // Customize the content of the info window
         ImageView imageView = view.findViewById(R.id.MarkerImage);
 
-        Glide.with(context).load(url).placeholder(context.getDrawable(R.drawable.ic_camera)).centerCrop().listener(new RequestListener<Drawable>() {
+        Glide.with(context).load(marker.getTag().toString()).placeholder(context.getDrawable(R.drawable.ic_camera)).centerCrop().listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 Log.e("ImageLoading", "Image load failed: " + e.getMessage());
@@ -92,7 +96,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                Log.d("ImageLoading", "Image load successful");
+                Log.d("ImageLoading", "Image load successful " + url.getLastPathSegment().toString());
                 imageView.setImageDrawable(resource);
                 return false;
             }
