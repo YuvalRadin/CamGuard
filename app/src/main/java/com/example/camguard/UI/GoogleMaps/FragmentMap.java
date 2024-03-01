@@ -175,6 +175,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                     DocumentSnapshot document = task.getResult();
                     LatLng latLng = new LatLng((double) document.getData().get("Latitude"), (double) document.getData().get("Longitude"));
                     String description = (String) document.getData().get("Description");
+                    String reporter = (String) document.getData().get("Reporter");
                     String picPath = (String) document.getData().get("PictureKey");
                     StorageReference reportImageRef = storage.getReferenceFromUrl("gs://camguard-1d482.appspot.com/" + picPath);
 
@@ -182,7 +183,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                         @Override
                         public void onSuccess(Uri uri) {
 
-                            CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(getBaseContext(), uri, credentials[0]);
+                            CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(getBaseContext(), uri, reporter);
                             mMap.setInfoWindowAdapter(customInfoWindowAdapter);
                             Marker marker = mMap.addMarker(new MarkerOptions()
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
@@ -293,6 +294,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                         marker.put("Longitude",latLng.longitude);
                         marker.put("Description", getIntent().getStringExtra("Description"));
                         marker.put("PictureKey", picPath);
+                        marker.put("Reporter", credentials[0]);
 
 //                        create document and add marker
                         db.collection("markers")
