@@ -182,12 +182,13 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                         @Override
                         public void onSuccess(Uri uri) {
 
-                            CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(getBaseContext(), uri);
+                            CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(getBaseContext(), uri, credentials[0]);
                             mMap.setInfoWindowAdapter(customInfoWindowAdapter);
                             Marker marker = mMap.addMarker(new MarkerOptions()
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                                     .title(description)
-                                    .position(latLng));
+                                    .position(latLng)
+                                    .snippet(uri.getLastPathSegment().toString().substring(7)));
 
                             marker.setTag(uri.toString());
 

@@ -21,6 +21,7 @@ import com.example.camguard.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
+import org.w3c.dom.Text;
 
 
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
@@ -28,14 +29,17 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     Context context;
      Uri url;
 
+     String Reporter;
+
     ImageView imageView;
 
-    public CustomInfoWindowAdapter(Context context, Uri url)
+    public CustomInfoWindowAdapter(Context context, Uri url, String reporter)
     {
         this.context = context;
         this.url = Uri.parse(url.toString());
         View view = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
         this.imageView = view.findViewById(R.id.MarkerImage);
+        this.Reporter = reporter;
 
     }
 
@@ -82,6 +86,12 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
         TextView textView = view.findViewById(R.id.info_window_text);
         textView.setText(marker.getTitle());
+
+        TextView textView2 = view.findViewById(R.id.report_id);
+        textView2.append(marker.getSnippet().toString());
+
+        TextView textview3 = view.findViewById(R.id.tvReporter);
+        textview3.append(Reporter);
 
         return view;
     }
