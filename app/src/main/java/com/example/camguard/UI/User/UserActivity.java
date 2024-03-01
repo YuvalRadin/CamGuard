@@ -81,6 +81,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         {
             module.DoNotRemember();
             Intent intent = new Intent(UserActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
     }

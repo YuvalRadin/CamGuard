@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,14 +16,21 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.camguard.Data.CustomMarkerAdapter.CustomInfoWindowAdapter;
 import com.example.camguard.R;
 import com.example.camguard.UI.Camera.CameraActivity;
 import com.example.camguard.UI.User.UserActivity;
+import com.google.android.gms.common.images.ImageManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -173,6 +181,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                     reportImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
+
                             CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(getBaseContext(), uri);
                             mMap.setInfoWindowAdapter(customInfoWindowAdapter);
                             Marker marker = mMap.addMarker(new MarkerOptions()
@@ -182,6 +191,41 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
 
                             marker.setTag(uri.toString());
 
+                            Glide.with(context)
+                                    .load(marker.getTag().toString())
+                                    .preload();
+
+                                // Set up the marker click listener
+                            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                @Override
+                                public boolean onMarkerClick(Marker clickedMarker) {
+                                    // Load the image when the marker is clicked
+                                    Glide.with(context)
+                                            .load(clickedMarker.getTag().toString())
+                                            .placeholder(context.getDrawable(R.drawable.ic_camera))
+                                            .centerCrop()
+                                            .listener(new RequestListener<Drawable>() {
+                                                @Override
+                                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                    Log.e("ImageLoading", "Image load failed: " + e.getMessage());
+                                                    // Handle the failure, if needed
+                                                    return false;
+                                                }
+
+                                                @Override
+                                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                    Log.d("ImageLoading", "Image load successful " + clickedMarker.getTag().toString());
+                                                    clickedMarker.showInfoWindow(); // Show the info window when the image is loaded
+                                                    return false;
+                                                }
+                                            })
+                                            .into(customInfoWindowAdapter.getImageView());
+
+                                    // Return true to consume the marker click event
+                                    return true;
+                                }
+                            });
+
                             // Process the next marker
                             processMarkersRecursive(documentIds, index + 1);
                         }
@@ -190,6 +234,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
             });
         }
     }
+
     public interface DocumentIdCallback {
         void onDocumentIdListLoaded(List<String> documentIds);
     }

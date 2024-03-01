@@ -21,20 +21,26 @@ import com.example.camguard.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
+
+
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     Context context;
      Uri url;
 
+    ImageView imageView;
+
     public CustomInfoWindowAdapter(Context context, Uri url)
     {
         this.context = context;
         this.url = Uri.parse(url.toString());
+        View view = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
+        this.imageView = view.findViewById(R.id.MarkerImage);
 
     }
 
-    public Uri getUrl() {
-        return url;
+    public ImageView getImageView() {
+        return imageView;
     }
 
     @Nullable
@@ -44,33 +50,9 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         View view = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
 
 
-        // Customize the content of the info window
-        ImageView imageView = view.findViewById(R.id.MarkerImage);
-
-        // Use Glide to load the image
-        Glide.with(context).load(marker.getTag().toString()).placeholder(context.getDrawable(R.drawable.ic_camera)).centerCrop().listener(new RequestListener<Drawable>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                Log.e("ImageLoading", "Image load failed: " + e.getMessage());
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                Log.d("ImageLoading", "Image load successful " + url.getLastPathSegment().toString());
-                imageView.setImageDrawable(resource);
-                return false;
-            }
-        }).into(imageView);
-
-        Glide.with(context).load(url).error(R.drawable.ic_camera);// Set a default error image.into(imageView);
-
-
-        TextView textView = view.findViewById(R.id.info_window_text);
-        textView.setText(marker.getTitle());
-
         return view;
     }
+
 
     @Nullable
     @Override
@@ -78,7 +60,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         // Inflate the custom info window layout
         View view = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
 
-        // Customize the content of the info window
+//         Customize the content of the info window
         ImageView imageView = view.findViewById(R.id.MarkerImage);
 
         Glide.with(context).load(marker.getTag().toString()).placeholder(context.getDrawable(R.drawable.ic_camera)).centerCrop().listener(new RequestListener<Drawable>() {
@@ -92,6 +74,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                 Log.d("ImageLoading", "Image load successful " + url.getLastPathSegment().toString());
                 imageView.setImageDrawable(resource);
+
                 return false;
             }
         }).into(imageView);
