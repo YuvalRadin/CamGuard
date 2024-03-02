@@ -9,21 +9,21 @@
 
     <ImageView
         android:id="@+id/MarkerImage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:scaleType="fitCenter"
         />
 
     <TextView
         android:id="@+id/info_window_text"
-        android:layout_width="200dp"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:text="Info Window Text" />
 
     <TextView
         android:id="@+id/report_id"
-        android:layout_width="200dp"
+        android:layout_width="160dp"
         android:layout_marginTop="30dp"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -31,7 +31,7 @@
 
     <TextView
         android:id="@+id/tvReporter"
-        android:layout_width="200dp"
+        android:layout_width="160dp"
         android:layout_marginTop="5dp"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"

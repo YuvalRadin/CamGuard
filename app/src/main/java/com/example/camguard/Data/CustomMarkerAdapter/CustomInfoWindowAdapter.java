@@ -29,17 +29,14 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     Context context;
      Uri url;
 
-     String Reporter;
-
     ImageView imageView;
 
-    public CustomInfoWindowAdapter(Context context, Uri url, String reporter)
+    public CustomInfoWindowAdapter(Context context, Uri url)
     {
         this.context = context;
         this.url = Uri.parse(url.toString());
         View view = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
         this.imageView = view.findViewById(R.id.MarkerImage);
-        this.Reporter = reporter;
 
     }
 
@@ -88,10 +85,10 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         textView.setText(marker.getTitle());
 
         TextView textView2 = view.findViewById(R.id.report_id);
-        textView2.append(marker.getSnippet().toString());
+        textView2.append(marker.getSnippet().toString().substring(0, marker.getSnippet().indexOf(" ")));
 
         TextView textview3 = view.findViewById(R.id.tvReporter);
-        textview3.append(Reporter);
+        textview3.setText(marker.getSnippet().substring(marker.getSnippet().indexOf(" ")));
 
         return view;
     }
