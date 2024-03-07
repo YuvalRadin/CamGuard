@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +31,7 @@ import com.bumptech.glide.request.target.Target;
 import com.example.camguard.Data.CustomMarkerAdapter.CustomInfoWindowAdapter;
 import com.example.camguard.R;
 import com.example.camguard.UI.Camera.CameraActivity;
+import com.example.camguard.UI.Login.MainActivity;
 import com.example.camguard.UI.User.UserActivity;
 import com.google.android.gms.common.images.ImageManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -74,6 +77,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
     Bitmap reportImage;
     moduleMap module;
     boolean isNewReport;
+    static boolean reloadMap = true;
     FirebaseFirestore db;
     FirebaseStorage storage;
     StorageReference storageReference;
@@ -94,11 +98,37 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        ActivityResultLauncher<String[]> locationPermissionRequest =
+                registerForActivityResult(new ActivityResultContracts
+                                .RequestMultiplePermissions(), result -> {
+                            Boolean fineLocationGranted = result.getOrDefault(
+                                    Manifest.permission.ACCESS_FINE_LOCATION, false);
+                            Boolean coarseLocationGranted = result.getOrDefault(
+                                    Manifest.permission.ACCESS_COARSE_LOCATION,false);
+                            if (fineLocationGranted != null && fineLocationGranted && coarseLocationGranted != null && coarseLocationGranted) {
+                                //location access granted.
+
+                                if(reloadMap && module.CredentialsExist()) {
+                                    Intent intent = new Intent(FragmentMap.this, MainActivity.class);
+                                    startActivity(intent);
+                                    reloadMap = false;
+                                }
+                            } else {
+                                // No location access granted.
+                                Intent intent = new Intent(FragmentMap.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                );
+        locationPermissionRequest.launch(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
 
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         credentials = new String[2];
+
+
 
 
 

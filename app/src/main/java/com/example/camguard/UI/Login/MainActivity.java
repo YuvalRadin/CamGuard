@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //If not granted asking for permission:
         locationPermissionRequest.launch(new String[] {
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+//                Manifest.permission.ACCESS_COARSE_LOCATION
         });
 
         //if username is already connected log-in immediately.

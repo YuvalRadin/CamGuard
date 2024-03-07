@@ -36,7 +36,10 @@ public class moduleMap {
     {
         return sharedPreferences.getBoolean("Remember", false);
     }
-
+    public boolean CredentialsExist()
+    {
+        return sharedPreferences.contains("username");
+    }
     public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
     public void AddReport(String id) { rp.AddReport(id);}
     public String getIdByName(String user) { return rp.getIdByName(user);}
