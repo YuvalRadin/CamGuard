@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.camguard.Data.CustomMarkerAdapter.CustomInfoWindowAdapter;
 import com.example.camguard.R;
+import com.example.camguard.UI.Admin.AdminActivity;
 import com.example.camguard.UI.Camera.CameraActivity;
 import com.example.camguard.UI.Login.MainActivity;
 import com.example.camguard.UI.User.UserActivity;
@@ -96,8 +98,6 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-
         ActivityResultLauncher<String[]> locationPermissionRequest =
                 registerForActivityResult(new ActivityResultContracts
                                 .RequestMultiplePermissions(), result -> {
@@ -136,11 +136,14 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
         module = new moduleMap(this);
         Intent intent = new Intent(FragmentMap.this, UserActivity.class);
         Intent intent2 = new Intent(FragmentMap.this, CameraActivity.class);
+        Intent intent3 = new Intent(FragmentMap.this, AdminActivity.class);
         if (!module.DoesRemember() && !module.getCredentials()[0].equals("")) {
             intent.putExtra("username", module.getCredentials()[0]);
             intent.putExtra("email", module.getCredentials()[1]);
             intent2.putExtra("username", module.getCredentials()[0]);
             intent2.putExtra("email", module.getCredentials()[1]);
+            intent3.putExtra("username", module.getCredentials()[0]);
+            intent3.putExtra("email", module.getCredentials()[1]);
             credentials[0] = module.getCredentials()[0];
             credentials[1] = module.getCredentials()[1];
             module.DoNotRemember();
@@ -153,19 +156,35 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.fragmentContainerView);
         mapFragment.getMapAsync(this);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
+        isNewReport = getIntent().getBooleanExtra("NewReport", false);
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        if(credentials[1].equals("s16131@nhs.co.il"))
+        {
+            bottomNavigationView.getMenu().clear();
+            bottomNavigationView.inflateMenu(R.menu.admin_bottom_navigation_menu);
+        }
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.menu_account) {
+                intent.putExtra("username", credentials[0]);
+                intent.putExtra("email", credentials[1]);
                 startActivity(intent);
             } else if (item.getItemId() == R.id.menu_camera) {
+                intent2.putExtra("username", credentials[0]);
+                intent2.putExtra("email", credentials[1]);
                 startActivity(intent2);
+            }
+            else if(item.getItemId() == R.id.menu_admin)
+            {
+                intent3.putExtra("username", credentials[0]);
+                intent3.putExtra("email", credentials[1]);
+                startActivity(intent3);
             }
             return true;
         });
         bottomNavigationView.setSelectedItemId(R.id.menu_map);
-
-        isNewReport = getIntent().getBooleanExtra("NewReport", false);
-
-
 
 
 
@@ -325,7 +344,6 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                         marker.put("Description", getIntent().getStringExtra("Description"));
                         marker.put("PictureKey", picPath);
                         marker.put("Reporter", credentials[0]);
-
 //                        create document and add marker
                         db.collection("markers")
                                 .add(marker)

@@ -112,18 +112,7 @@
         android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#3498db"
-            android:text="Delete All Database Info (temp)"
-            android:textColor="#ffffff"
-            android:textSize="18sp"
-            android:padding="12dp"
-            android:id="@+id/deleteAll"
-            android:layout_below="@id/loginText"
-            android:layout_marginTop="16dp"
-            />
+
 
 
 </RelativeLayout>

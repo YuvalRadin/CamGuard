@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.camguard.R;
+import com.example.camguard.UI.Admin.AdminActivity;
 import com.example.camguard.UI.Camera.CameraActivity;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Login.MainActivity;
@@ -30,7 +31,6 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         module = new ModuleUser(this);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.menu_account);
 
         tvUsername = findViewById(R.id.nameTextView);
         tvEmail = findViewById(R.id.emailTextView);
@@ -38,20 +38,6 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         btnLogout = findViewById(R.id.LogOutButton);
         btnLogout.setOnClickListener(this);
 
-
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            if(item.getItemId() == R.id.menu_map)
-            {
-                Intent intent = new Intent(UserActivity.this, FragmentMap.class);
-                startActivity(intent);
-            }
-            else if(item.getItemId() == R.id.menu_camera)
-            {
-                Intent intent = new Intent(UserActivity.this, CameraActivity.class);
-                startActivity(intent);
-            }
-            return true;
-        });
 
         if(module.CredentialsExist()) {
             Credentials = module.getCredentials();
@@ -69,7 +55,36 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                 module.DoNotRemember();
             }
 
-
+        if(Credentials[1].equals("s16131@nhs.co.il"))
+        {
+            bottomNavigationView.getMenu().clear();
+            bottomNavigationView.inflateMenu(R.menu.admin_bottom_navigation_menu);
+        }
+        bottomNavigationView.setSelectedItemId(R.id.menu_account);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if(item.getItemId() == R.id.menu_map)
+            {
+                Intent intent = new Intent(UserActivity.this, FragmentMap.class);
+                intent.putExtra("username",Credentials[0]);
+                intent.putExtra("email",Credentials[1]);
+                startActivity(intent);
+            }
+            else if(item.getItemId() == R.id.menu_camera)
+            {
+                Intent intent = new Intent(UserActivity.this, CameraActivity.class);
+                intent.putExtra("username",Credentials[0]);
+                intent.putExtra("email",Credentials[1]);
+                startActivity(intent);
+            }
+            else if(item.getItemId() == R.id.menu_admin)
+            {
+                Intent intent = new Intent(UserActivity.this, AdminActivity.class);
+                intent.putExtra("username",Credentials[0]);
+                intent.putExtra("email",Credentials[1]);
+                startActivity(intent);
+            }
+            return true;
+        });
 
 
 

@@ -5,7 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -17,6 +18,9 @@
         android:theme="@style/Theme.CamGuard"
         tools:targetApi="31">
         <activity
+            android:name=".UI.Admin.AdminActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.Camera.CameraActivity"
             android:exported="false" />
         <activity
@@ -25,7 +29,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}"></meta-data>
+            android:value="${MAPS_API_KEY}" />
 
         <activity
             android:name=".UI.GoogleMaps.FragmentMap"

@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.camguard.R;
+import com.example.camguard.UI.Admin.AdminActivity;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.User.UserActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -29,13 +30,14 @@ import java.util.Map;
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int REQUEST_CODE = 22;
+    static String[] credentials = new String[2];
     ImageView imageView;
     Button btnSubmit;
     EditText etReport;
     ModuleCamera module;
     Bitmap photo;
     Intent intent;
-    BottomNavigationView bottomNavigationView;
+    static BottomNavigationView bottomNavigationView;
 
 
     @Override
@@ -56,7 +58,30 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
 
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+                bottomNavigationView = findViewById(R.id.bottom_navigation);
+                if (module.CredentialsExist()) {
+                    credentials = module.getCredentials();
+                } else if (getIntent().hasExtra("username")) {
+                    if (!getIntent().getStringExtra("username").isEmpty() && getIntent().getStringExtra("email").equals("s16131@nhs.co.il")) {
+                       credentials[0] = getIntent().getStringExtra("username");
+                       credentials[1] = getIntent().getStringExtra("email");
+                    }
+                }
+
+                if(module.CredentialsExist() && module.getCredentials()[1].equals("s16131@nhs.co.il"))
+                {
+                    bottomNavigationView.getMenu().clear();
+                    bottomNavigationView.inflateMenu(R.menu.admin_bottom_navigation_menu);
+                }
+                else if(!module.CredentialsExist() && getIntent().hasExtra("email") && getIntent().getStringExtra("email").equals("s16131@nhs.co.il"))
+                {
+                    bottomNavigationView.getMenu().clear();
+                    bottomNavigationView.inflateMenu(R.menu.admin_bottom_navigation_menu);
+                }
+
+
+
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if(item.getItemId() == R.id.menu_account)
             {
@@ -71,6 +96,16 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             else if(item.getItemId() == R.id.menu_map)
             {
                 Intent intent = new Intent(CameraActivity.this, FragmentMap.class);
+                startActivity(intent);
+            }
+            else if(item.getItemId() == R.id.menu_admin)
+            {
+                intent = new Intent(CameraActivity.this, AdminActivity.class);
+                if (!module.CredentialsExist() && getIntent().getStringExtra("username") != null && !getIntent().getStringExtra("username").equals(""))
+                {
+                    intent.putExtra("username",getIntent().getStringExtra("username"));
+                    intent.putExtra("email",getIntent().getStringExtra("email"));
+                }
                 startActivity(intent);
             }
             return true;

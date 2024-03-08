@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_map"
+        android:title="Map"
+        android:icon="@drawable/ic_map" />
+
+    <item
+        android:id="@+id/menu_account"
+        android:title="Account"
+        android:icon="@drawable/ic_account" />
+
+    <item
+        android:id="@+id/menu_camera"
+        android:title="New Report"
+        android:icon="@drawable/ic_camera" />
+
+    <item
+        android:id="@+id/menu_admin"
+        android:title="Admin"
+        android:icon="@drawable/admin" />
+</menu>

@@ -1,11 +1,11 @@
-package com.example.camguard.UI.Camera;
+package com.example.camguard.UI.Admin;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.camguard.Data.Repository.Repository;
 
-public class ModuleCamera {
+public class ModuleAdmin {
 
     Repository repository;
     Context context;
@@ -13,7 +13,7 @@ public class ModuleCamera {
     SharedPreferences sharedPreferences;
 
     SharedPreferences.Editor editor;
-    public ModuleCamera(Context context)
+    public ModuleAdmin(Context context)
     {
         this.context = context;
         repository = new Repository(context);
@@ -26,6 +26,5 @@ public class ModuleCamera {
         return sharedPreferences.contains("username");
     }
     public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
-
 
 }
