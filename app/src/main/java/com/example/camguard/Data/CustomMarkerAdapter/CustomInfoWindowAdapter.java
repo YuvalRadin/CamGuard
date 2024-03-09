@@ -88,7 +88,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         textView2.append(marker.getSnippet().toString().substring(0, marker.getSnippet().indexOf(" ")));
 
         TextView textview3 = view.findViewById(R.id.tvReporter);
-        textview3.setText(marker.getSnippet().substring(marker.getSnippet().indexOf(" ")));
+        textview3.setText(marker.getSnippet().substring(marker.getSnippet().indexOf(" ")+1));
 
         return view;
     }

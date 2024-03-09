@@ -63,8 +63,6 @@ public class moduleRegister {
             return false;
         }
 
-
-
         //password validity checkups
         if(etPassword.getText().toString().equals(""))
         {
@@ -99,11 +97,6 @@ public class moduleRegister {
         rp.addUser(etUser.getText().toString(),etPassword.getText().toString(),etEmail.getText().toString());
 
         return true;
-    }
-
-    public void DeleteAllData()
-    {
-        rp.deleteAllData();
     }
 
     public void RememberMe(boolean flag){

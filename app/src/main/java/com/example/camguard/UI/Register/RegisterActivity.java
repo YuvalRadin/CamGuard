@@ -23,7 +23,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     TextView tvReg;
     EditText etUser, etEmail, etPassword, etPasswordConfirmation;
     moduleRegister module;
-    Button btnRegister, DeleteAll;
+    Button btnRegister;
     CheckBox cb;
 
 
@@ -42,18 +42,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         etPasswordConfirmation = findViewById(R.id.registerPasswordConfirmationEditText);
         btnRegister = findViewById(R.id.registerButton);
         btnRegister.setOnClickListener(this);
-        DeleteAll = findViewById(R.id.deleteAll);
-        DeleteAll.setOnClickListener(this);
         cb = findViewById(R.id.rememberMeCheckbox);
 
     }
 
     @Override
     public void onClick(View view) {
-        if(view == DeleteAll)
-        {
-            module.DeleteAllData();
-        }
 
         if(view == tvReg)
         {

@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Delete all Users:"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             android:textSize="20dp"/>
 
 
@@ -28,11 +28,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#3498db"
-            android:text="Delete All Users Database Info"
+            android:text="Delete All Users"
             android:textColor="#ffffff"
             android:textSize="18sp"
             android:padding="12dp"
-            android:id="@+id/deleteAll"
+            android:id="@+id/btnDeleteUsers"
             android:layout_marginTop="15dp"
             />
 
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text="Delete User:"
                 android:layout_marginTop="40dp"
-                android:layout_below="@id/deleteAll"
+                android:layout_below="@id/btnDeleteUsers"
                 android:textSize="20dp"/>
 
             <EditText

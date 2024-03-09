@@ -1,19 +1,29 @@
 package com.example.camguard.UI.Admin;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.camguard.R;
 import com.example.camguard.UI.Camera.CameraActivity;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
+import com.example.camguard.UI.Login.MainActivity;
 import com.example.camguard.UI.User.UserActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class AdminActivity extends AppCompatActivity {
+public class AdminActivity extends AppCompatActivity implements View.OnClickListener {
 
     BottomNavigationView bottomNavigationView;
+    Button btnDeleteAllUsers, btnDeleteUser, btnDeleteAllMarkers, btnDeleteMarker;
+    EditText etDeleteUser, etDeleteMarker;
+    ModuleAdmin module;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +32,19 @@ public class AdminActivity extends AppCompatActivity {
 
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        ModuleAdmin module = new ModuleAdmin(this);
+        module = new ModuleAdmin(this);
+
+        btnDeleteAllUsers = findViewById(R.id.btnDeleteUsers);
+        btnDeleteUser = findViewById(R.id.btnDeleteUser);
+        etDeleteUser = findViewById(R.id.etDeleteUser);
+        btnDeleteAllMarkers = findViewById(R.id.btnDeleteMarkers);
+        btnDeleteMarker = findViewById(R.id.btnDeleteMarker);
+        etDeleteMarker = findViewById(R.id.etDeleteMarker);
+
+        btnDeleteMarker.setOnClickListener(this);
+        btnDeleteUser.setOnClickListener(this);
+        btnDeleteAllUsers.setOnClickListener(this);
+        btnDeleteAllMarkers.setOnClickListener(this);
 
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -54,5 +76,47 @@ public class AdminActivity extends AppCompatActivity {
             return true;
         });
         bottomNavigationView.setSelectedItemId(R.id.menu_admin);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == btnDeleteAllUsers)
+        {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setCancelable(false);
+            dialog.setMessage("Are you sure you want to proceed, this will delete your account!")
+                    .setPositiveButton("Yes, I am sure", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            module.deleteAllData();
+                            Intent intent = new Intent(AdminActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("No Don't", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    }).show();
+
+        }
+        if(view == btnDeleteUser)
+        {
+            if(!module.FindUser(etDeleteUser.getText().toString())) {
+                String UserToDelete = module.getUserByName(etDeleteUser.getText().toString()).getString(0);
+                module.deleteOneRow(UserToDelete);
+            }
+            else Toast.makeText(this, "User Does Not Exist!", Toast.LENGTH_SHORT).show();
+            etDeleteUser.setText("");
+        }
+        if(view == btnDeleteMarker)
+        {
+            module.DeleteMarker(etDeleteMarker.getText().toString());
+            etDeleteMarker.setText("");
+        }
+        if(view == btnDeleteAllMarkers)
+        {
+            module.DeleteAllMarkers();
+        }
     }
 }
