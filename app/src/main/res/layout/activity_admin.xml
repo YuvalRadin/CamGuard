@@ -101,7 +101,7 @@
                 android:id="@+id/tvDeleteMarker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Delete a Marker:"
+                android:text="Delete a Marker By ID:"
                 android:layout_marginTop="40dp"
                 android:layout_below="@id/btnDeleteMarkers"
                 android:textSize="20dp"/>
@@ -121,11 +121,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#3498db"
-                android:text="Delete User"
+                android:text="Delete Marker"
                 android:textColor="#ffffff"
                 android:textSize="18sp"
                 android:padding="12dp"
                 android:id="@+id/btnDeleteMarker"
+                android:layout_marginTop="15dp"
+                />
+
+
+            <TextView
+                android:id="@+id/tvDeleteMarkerByDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Delete a Marker  By Description:"
+                android:layout_marginTop="40dp"
+                android:layout_below="@id/btnDeleteMarker"
+                android:textSize="20dp"/>
+
+            <EditText
+                android:id="@+id/etDeleteMarkerByDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Delete marker:"
+                android:layout_marginTop="40dp"
+                android:layout_below="@id/tvDeleteMarkerByDesc"
+                android:textSize="20dp"/>
+
+
+            <Button
+                android:layout_below="@+id/etDeleteMarkerByDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#3498db"
+                android:text="Delete Marker"
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                android:padding="12dp"
+                android:id="@+id/btnDeleteMarkerByDesc"
                 android:layout_marginTop="15dp"
                 />
 

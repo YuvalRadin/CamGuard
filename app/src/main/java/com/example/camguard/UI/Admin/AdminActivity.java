@@ -22,8 +22,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class AdminActivity extends AppCompatActivity implements View.OnClickListener {
 
     BottomNavigationView bottomNavigationView;
-    Button btnDeleteAllUsers, btnDeleteUser, btnDeleteAllMarkers, btnDeleteMarker;
-    EditText etDeleteUser, etDeleteMarker;
+    Button btnDeleteAllUsers, btnDeleteUser, btnDeleteAllMarkers, btnDeleteMarker, btnDeleteMarkerByDesc;
+    EditText etDeleteUser, etDeleteMarker, etDeleteMarkerByDesc;
     ModuleAdmin module;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +41,14 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         btnDeleteAllMarkers = findViewById(R.id.btnDeleteMarkers);
         btnDeleteMarker = findViewById(R.id.btnDeleteMarker);
         etDeleteMarker = findViewById(R.id.etDeleteMarker);
+        btnDeleteMarkerByDesc = findViewById(R.id.btnDeleteMarkerByDesc);
+        etDeleteMarkerByDesc = findViewById(R.id.etDeleteMarkerByDesc);
 
         btnDeleteMarker.setOnClickListener(this);
         btnDeleteUser.setOnClickListener(this);
         btnDeleteAllUsers.setOnClickListener(this);
         btnDeleteAllMarkers.setOnClickListener(this);
+        btnDeleteMarkerByDesc.setOnClickListener(this);
 
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -124,12 +127,17 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         }
         if(view == btnDeleteMarker)
         {
-            module.DeleteMarker(etDeleteMarker.getText().toString());
+            module.DeleteMarkerByID(etDeleteMarker.getText().toString());
             etDeleteMarker.setText("");
         }
         if(view == btnDeleteAllMarkers)
         {
             module.DeleteAllMarkers();
+        }
+        if(view == btnDeleteMarkerByDesc)
+        {
+            module.DeleteMarkerByDesc(etDeleteMarkerByDesc.getText().toString());
+            etDeleteMarkerByDesc.setText("");
         }
     }
 }

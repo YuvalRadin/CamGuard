@@ -87,7 +87,7 @@ public class Repository {
     public void AddReportToUser(String id) { myDatabaseHelper.AddReport(id);}
     public void deleteOneRow(String row_id){ myDatabaseHelper.deleteOneRow(row_id);}
 
-    public void DeleteMarker(String marker) {
+    public void DeleteMarkerByID(String marker) {
         FireStore.collection("markers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -96,6 +96,73 @@ public class Repository {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if (document.getData().get("PictureKey").toString().equals("/images/" + marker)) {
                             
+                            didFind = true;
+                            final String documentID = document.getId();
+                            FireStore.collection("markers").document(documentID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    String PicPath = documentSnapshot.getData().get("PictureKey").toString();
+                                    StorageReference Ref = null;
+                                    if (PicPath != null && !PicPath.equals("")) {
+                                        Ref = FireStorage.getReference().child(PicPath);
+                                    }
+
+                                    // Delete the file
+                                    if (Ref != null) {
+
+                                        Ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                // File deleted successfully
+                                                FireStore.collection("markers").document(documentID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(context, "Failed to delete", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception exception) {
+                                                // Uh-oh, an error occurred!
+                                            }
+                                        });
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(context, "failed to retrieve picture", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                    if(!didFind)
+                    {
+                        Toast.makeText(context, "Report does not exist", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, "report does not exist", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public void DeleteMarkerByDesc(String marker) {
+        FireStore.collection("markers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    boolean didFind = false;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (document.getData().get("Description").toString().equals(marker)) {
                             didFind = true;
                             final String documentID = document.getId();
                             FireStore.collection("markers").document(documentID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

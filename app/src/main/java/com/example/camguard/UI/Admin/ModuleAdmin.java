@@ -31,7 +31,8 @@ public class ModuleAdmin {
     public Cursor getUserByName(String user){ return repository.getUserByName(user);}
     public void deleteOneRow(String row_id){ repository.deleteOneRow(row_id);}
     public boolean FindUser(String user) { return repository.FindUser(user);}
-    public void DeleteMarker(String marker) { repository.DeleteMarker(marker);};
+    public void DeleteMarkerByID(String marker) { repository.DeleteMarkerByID(marker);}
+    public void DeleteMarkerByDesc(String marker) { repository.DeleteMarkerByDesc(marker);}
     public void DeleteAllMarkers(){ repository.DeleteAllMarkers();};
 
 
