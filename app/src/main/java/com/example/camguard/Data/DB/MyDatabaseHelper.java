@@ -58,12 +58,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_EMAIL, Email);
         cv.put(COLUMN_REPORTS, 0);
 
-        long result = db.insert(TABLE_NAME,null, cv);
-        if(result == -1){
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "Added Successfully!", Toast.LENGTH_SHORT).show();
-        }
+        db.insert(TABLE_NAME,null, cv);
     }
 
     public Cursor readAllData(){
@@ -148,6 +143,20 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
               cursor = db.rawQuery(query, new String[]{user});
               isUnique = cursor.getCount() == 0;
               cursor.close();
+
+        return isUnique;
+    }
+
+    public boolean UserExistsNotLocal(String user, String email)
+    {
+        boolean isUnique;
+        Cursor cursor;
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT "+  COLUMN_USERNAME +" FROM "+ TABLE_NAME + " WHERE " + COLUMN_USERNAME + " = ? AND " + COLUMN_EMAIL + " = ?";
+
+        cursor = db.rawQuery(query, new String[]{user, email});
+        isUnique = cursor.getCount() == 0;
+        cursor.close();
 
         return isUnique;
     }

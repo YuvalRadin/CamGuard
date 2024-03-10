@@ -23,7 +23,8 @@ public class moduleLogin {
         sharedPreferences = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
-
+    public void addUser(String Username, String Password, String Email) { rp.addUser(Username,Password,Email);}
+    public boolean UserExistsNotLocal(String user, String email) { return rp.UserExistsNotLocal(user,email); }
     public int isExist(EditText etUser, EditText etPass)
     {
         if(etUser.getText().toString().contains("@"))

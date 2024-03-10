@@ -69,10 +69,11 @@ public class Repository {
     public void UpdateUser(String id, String name, String pass, String email) { myDatabaseHelper.updateData(id, name, pass, email);}
     public boolean FindUser(String user) { return myDatabaseHelper.FindUser(user);}
     public boolean FindEmail(String email) { return myDatabaseHelper.FindEmail(email);}
+    public boolean UserExistsNotLocal(String user, String email) { return myDatabaseHelper.UserExistsNotLocal(user, email);}
 
     public boolean LoginUser(String user, String password, int EmailLogin) { return myDatabaseHelper.LoginUser(user, password, EmailLogin); }
 
-    public void addUser(String Username, String Email, String Password) { myDatabaseHelper.addUser(Username, Email, Password);}
+    public void addUser(String Username, String Password, String Email) { myDatabaseHelper.addUser(Username, Password, Email);}
 
     public void deleteAllData() { myDatabaseHelper.deleteAllData(); }
 
@@ -86,6 +87,29 @@ public class Repository {
 
     public void AddReportToUser(String id) { myDatabaseHelper.AddReport(id);}
     public void deleteOneRow(String row_id){ myDatabaseHelper.deleteOneRow(row_id);}
+
+    public void AddUserToFireBase(String user, String email, String password) {
+        Map<String, Object> User = new HashMap<String, Object>();
+        User.put("name", user);
+        User.put("email",email);
+        User.put("password", password);
+        User.put("Reports", 0);
+//                        create document and add marker
+        FireStore.collection("users")
+                .add(User)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
 
     public void DeleteMarkerByID(String marker) {
         FireStore.collection("markers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

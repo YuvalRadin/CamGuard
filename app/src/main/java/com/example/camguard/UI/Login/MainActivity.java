@@ -17,13 +17,23 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.camguard.Data.CurrentUser.CurrentUser;
+import com.example.camguard.Data.Repository.Repository;
 import com.example.camguard.R;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Register.RegisterActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -33,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean passwordVisible = false;
     CheckBox cb;
     EditText etUser, etPass;
+    FirebaseFirestore FireStore = FirebaseFirestore.getInstance();
+    String ExistingPassword, ExistingName, ExistingEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,33 +142,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
             Intent intent = new Intent(MainActivity.this, FragmentMap.class);
-            switch(module.isExist(etUser,etPass))
-            {
-                case 0:
-                {
-                    if(etUser.getText().toString().contains("@"))
-                    {
-                        etUser.setText(module.getNameByEmail(etUser.getText().toString()));
+            getAllDocumentIds(new DocumentsRetrieved() {
+                @Override
+                public void onAllDocumentsRetrieved(boolean isExist) {
+                    if (isExist) {
+                        if (module.UserExistsNotLocal(etUser.getText().toString(), etPass.getText().toString())) {
+                            module.addUser(ExistingName,ExistingPassword,ExistingEmail);
+                        }
+                        module.RememberMe(cb.isChecked());
+                        CurrentUser.InitializeUser(module.getUserByName(etUser.getText().toString()).getString(1), module.getUserByName(etUser.getText().toString()).getString(3), module.getUserByName(etUser.getText().toString()).getString(0));
+                        module.SaveUser(etUser);
+                        etUser.setText("");
+                        etPass.setText("");
+                        startActivity(intent);
                     }
-                    module.SaveUser(etUser);
-                    module.RememberMe(cb.isChecked());
-                    CurrentUser.InitializeUser(module.getUserByName(etUser.getText().toString()).getString(1), module.getUserByName(etUser.getText().toString()).getString(3), module.getUserByName(etUser.getText().toString()).getString(0));
-                    etUser.setText("");
-                    etPass.setText("");
-                    startActivity(intent);
-                    return;
                 }
-                case 1:
-                {
-                    etUser.setError("Invalid username/password");
-                    return;
-                }
-                case 2:
-                {
-                    etUser.setError("invalid email/password");
-                    return;
-                }
-            }
+            });
+
         }
 
         if(view == tvReg)
@@ -165,4 +167,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
     }
+
+    public void getAllDocumentIds(DocumentsRetrieved callback) {
+        FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if(etUser.getText().toString().contains("@"))
+                        {
+                            if(document.getData().get("email").toString().equals(etUser.getText().toString()) && document.getData().get("password").toString().equals(etPass.getText().toString()))
+                            {
+                                ExistingPassword = document.getData().get("password").toString();
+                                ExistingName = document.getData().get("name").toString();
+                                ExistingEmail = document.getData().get("email").toString();
+                                callback.onAllDocumentsRetrieved(true);
+                            }
+
+                        }
+                        else if (document.getData().get("name").toString().equals(etUser.getText().toString()) && document.getData().get("password").toString().equals(etPass.getText().toString())){
+                            ExistingPassword = document.getData().get("password").toString();
+                            ExistingName = document.getData().get("name").toString();
+                            ExistingEmail = document.getData().get("email").toString();
+                            callback.onAllDocumentsRetrieved(true);
+                        }
+                    }
+                    callback.onAllDocumentsRetrieved(false);
+                }
+            }
+        });
+    }
+    public interface DocumentsRetrieved
+    {
+        void onAllDocumentsRetrieved(boolean isExist);
+    }
+
+
 }

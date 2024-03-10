@@ -3,26 +3,45 @@ package com.example.camguard.UI.Register;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.example.camguard.Data.Repository.Repository;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
+import com.google.firebase.storage.FirebaseStorage;
+
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class moduleRegister {
 
     Context context;
-    Repository rp;
+    Repository repository;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    FirebaseFirestore FireStore;
     public moduleRegister(Context context)
     {
         this.context = context;
-        rp = new Repository(this.context);
+        repository = new Repository(this.context);
         sharedPreferences = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        FireStore = FirebaseFirestore.getInstance();
     }
-
+    public boolean UserExistsNotLocal(String user, String email) { return repository.UserExistsNotLocal(user,email); }
+    public void addUser(String Username, String Email, String Password) { repository.addUser(Username,Email,Password);}
+    public void AddUserToFireBase(String user, String email, String password) { repository.AddUserToFireBase(user,email,password);}
     public Boolean CheckUps(EditText etUser, EditText etEmail, EditText etPassword, EditText etPasswordConfirmation)
     {
         // username validity checkups
@@ -83,18 +102,16 @@ public class moduleRegister {
 
 
         //Username & Email Availability checks
-        if(!(rp.FindUser(etUser.getText().toString())))
+        if(!(repository.FindUser(etUser.getText().toString())))
         {
             etUser.setError("Username already exists");
             return false;
         }
-        if(!(rp.FindEmail(etEmail.getText().toString())))
+        if(!(repository.FindEmail(etEmail.getText().toString())))
         {
             etEmail.setError("Email already exists");
             return false;
         }
-
-        rp.addUser(etUser.getText().toString(),etPassword.getText().toString(),etEmail.getText().toString());
 
         return true;
     }
@@ -109,7 +126,7 @@ public class moduleRegister {
         editor.putString("email", etEmail.getText().toString());
         editor.apply();
     }
-    public Cursor getUserByName(String user){ return rp.getUserByName(user);}
+    public Cursor getUserByName(String user){ return repository.getUserByName(user);}
 
 
 }
