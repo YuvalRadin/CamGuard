@@ -94,7 +94,6 @@ public class moduleRegister {
             return false;
         }
 
-
         rp.addUser(etUser.getText().toString(),etPassword.getText().toString(),etEmail.getText().toString());
 
         return true;

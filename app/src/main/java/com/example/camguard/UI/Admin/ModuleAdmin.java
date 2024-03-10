@@ -21,19 +21,21 @@ public class ModuleAdmin {
         sharedPreferences = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
-
-    public boolean CredentialsExist()
+    public void DoNotRemember()
     {
-        return sharedPreferences.contains("username");
+        editor.remove("username");
+        editor.remove("password");
+        editor.remove("Remember");
+        editor.apply();
     }
+
     public void deleteAllData() { repository.deleteAllData(); }
-    public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
     public Cursor getUserByName(String user){ return repository.getUserByName(user);}
     public void deleteOneRow(String row_id){ repository.deleteOneRow(row_id);}
     public boolean FindUser(String user) { return repository.FindUser(user);}
     public void DeleteMarkerByID(String marker) { repository.DeleteMarkerByID(marker);}
     public void DeleteMarkerByDesc(String marker) { repository.DeleteMarkerByDesc(marker);}
-    public void DeleteAllMarkers(){ repository.DeleteAllMarkers();};
+    public void DeleteAllMarkers(){ repository.DeleteAllMarkers();}
 
 
 

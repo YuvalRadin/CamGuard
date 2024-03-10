@@ -52,9 +52,6 @@ public class moduleMap {
         return sharedPreferences.contains("username");
     }
     public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
-    public void AddReportToUser(String id) { repository.AddReportToUser(id);}
-    public String getIdByName(String user) { return repository.getIdByName(user);}
-    public String uploadPicture(Bitmap reportImage) { return repository.uploadPicture(reportImage);}
     public void AddReport(LatLng latLng, String Description, Bitmap reportImage, GoogleMap mMap) { repository.AddReport(latLng,Description,reportImage,mMap); }
     public void CreateCustomMarkers(List<String> documentIds, GoogleMap mMap) { repository.CreateCustomMarkers(documentIds, mMap);}
     public void getAllDocumentIds(Repository.DocumentIdCallback callback) { repository.getAllDocumentIds(callback);}

@@ -92,7 +92,6 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
         context = getBaseContext();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-
         ActivityResultLauncher<String[]> locationPermissionRequest =
                 registerForActivityResult(new ActivityResultContracts
                                 .RequestMultiplePermissions(), result -> {

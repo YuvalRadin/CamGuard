@@ -119,13 +119,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             {
                 return;
             }
+            CurrentUser.InitializeUser(module.getUserByName(etUser.getText().toString()).getString(1), module.getUserByName(etUser.getText().toString()).getString(3), module.getUserByName(etUser.getText().toString()).getString(0));
             module.SaveUser(etUser, etEmail);
             module.RememberMe(cb.isChecked());
             etPassword.setText("");
             etPasswordConfirmation.setText("");
             etUser.setText("");
             etEmail.setText("");
-            CurrentUser.InitializeUser(module.getUserByName(etUser.getText().toString()).getString(1), module.getUserByName(etUser.getText().toString()).getString(3), module.getUserByName(etUser.getText().toString()).getString(0));
             Intent intent = new Intent(RegisterActivity.this, FragmentMap.class);
             startActivity(intent);
 

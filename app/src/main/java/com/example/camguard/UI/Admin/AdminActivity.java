@@ -83,6 +83,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             module.deleteAllData();
+                            module.DoNotRemember();
                             Intent intent = new Intent(AdminActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
@@ -106,8 +107,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                             .setPositiveButton("Yes, I am sure", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    String UserToDelete = module.getUserByName(etDeleteUser.getText().toString()).getString(0);
-                                    module.deleteOneRow(UserToDelete);
+                                    module.deleteOneRow(CurrentUser.getId());
+                                    module.DoNotRemember();
                                     Intent intent = new Intent(AdminActivity.this, MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
