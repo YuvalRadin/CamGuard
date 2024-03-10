@@ -2,7 +2,6 @@ package com.example.camguard.UI.User;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Camera;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.camguard.Data.CurrentUser;
+import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.R;
 import com.example.camguard.UI.Admin.AdminActivity;
 import com.example.camguard.UI.Camera.CameraActivity;

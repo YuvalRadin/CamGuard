@@ -2,7 +2,6 @@ package com.example.camguard.UI.Camera;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -15,18 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.camguard.Data.CurrentUser;
+import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.R;
 import com.example.camguard.UI.Admin.AdminActivity;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.User.UserActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.type.LatLng;
-
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
 

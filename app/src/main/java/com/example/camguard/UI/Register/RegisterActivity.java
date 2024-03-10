@@ -17,7 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.camguard.Data.CurrentUser;
+import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.R;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Login.MainActivity;

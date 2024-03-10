@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.R;
 import com.example.camguard.UI.Camera.CameraActivity;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
@@ -93,8 +94,30 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         if(view == btnDeleteUser)
         {
             if(!module.FindUser(etDeleteUser.getText().toString())) {
-                String UserToDelete = module.getUserByName(etDeleteUser.getText().toString()).getString(0);
-                module.deleteOneRow(UserToDelete);
+                if(CurrentUser.getName().equals(etDeleteUser.getText().toString()))
+                {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                    dialog.setCancelable(false);
+                    dialog.setMessage("Are you sure you want to proceed, this will delete your account!")
+                            .setPositiveButton("Yes, I am sure", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    String UserToDelete = module.getUserByName(etDeleteUser.getText().toString()).getString(0);
+                                    module.deleteOneRow(UserToDelete);
+                                    Intent intent = new Intent(AdminActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("No Don't", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                }
+                            }).show();
+                }
+                else {
+                    String UserToDelete = module.getUserByName(etDeleteUser.getText().toString()).getString(0);
+                    module.deleteOneRow(UserToDelete);
+                }
             }
             else Toast.makeText(this, "User Does Not Exist!", Toast.LENGTH_SHORT).show();
             etDeleteUser.setText("");

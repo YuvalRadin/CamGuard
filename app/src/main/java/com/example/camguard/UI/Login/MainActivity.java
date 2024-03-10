@@ -20,7 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.camguard.Data.CurrentUser;
+import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.R;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Register.RegisterActivity;

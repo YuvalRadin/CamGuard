@@ -1,6 +1,4 @@
-package com.example.camguard.Data;
-
-import android.content.SharedPreferences;
+package com.example.camguard.Data.CurrentUser;
 
 public class CurrentUser {
 
