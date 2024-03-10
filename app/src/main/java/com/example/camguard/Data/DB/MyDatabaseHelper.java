@@ -22,12 +22,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_EMAIL = "column_email";
     private static final String COLUMN_REPORTS = "column_reports";
 
-
-
-
-
-
-
     public MyDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -216,6 +210,18 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_REPORTS, cursor.getInt(0) + 1);
         db.update(TABLE_NAME, cv, "_id=?", new String[]{id});
     }
+    public void UpdateReports(String id, int reports)
+    {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        String query = "SELECT " + COLUMN_REPORTS + " FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{id});
+        cursor.moveToFirst();
+        cv.put(COLUMN_REPORTS, reports);
+        db.update(TABLE_NAME, cv, "_id=?", new String[]{id});
+    }
+
 
     public boolean LoginUser(String user, String password, int EmailLogin)
     {

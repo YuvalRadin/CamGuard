@@ -43,6 +43,7 @@ public class moduleMap {
         editor.apply();
     }
 
+    public void UpdateReports(String id, int reports) { repository.UpdateReports(id,reports);}
     public boolean DoesRemember()
     {
         return sharedPreferences.getBoolean("Remember", false);

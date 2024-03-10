@@ -83,9 +83,24 @@ public class Repository {
 
     public String getIdByName(String user) { return myDatabaseHelper.getIdByName(user);}
 
-    public String getNameByEmail(String email) { return myDatabaseHelper.getNameByEmail(email);}
+    public void UpdateReports(String id, int reports) { myDatabaseHelper.UpdateReports(id,reports);}
 
-    public void AddReportToUser(String id) { myDatabaseHelper.AddReport(id);}
+    public void AddReportToUser(String id) {
+        myDatabaseHelper.AddReport(id);
+        FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if(document.getData().get("name").toString().equals(CurrentUser.getName())) {
+                            int updatedReports = Integer.parseInt(document.getData().get("reports").toString()) + 1;
+                            FireStore.collection("users").document(document.getId()).update("reports", updatedReports);
+                        }
+                    }
+                }
+            }
+        });
+    }
     public void deleteOneRow(String row_id){ myDatabaseHelper.deleteOneRow(row_id);}
     public void DeleteAllFireStoreData()
     {
@@ -129,7 +144,7 @@ public class Repository {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if(document.getData().get("name").toString().equals(user)) {
-                            FireStore.collection("users").document(document.getId()).set(newUser);
+                            FireStore.collection("users").document(document.getId()).update(newUser);
                         }
                     }
                 }
@@ -144,7 +159,7 @@ public class Repository {
         User.put("name", user);
         User.put("email",email);
         User.put("password", password);
-        User.put("Reports", 0);
+        User.put("reports", 0);
 //                        create document and add marker
         FireStore.collection("users")
                 .add(User)

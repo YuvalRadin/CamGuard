@@ -164,6 +164,21 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
         bottomNavigationView.setSelectedItemId(R.id.menu_map);
 
 
+        FirebaseFirestore FireStore = FirebaseFirestore.getInstance();
+        FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (QueryDocumentSnapshot document : task.getResult())
+                {
+                    if(document.getData().get("name").toString().equals(CurrentUser.getName()))
+                    {
+                        module.UpdateReports(CurrentUser.getId(), Integer.valueOf(document.getData().get("reports").toString()));
+                    }
+                }
+            }
+        });
+
+
 
     }
 

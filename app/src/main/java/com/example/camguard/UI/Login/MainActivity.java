@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         tvReg = findViewById(R.id.registerText);
         tvReg.setOnClickListener(this);
-
         btnLogin = findViewById(R.id.loginButton);
         btnLogin.setOnClickListener(this);
 
@@ -97,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         module = new moduleLogin(this);
-
         //Asking if Location Permission is Granted
         ActivityResultLauncher<String[]> locationPermissionRequest =
                 registerForActivityResult(new ActivityResultContracts
@@ -120,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Manifest.permission.ACCESS_FINE_LOCATION,
 //                Manifest.permission.ACCESS_COARSE_LOCATION
         });
-
         //if username is already connected log-in immediately.
         if(module.CredentialsExist() && module.isExist(module.getCredentials()[0]))
         {

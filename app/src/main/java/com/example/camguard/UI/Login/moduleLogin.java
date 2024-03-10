@@ -49,7 +49,6 @@ public class moduleLogin {
 
     public Cursor getUserByName(String user){ return rp.getUserByName(user);}
 
-    public String getNameByEmail(String email) { return rp.getNameByEmail(email);}
 
     public void SaveUser(EditText etUser)
     {
