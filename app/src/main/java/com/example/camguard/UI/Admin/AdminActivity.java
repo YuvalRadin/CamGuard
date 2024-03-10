@@ -84,6 +84,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                         public void onClick(DialogInterface dialogInterface, int i) {
                             module.deleteAllData();
                             Intent intent = new Intent(AdminActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }
                     })
@@ -108,6 +109,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                                     String UserToDelete = module.getUserByName(etDeleteUser.getText().toString()).getString(0);
                                     module.deleteOneRow(UserToDelete);
                                     Intent intent = new Intent(AdminActivity.this, MainActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                 }
                             })
