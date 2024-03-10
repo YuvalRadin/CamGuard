@@ -2,6 +2,7 @@ package com.example.camguard.UI.Register;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.widget.EditText;
 
 import com.example.camguard.Data.Repository.Repository;
@@ -109,6 +110,7 @@ public class moduleRegister {
         editor.putString("email", etEmail.getText().toString());
         editor.apply();
     }
+    public Cursor getUserByName(String user){ return rp.getUserByName(user);}
 
 
 }

@@ -51,21 +51,11 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
             if(item.getItemId() == R.id.menu_account)
             {
                 Intent intent = new Intent(AdminActivity.this, UserActivity.class);
-                if (!module.CredentialsExist() && getIntent().getStringExtra("username") != null && !getIntent().getStringExtra("username").equals(""))
-                {
-                    intent.putExtra("username",getIntent().getStringExtra("username"));
-                    intent.putExtra("email",getIntent().getStringExtra("email"));
-                }
                 startActivity(intent);
             }
             else if(item.getItemId() == R.id.menu_camera)
             {
                 Intent intent = new Intent(AdminActivity.this, CameraActivity.class);
-                if (!module.CredentialsExist() && getIntent().getStringExtra("username") != null && !getIntent().getStringExtra("username").equals(""))
-                {
-                    intent.putExtra("username",getIntent().getStringExtra("username"));
-                    intent.putExtra("email",getIntent().getStringExtra("email"));
-                }
                 startActivity(intent);
             }
             else if(item.getItemId() == R.id.menu_map)

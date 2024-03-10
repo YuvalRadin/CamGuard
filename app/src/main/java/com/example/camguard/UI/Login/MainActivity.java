@@ -5,6 +5,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,17 +20,17 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-
+import com.example.camguard.Data.CurrentUser;
+import com.example.camguard.R;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Register.RegisterActivity;
-import com.example.camguard.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView tvReg;
     moduleLogin module;
     Button btnLogin;
-
+    boolean passwordVisible = false;
     CheckBox cb;
     EditText etUser, etPass;
 
@@ -45,6 +48,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         etUser =findViewById(R.id.usernameEditText);
 
         etPass = findViewById(R.id.passwordEditText);
+        etPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        etPass.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                final int DRAWABLE_RIGHT = 2;
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
+                    if(motionEvent.getRawX() >= (etPass.getRight() - etPass.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()))
+                    {
+                        if(passwordVisible)
+                        {
+                            etPass.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_baseline_visibility,0);
+                            etPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            passwordVisible = false;
+
+                        } else
+                        {
+                            etPass.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_baseline_visibility_on,0);
+                            etPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            passwordVisible = true;
+
+                        }
+                    }
+
+                }
+                return false;
+            }
+        });
+
         cb = findViewById(R.id.rememberMeCheckbox);
 
 
@@ -74,8 +110,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         //if username is already connected log-in immediately.
-        if(module.CredentialsExist() && module.isExist(module.getSharedName()))
+        if(module.CredentialsExist() && module.isExist(module.getCredentials()[0]))
         {
+            CurrentUser.InitializeUser(module.getCredentials()[0], module.getCredentials()[1], module.getIdByName(module.getCredentials()[0]));
             Intent intent = new Intent(MainActivity.this, FragmentMap.class);
             startActivity(intent);
         }
@@ -103,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     module.SaveUser(etUser);
                     module.RememberMe(cb.isChecked());
+                    CurrentUser.InitializeUser(module.getUserByName(etUser.getText().toString()).getString(1), module.getUserByName(etUser.getText().toString()).getString(3), module.getUserByName(etUser.getText().toString()).getString(0));
                     etUser.setText("");
                     etPass.setText("");
                     startActivity(intent);

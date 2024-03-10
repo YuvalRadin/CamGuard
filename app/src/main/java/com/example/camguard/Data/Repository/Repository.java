@@ -2,7 +2,6 @@ package com.example.camguard.Data.Repository;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,9 +17,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Repository {
     Context context;
@@ -38,6 +34,7 @@ public class Repository {
         FireStorage = FirebaseStorage.getInstance();
     }
 
+    public void UpdateUser(String id, String name, String pass, String email) { myDatabaseHelper.updateData(id, name, pass, email);}
     public boolean FindUser(String user) { return myDatabaseHelper.FindUser(user);}
     public boolean FindEmail(String email) { return myDatabaseHelper.FindEmail(email);}
 

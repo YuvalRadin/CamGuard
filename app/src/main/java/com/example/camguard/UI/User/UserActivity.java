@@ -1,14 +1,21 @@
 package com.example.camguard.UI.User;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Camera;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.camguard.Data.CurrentUser;
 import com.example.camguard.R;
 import com.example.camguard.UI.Admin.AdminActivity;
 import com.example.camguard.UI.Camera.CameraActivity;
@@ -20,9 +27,9 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
     ModuleUser module;
     BottomNavigationView bottomNavigationView;
-    static String[] Credentials;
     TextView tvUsername, tvEmail, tvReports;
-    Button btnLogout;
+    Button btnLogout, btnEdit;
+    boolean passwordVisible = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,25 +44,18 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         tvReports = findViewById(R.id.reportCountTextView);
         btnLogout = findViewById(R.id.LogOutButton);
         btnLogout.setOnClickListener(this);
+        btnEdit = findViewById(R.id.btnEdit);
+        btnEdit.setOnClickListener(this);
 
 
-        if(module.CredentialsExist()) {
-            Credentials = module.getCredentials();
-        }
-        else if (getIntent().getStringExtra("username") != null && !getIntent().getStringExtra("username").equals(""))
-        {
-            Credentials = new String[2];
-            Credentials[0] = getIntent().getStringExtra("username");
-            Credentials[1] = getIntent().getStringExtra("email");
-        }
-            tvUsername.setText(Credentials[0]);
-            tvEmail.setText(Credentials[1]);
-            tvReports.setText("Reports: " + module.getReports(Credentials[0]));
+            tvUsername.setText(CurrentUser.getName());
+            tvEmail.setText(CurrentUser.getEmail());
+            tvReports.setText("Reports: " + module.getReports(CurrentUser.getName()));
             if (!module.DoesRemember()) {
                 module.DoNotRemember();
             }
 
-        if(Credentials[1].equals("s16131@nhs.co.il"))
+        if(CurrentUser.getEmail().equals("s16131@nhs.co.il"))
         {
             bottomNavigationView.getMenu().clear();
             bottomNavigationView.inflateMenu(R.menu.admin_bottom_navigation_menu);
@@ -65,22 +65,16 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
             if(item.getItemId() == R.id.menu_map)
             {
                 Intent intent = new Intent(UserActivity.this, FragmentMap.class);
-                intent.putExtra("username",Credentials[0]);
-                intent.putExtra("email",Credentials[1]);
                 startActivity(intent);
             }
             else if(item.getItemId() == R.id.menu_camera)
             {
                 Intent intent = new Intent(UserActivity.this, CameraActivity.class);
-                intent.putExtra("username",Credentials[0]);
-                intent.putExtra("email",Credentials[1]);
                 startActivity(intent);
             }
             else if(item.getItemId() == R.id.menu_admin)
             {
                 Intent intent = new Intent(UserActivity.this, AdminActivity.class);
-                intent.putExtra("username",Credentials[0]);
-                intent.putExtra("email",Credentials[1]);
                 startActivity(intent);
             }
             return true;
@@ -98,6 +92,68 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(UserActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+        }
+        if(view == btnEdit)
+        {
+            Dialog dialog=new Dialog(this);
+            dialog.setContentView(R.layout.update_user);
+            EditText upname,upmail,uppass;
+            Button btnClose,btnUpdate;
+            btnUpdate = dialog.findViewById(R.id.btnUpdate);
+            btnClose= dialog.findViewById(R.id.btnCancel);
+            upname = dialog.findViewById(R.id.editTextName);
+            upmail = dialog.findViewById(R.id.editTextEmail);
+            uppass = dialog.findViewById(R.id.editTextPassword);
+            uppass.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    final int DRAWABLE_RIGHT = 2;
+                    if(motionEvent.getAction() == MotionEvent.ACTION_UP)
+                    {
+                        if(motionEvent.getRawX() >= (uppass.getRight() - uppass.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()))
+                        {
+                            if(passwordVisible)
+                            {
+                                uppass.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_baseline_visibility,0);
+                                uppass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                passwordVisible = false;
+                            } else
+                            {
+                                uppass.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_baseline_visibility_on,0);
+                                uppass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                passwordVisible = true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            });
+            upname.setText(CurrentUser.getName());
+            upmail.setText(CurrentUser.getEmail());
+            uppass.setText(module.getUserByName(CurrentUser.getName()).getString(2));
+            btnUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String mailU,nameU,passU;
+                    mailU = upmail.getText().toString();
+                    nameU = upname.getText().toString();
+                    passU = uppass.getText().toString();
+                    module.UpdateSharedPreference(nameU,mailU);
+                    module.UpdateUser(CurrentUser.getId(), nameU,passU,mailU);
+                    tvUsername.setText(nameU);
+                    tvEmail.setText(mailU);
+                    dialog.dismiss();
+                }
+            });
+            btnClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.setCancelable(false);
+            dialog.show();
         }
     }
 }

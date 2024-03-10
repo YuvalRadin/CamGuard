@@ -60,9 +60,8 @@ public class moduleLogin {
         {
             return sharedPreferences.contains("username");
         }
-
-    public String getSharedName() { return sharedPreferences.getString("username", "");}
-
+    public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
+    public String getIdByName(String user) { return rp.getIdByName(user);}
     public boolean isExist(String user) { return !rp.FindUser(user);}
 
 

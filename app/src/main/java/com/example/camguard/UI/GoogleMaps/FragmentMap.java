@@ -29,6 +29,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.camguard.Data.CurrentUser;
 import com.example.camguard.Data.CustomMarkerAdapter.CustomInfoWindowAdapter;
 import com.example.camguard.R;
 import com.example.camguard.UI.Admin.AdminActivity;
@@ -84,8 +85,6 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
     FirebaseStorage storage;
     StorageReference storageReference;
 
-    static String credentials[];
-
 
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -126,31 +125,17 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        credentials = new String[2];
-
-
 
 
 
 
         module = new moduleMap(this);
-        Intent intent = new Intent(FragmentMap.this, UserActivity.class);
-        Intent intent2 = new Intent(FragmentMap.this, CameraActivity.class);
-        Intent intent3 = new Intent(FragmentMap.this, AdminActivity.class);
+
         if (!module.DoesRemember() && !module.getCredentials()[0].equals("")) {
-            intent.putExtra("username", module.getCredentials()[0]);
-            intent.putExtra("email", module.getCredentials()[1]);
-            intent2.putExtra("username", module.getCredentials()[0]);
-            intent2.putExtra("email", module.getCredentials()[1]);
-            intent3.putExtra("username", module.getCredentials()[0]);
-            intent3.putExtra("email", module.getCredentials()[1]);
-            credentials[0] = module.getCredentials()[0];
-            credentials[1] = module.getCredentials()[1];
             module.DoNotRemember();
         }
         else {
-            credentials[0] = module.getCredentials()[0];
-            credentials[1] = module.getCredentials()[1];
+
         }
 
         SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.fragmentContainerView);
@@ -161,26 +146,23 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
         isNewReport = getIntent().getBooleanExtra("NewReport", false);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        if(credentials[1].equals("s16131@nhs.co.il"))
+        if(CurrentUser.getEmail().equals("s16131@nhs.co.il"))
         {
             bottomNavigationView.getMenu().clear();
             bottomNavigationView.inflateMenu(R.menu.admin_bottom_navigation_menu);
         }
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.menu_account) {
-                intent.putExtra("username", credentials[0]);
-                intent.putExtra("email", credentials[1]);
+                Intent intent = new Intent(FragmentMap.this, UserActivity.class);
                 startActivity(intent);
             } else if (item.getItemId() == R.id.menu_camera) {
-                intent2.putExtra("username", credentials[0]);
-                intent2.putExtra("email", credentials[1]);
-                startActivity(intent2);
+                Intent intent = new Intent(FragmentMap.this, CameraActivity.class);
+                startActivity(intent);
             }
             else if(item.getItemId() == R.id.menu_admin)
             {
-                intent3.putExtra("username", credentials[0]);
-                intent3.putExtra("email", credentials[1]);
-                startActivity(intent3);
+                Intent intent = new Intent(FragmentMap.this, AdminActivity.class);
+                startActivity(intent);
             }
             return true;
         });
@@ -343,7 +325,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                         marker.put("Longitude",latLng.longitude);
                         marker.put("Description", getIntent().getStringExtra("Description"));
                         marker.put("PictureKey", picPath);
-                        marker.put("Reporter", credentials[0]);
+                        marker.put("Reporter", CurrentUser.getName());
 //                        create document and add marker
                         db.collection("markers")
                                 .add(marker)
@@ -352,7 +334,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                                     public void onSuccess(DocumentReference documentReference) {
                                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                                         Toast.makeText(context, "Report Added Successfully", Toast.LENGTH_SHORT).show();
-                                        module.AddReport(module.getIdByName(credentials[0]));
+                                        module.AddReport(module.getIdByName(CurrentUser.getName()));
                                         getAllDocumentIds(new DocumentIdCallback() {
                                             @Override
                                             public void onDocumentIdListLoaded(List<String> documentIds) {

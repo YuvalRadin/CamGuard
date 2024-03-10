@@ -2,6 +2,7 @@ package com.example.camguard.UI.User;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 
 import com.example.camguard.Data.Repository.Repository;
 
@@ -33,14 +34,16 @@ public class ModuleUser {
     public void DoNotRemember()
     {
         editor.remove("username");
-        editor.remove("password");
+        editor.remove("email");
         editor.remove("Remember");
         editor.apply();
     }
-
+    public Cursor getUserByName(String user){ return repository.getUserByName(user);}
     public boolean DoesRemember()
     {
         return sharedPreferences.getBoolean("Remember", false);
     }
+    public void UpdateUser(String id, String name, String pass, String email) { repository.UpdateUser(id, name, pass, email);}
+    public void UpdateSharedPreference(String name, String email) { editor.putString("username", name); editor.putString("email", email); editor.apply();}
 
 }

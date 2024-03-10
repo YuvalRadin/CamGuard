@@ -61,6 +61,7 @@
         android:maxLength="14"
         android:textColor="#333333"
         android:textSize="16sp"
+        android:drawableRight="@drawable/ic_baseline_visibility"
         android:layout_below="@id/registerEmailEditText"
         android:layout_marginTop="8dp"/>
 
@@ -77,6 +78,7 @@
         android:textColor="#333333"
         android:textSize="16sp"
         android:layout_below="@id/registerPasswordEditText"
+        android:drawableRight="@drawable/ic_baseline_visibility"
         android:layout_marginTop="8dp"/>
 
     <CheckBox
