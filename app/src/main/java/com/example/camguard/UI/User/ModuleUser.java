@@ -44,6 +44,7 @@ public class ModuleUser {
         return sharedPreferences.getBoolean("Remember", false);
     }
     public void UpdateUser(String id, String name, String pass, String email) { repository.UpdateUser(id, name, pass, email);}
+    public void UpdateFireStoreUser(String user, String upUser, String upEmail, String upPass) { repository.UpdateFireStoreUser(user,upUser,upEmail,upPass);}
     public void UpdateSharedPreference(String name, String email) { editor.putString("username", name); editor.putString("email", email); editor.apply();}
 
 }

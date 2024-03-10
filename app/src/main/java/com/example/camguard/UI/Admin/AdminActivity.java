@@ -18,6 +18,7 @@ import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Login.MainActivity;
 import com.example.camguard.UI.User.UserActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AdminActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -83,6 +84,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             module.deleteAllData();
+                            module.DeleteAllFireStoreData();
                             module.DoNotRemember();
                             Intent intent = new Intent(AdminActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -108,6 +110,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     module.deleteOneRow(CurrentUser.getId());
+                                    module.DeleteFireStoreUser(CurrentUser.getName());
                                     module.DoNotRemember();
                                     Intent intent = new Intent(AdminActivity.this, MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -123,6 +126,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                 else {
                     String UserToDelete = module.getUserByName(etDeleteUser.getText().toString()).getString(0);
                     module.deleteOneRow(UserToDelete);
+                    module.DeleteFireStoreUser(CurrentUser.getName());
                 }
             }
             else Toast.makeText(this, "User Does Not Exist!", Toast.LENGTH_SHORT).show();

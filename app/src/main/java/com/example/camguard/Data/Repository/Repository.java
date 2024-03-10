@@ -87,6 +87,57 @@ public class Repository {
 
     public void AddReportToUser(String id) { myDatabaseHelper.AddReport(id);}
     public void deleteOneRow(String row_id){ myDatabaseHelper.deleteOneRow(row_id);}
+    public void DeleteAllFireStoreData()
+    {
+        FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        FireStore.collection("users").document(document.getId()).delete();
+                    }
+                }
+            }
+        });
+
+    }
+    public void DeleteFireStoreUser(String user)
+    {
+        FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if(document.getData().get("name").toString().equals(user)) {
+                            FireStore.collection("users").document(document.getId()).delete();
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+    public void UpdateFireStoreUser(String user, String upUser, String upEmail, String upPass)
+    {
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("name", upUser);
+        newUser.put("email", upEmail);
+        newUser.put("password", upPass);
+        FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if(document.getData().get("name").toString().equals(user)) {
+                            FireStore.collection("users").document(document.getId()).set(newUser);
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
 
     public void AddUserToFireBase(String user, String email, String password) {
         Map<String, Object> User = new HashMap<String, Object>();

@@ -5,12 +5,12 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 
 import com.example.camguard.Data.Repository.Repository;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ModuleAdmin {
 
     Repository repository;
     Context context;
-
     SharedPreferences sharedPreferences;
 
     SharedPreferences.Editor editor;
@@ -36,6 +36,9 @@ public class ModuleAdmin {
     public void DeleteMarkerByID(String marker) { repository.DeleteMarkerByID(marker);}
     public void DeleteMarkerByDesc(String marker) { repository.DeleteMarkerByDesc(marker);}
     public void DeleteAllMarkers(){ repository.DeleteAllMarkers();}
+    public void DeleteAllFireStoreData() { repository.DeleteAllFireStoreData();}
+    public void DeleteFireStoreUser(String user){ repository.DeleteFireStoreUser(user);}
+
 
 
 

@@ -139,6 +139,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                     passU = uppass.getText().toString();
                     module.UpdateSharedPreference(nameU,mailU);
                     module.UpdateUser(CurrentUser.getId(), nameU,passU,mailU);
+                    module.UpdateFireStoreUser(tvUsername.getText().toString(),nameU,mailU,passU);
                     tvUsername.setText(nameU);
                     tvEmail.setText(mailU);
                     dialog.dismiss();
