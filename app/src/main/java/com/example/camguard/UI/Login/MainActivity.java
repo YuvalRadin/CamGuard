@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         module = new moduleLogin(this);
 
+
         //Asking if Location Permission is Granted
         ActivityResultLauncher<String[]> locationPermissionRequest =
                 registerForActivityResult(new ActivityResultContracts
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onAllDocumentsRetrieved(boolean isExist) {
                     if (isExist) {
                         if (module.UserExistsNotLocal(etUser.getText().toString(), etPass.getText().toString())) {
-                            module.addUser(ExistingName,ExistingPassword,ExistingEmail);
+                            module.addUser(ExistingName, ExistingPassword, ExistingEmail);
                         }
                         module.RememberMe(cb.isChecked());
                         CurrentUser.InitializeUser(module.getUserByName(etUser.getText().toString()).getString(1), module.getUserByName(etUser.getText().toString()).getString(3), module.getUserByName(etUser.getText().toString()).getString(0));
@@ -156,9 +157,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         etPass.setText("");
                         startActivity(intent);
                     }
+                    else Toast.makeText(MainActivity.this, "User Does Not Exist", Toast.LENGTH_SHORT).show();
+
                 }
             });
-
         }
 
         if(view == tvReg)
@@ -182,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 ExistingName = document.getData().get("name").toString();
                                 ExistingEmail = document.getData().get("email").toString();
                                 callback.onAllDocumentsRetrieved(true);
+                                return;
                             }
 
                         }
@@ -190,9 +193,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             ExistingName = document.getData().get("name").toString();
                             ExistingEmail = document.getData().get("email").toString();
                             callback.onAllDocumentsRetrieved(true);
+                            return;
                         }
                     }
                     callback.onAllDocumentsRetrieved(false);
+
                 }
             }
         });
