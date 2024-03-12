@@ -335,6 +335,11 @@ public class Repository {
     public void AddReport(LatLng latLng, String Description, Bitmap reportImage, GoogleMap mMap){
         Map<String, Object> marker = new HashMap<String, Object>();
         String picPath = uploadPicture(reportImage);
+        if(picPath == null || picPath.isEmpty())
+        {
+            Toast.makeText(context, "Upload Failed", Toast.LENGTH_SHORT).show();
+            return;
+        }
         marker.put("Latitude", latLng.latitude);
         marker.put("Longitude",latLng.longitude);
         marker.put("Description", Description);
@@ -505,5 +510,8 @@ public class Repository {
             });
         }
     }
+
+
+
 
 }

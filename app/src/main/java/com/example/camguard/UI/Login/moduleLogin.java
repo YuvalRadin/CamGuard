@@ -7,12 +7,15 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
+import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.Data.Repository.Repository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.units.qual.Current;
 
 public class moduleLogin {
 

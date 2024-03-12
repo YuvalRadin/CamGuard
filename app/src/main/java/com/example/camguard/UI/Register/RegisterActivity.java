@@ -127,7 +127,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             {
                 return;
             }
-            CheckForFirebase(etUser,etEmail,etPassword, new FirebaseCallback() {
+            CheckForFirebase(etUser,etEmail, new FirebaseCallback() {
                 @Override
                 public void onResult() {
                     if(etUser.getError()!=null)
@@ -168,7 +168,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public interface FirebaseCallback {
         void onResult();
     }
-    public void CheckForFirebase(EditText etUser, EditText etEmail, EditText etPassword, FirebaseCallback firebaseCallback)
+    public void CheckForFirebase(EditText etUser, EditText etEmail, FirebaseCallback firebaseCallback)
     {
         checkUserAndEmailExistence(etUser, etEmail, new FireStoreCallback() {
             @Override

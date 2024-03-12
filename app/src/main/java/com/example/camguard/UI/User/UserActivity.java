@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.camguard.Data.CurrentUser.CurrentUser;
@@ -20,7 +21,13 @@ import com.example.camguard.UI.Admin.AdminActivity;
 import com.example.camguard.UI.Camera.CameraActivity;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Login.MainActivity;
+import com.example.camguard.UI.Register.RegisterActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class UserActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,6 +36,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvUsername, tvEmail, tvReports;
     Button btnLogout, btnEdit;
     boolean passwordVisible = false;
+    FirebaseFirestore FireStore = FirebaseFirestore.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,12 +146,26 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                     mailU = upmail.getText().toString();
                     nameU = upname.getText().toString();
                     passU = uppass.getText().toString();
-                    module.UpdateSharedPreference(nameU,mailU);
-                    module.UpdateUser(CurrentUser.getId(), nameU,passU,mailU);
-                    module.UpdateFireStoreUser(tvUsername.getText().toString(),nameU,mailU,passU);
-                    tvUsername.setText(nameU);
-                    tvEmail.setText(mailU);
-                    dialog.dismiss();
+
+                    if(!module.CheckUps(upname, upmail,uppass))
+                    {
+                        return;
+                    }
+
+                    CheckForFirebase(upname, upmail, new FirebaseCallback() {
+                        @Override
+                        public void onResult() {
+                            if(upname.getError() == null && upmail.getError() == null) {
+                                module.UpdateSharedPreference(nameU, mailU);
+                                module.UpdateUser(CurrentUser.getId(), nameU, passU, mailU);
+                                module.UpdateFireStoreUser(tvUsername.getText().toString(), nameU, mailU, passU);
+                                tvUsername.setText(nameU);
+                                tvEmail.setText(mailU);
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+
                 }
             });
             btnClose.setOnClickListener(new View.OnClickListener() {
@@ -155,5 +178,52 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
             dialog.setCancelable(false);
             dialog.show();
         }
+    }
+
+    public interface FirebaseCallback {
+        void onResult();
+    }
+    public void CheckForFirebase(EditText etUser, EditText etEmail, FirebaseCallback firebaseCallback)
+    {
+        checkUserAndEmailExistence(etUser, etEmail, new FireStoreCallback() {
+            @Override
+            public void onCallback(boolean usernameExists, boolean emailExists) {
+                if (usernameExists) {
+                    etUser.setError("Username already exists");
+                }
+                if (emailExists) {
+                    etEmail.setError("Email already exists");
+                }
+                firebaseCallback.onResult();
+            }
+        });
+
+    }
+
+
+    public interface FireStoreCallback {
+        void onCallback(boolean usernameExists, boolean emailExists);
+    }
+
+    public void checkUserAndEmailExistence(EditText user, EditText email ,final FireStoreCallback callback) {
+        FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                boolean usernameExists = false;
+                boolean emailExists = false;
+
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    if (document.getData().get("name").toString().equals(user.getText().toString()) && !document.getData().get("name").toString().equals(CurrentUser.getName())) {
+                        user.setError("Username already exists");
+                        usernameExists = true;
+                    }
+                    if (document.getData().get("email").toString().equals(email.getText().toString()) && !document.getData().get("email").toString().equals(CurrentUser.getEmail())) {
+                        email.setError("Email already exists");
+                        emailExists = true;
+                    }
+                }
+                callback.onCallback(usernameExists, emailExists);
+            }
+        });
     }
 }
