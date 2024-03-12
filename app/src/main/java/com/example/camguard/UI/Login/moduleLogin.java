@@ -5,7 +5,14 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+
 import com.example.camguard.Data.Repository.Repository;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class moduleLogin {
 
@@ -63,6 +70,23 @@ public class moduleLogin {
     public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
     public String getIdByName(String user) { return rp.getIdByName(user);}
     public boolean isExist(String user) { return !rp.FindUser(user);}
+    public void deleteAllData() { rp.deleteAllData(); }
+    public void updateLocalDB() {
+        FirebaseFirestore FireStore = FirebaseFirestore.getInstance();
+
+        FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (QueryDocumentSnapshot document : task.getResult())
+                {
+                    rp.UserExistsNotLocal(document.getData().get("name").toString(), document.getData().get("email").toString());
+                    rp.addUser(document.getData().get("name").toString(), document.getData().get("password").toString(), document.getData().get("email").toString());
+                }
+            }
+        });
+
+    }
+
 
 
 

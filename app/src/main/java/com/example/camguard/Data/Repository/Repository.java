@@ -397,6 +397,7 @@ public class Repository {
 
         final String randomKey = UUID.randomUUID().toString();
         // Create a reference to 'images/mountains.jpg'
+
         StorageReference markersImagesRef = FireStorage.getReference().child("images/" + randomKey);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

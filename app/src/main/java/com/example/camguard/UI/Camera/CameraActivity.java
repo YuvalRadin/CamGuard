@@ -1,5 +1,6 @@
 package com.example.camguard.UI.Camera;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -79,33 +84,33 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         });
         bottomNavigationView.setSelectedItemId(R.id.menu_camera);
     }
+    ActivityResultLauncher<Intent> CameraResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        photo = (Bitmap) result.getData().getExtras().get("data");
+                        imageView.setImageBitmap(photo);
+                        imageView.setTag("Pic");
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK)
-        {
-            photo = (Bitmap) data.getExtras().get("data");
-            imageView.setImageBitmap(photo);
-            imageView.setTag("Pic");
+                        int height = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 320)));
+                        int width = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 240)));
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width,height);
+                        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                        imageView.setLayoutParams(params);
 
-            int height = Integer.parseInt(String.valueOf(Math.round(this.getResources().getDisplayMetrics().density * 320)));
-            int width = Integer.parseInt(String.valueOf(Math.round(this.getResources().getDisplayMetrics().density * 240)));
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width,height);
-            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            imageView.setLayoutParams(params);
-        }
-        else {
-            Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
+                    }
+                }
+            });
 
     @Override
     public void onClick(View view) {
         if(view == imageView)
         {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cameraIntent, REQUEST_CODE);
+            CameraResultLauncher.launch(cameraIntent);
         }
         if(view == btnSubmit)
         {
