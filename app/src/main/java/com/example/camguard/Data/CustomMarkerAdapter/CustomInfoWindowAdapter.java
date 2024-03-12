@@ -49,8 +49,6 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     public View getInfoContents(@NonNull Marker marker) {
         // Inflate the custom info window layout
         View view = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
-
-
         return view;
     }
 

@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        module = new moduleLogin(this);
+
         tvReg = findViewById(R.id.registerText);
         tvReg.setOnClickListener(this);
 
@@ -95,8 +97,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         cb = findViewById(R.id.rememberMeCheckbox);
 
-
-        module = new moduleLogin(this);
+        module.deleteAllData();
+        module.updateLocalDB();
 
         //Asking if Location Permission is Granted
         ActivityResultLauncher<String[]> locationPermissionRequest =
@@ -115,11 +117,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         }
                 );
+
         //If not granted asking for permission:
         locationPermissionRequest.launch(new String[] {
                 Manifest.permission.ACCESS_FINE_LOCATION,
 //                Manifest.permission.ACCESS_COARSE_LOCATION
         });
+
 
         //if username is already connected log-in immediately.
         if(module.CredentialsExist() && module.isExist(module.getCredentials()[0]))
@@ -172,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                boolean isFound = false;
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if(etUser.getText().toString().contains("@"))
@@ -182,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 ExistingName = document.getData().get("name").toString();
                                 ExistingEmail = document.getData().get("email").toString();
                                 callback.onAllDocumentsRetrieved(true);
+                                isFound = true;
                             }
 
                         }
@@ -190,7 +196,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             ExistingName = document.getData().get("name").toString();
                             ExistingEmail = document.getData().get("email").toString();
                             callback.onAllDocumentsRetrieved(true);
+                            isFound = true;
                         }
+                    }
+                    if(!isFound)
+                    {
+                        Toast.makeText(MainActivity.this, "User does not exist", Toast.LENGTH_SHORT).show();
                     }
                     callback.onAllDocumentsRetrieved(false);
                 }

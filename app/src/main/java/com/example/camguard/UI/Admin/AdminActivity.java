@@ -87,6 +87,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                             module.DeleteAllFireStoreData();
                             module.DoNotRemember();
                             Intent intent = new Intent(AdminActivity.this, MainActivity.class);
+                            Toast.makeText(getBaseContext(), "All data has been successfully deleted", Toast.LENGTH_SHORT).show();
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }
