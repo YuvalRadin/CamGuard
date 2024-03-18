@@ -1,6 +1,7 @@
 package com.example.camguard.UI.User;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -202,6 +203,10 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
         if(view == btnMyMarkers)
         {
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Fetching all of your markers!");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
             Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.my_markers);
             TableLayout myMarkers = dialog.findViewById(R.id.markersList);
@@ -303,6 +308,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         dialog.setCancelable(false);
                         dialog.show();
+                        progressDialog.dismiss();
                 }
             });
 
