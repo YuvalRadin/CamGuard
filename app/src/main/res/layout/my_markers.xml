@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/myMarkersLayout">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnClose">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent" >
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/markersList"
+                    android:orientation="vertical">
+
+                    <TableRow android:layout_weight="1">
+                        <!-- Image Field -->
+                        <TextView
+                            android:id="@+id/tvImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Preview"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/black"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="0.25"
+                            />
+
+                        <!-- Description Field -->
+                        <TextView
+                            android:id="@+id/descriptionTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Description"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/black"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="0.25"
+                            />
+
+                        <!-- ID Field -->
+                        <TextView
+                            android:id="@+id/idTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="ID"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/black"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="0.25"
+                            />
+
+                        <!-- Button Field -->
+                        <TextView
+                            android:id="@+id/tvDelete"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Delete"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/black"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="0.25"
+                            />
+
+
+
+
+                    </TableRow>
+                </TableLayout>
+
+            </HorizontalScrollView>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text="Close"/>
+
+</RelativeLayout>

@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.Data.CustomMarkerAdapter.CustomInfoWindowAdapter;
+import com.example.camguard.Data.DB.MyDatabaseHelper;
 import com.example.camguard.Data.Repository.Repository;
 import com.example.camguard.R;
 import com.example.camguard.UI.User.UserActivity;
@@ -36,6 +37,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -51,14 +53,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import io.grpc.stub.annotations.RpcMethod;
+
 public class FirebaseHelper {
     FirebaseFirestore FireStore = FirebaseFirestore.getInstance();
     FirebaseStorage FireStorage = FirebaseStorage.getInstance();
     Context context;
+    MyDatabaseHelper myDatabaseHelper;
 
     public FirebaseHelper(Context context)
     {
         this.context = context;
+        myDatabaseHelper = new MyDatabaseHelper(context);
     }
 
 
@@ -576,5 +582,62 @@ public class FirebaseHelper {
             }
         });
     }
+
+    public interface markersGotten
+    {
+        void onMarkersGotten(Task<QuerySnapshot> task, LinkedList<Uri> photos);
+    }
+
+    public void getMyMarkers(markersGotten callback)
+    {
+        getMyPhotos(new MyPhotos() {
+            @Override
+            public void onMyPhotosHere(LinkedList<Uri> photos) {
+                retrieveDocs(2, new DocsRetrievedListener() {
+                    @Override
+                    public void onDocsRetrieved(Task<QuerySnapshot> task) {
+                        callback.onMarkersGotten(task, photos);
+                    }
+                });
+            }
+        });
+
+    }
+
+    interface MyPhotos
+    {
+      void onMyPhotosHere(LinkedList<Uri> photos);
+    }
+
+    public void getMyPhotos(MyPhotos callback)
+    {
+        LinkedList<Uri> photos = new LinkedList<>();
+            retrieveDocs(2, new DocsRetrievedListener() {
+                @Override
+                public void onDocsRetrieved(Task<QuerySnapshot> task) {
+                    getMyPhotosRecursive(photos, 0, task, callback);
+                }
+            });
+
+    }
+
+    public void getMyPhotosRecursive(LinkedList<Uri> photos, int index, Task<QuerySnapshot> task, MyPhotos callback) {
+        if(index < task.getResult().size())
+        {
+        StorageReference reportImageRef = FireStorage.getReferenceFromUrl("gs://camguard-1d482.appspot.com/" + task.getResult().getDocuments().get(index).getData().get("PictureKey"));
+        reportImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                photos.add(uri);
+                if(photos.size() == task.getResult().size()){
+                    callback.onMyPhotosHere(photos);
+                }
+                else getMyPhotosRecursive(photos, index + 1, task, callback);
+            }
+        });
+        }
+    }
+
+
 
 }

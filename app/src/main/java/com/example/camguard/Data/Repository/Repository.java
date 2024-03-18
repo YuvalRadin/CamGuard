@@ -1,56 +1,16 @@
 package com.example.camguard.Data.Repository;
 
-import static android.content.ContentValues.TAG;
-
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.util.Log;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.camguard.Data.CurrentUser.CurrentUser;
-import com.example.camguard.Data.CustomMarkerAdapter.CustomInfoWindowAdapter;
 import com.example.camguard.Data.DB.MyDatabaseHelper;
 import com.example.camguard.Data.FireBase.FirebaseHelper;
-import com.example.camguard.R;
-import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class Repository {
     Context context;
@@ -63,7 +23,6 @@ public class Repository {
         this.context = context;
         myDatabaseHelper = new MyDatabaseHelper(this.context);
         myFirebaseHelper = new FirebaseHelper(this.context);
-
     }
 
     //SQLite database
@@ -96,6 +55,7 @@ public class Repository {
     public void deleteMarkerByID(String marker) { myFirebaseHelper.deleteMarkerByID(marker); }
     public void deleteMarkerByDesc(String marker) {myFirebaseHelper.deleteMarkerByDesc(marker);}
     public void deleteAllMarkers() { myFirebaseHelper.deleteAllMarkers();}
+    public void getMyMarkers(FirebaseHelper.markersGotten callback) { myFirebaseHelper.getMyMarkers(callback);}
 
 
 

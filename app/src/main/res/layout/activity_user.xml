@@ -53,6 +53,18 @@
         android:paddingBottom="16dp"/>
 
     <Button
+        android:id="@+id/btnMyMarkers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#2980b9"
+        android:text="Show my Markers"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:layout_above="@id/btnEdit"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
         android:id="@+id/btnEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

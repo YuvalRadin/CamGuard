@@ -25,6 +25,10 @@ public class ModuleUser {
         editor = sharedPreferences.edit();
     }
 
+
+    public void getMyMarkers(FirebaseHelper.markersGotten callback) { repository.getMyMarkers(callback);}
+    public void deleteMarkerByID(String marker) { repository.deleteMarkerByID(marker); }
+
     public void checkUserAndEmailExistence(String user, String email , FirebaseHelper.CredentialsCheck callback) {repository.checkUserAndEmailExistence(user,email,callback); }
     public int getReports(String user) { return repository.getReportsByID(repository.getIdByName(user));}
 
@@ -40,9 +44,9 @@ public class ModuleUser {
     {
         return sharedPreferences.getBoolean("Remember", false);
     }
-    public void UpdateUser(String id, String name, String pass, String email) { repository.updateUser(id, name, pass, email);}
-    public void UpdateFireStoreUser(String user, String upUser, String upEmail, String upPass) { repository.updateFireStoreUser(user,upUser,upEmail,upPass);}
-    public void UpdateSharedPreference(String name, String email) { editor.putString("username", name); editor.putString("email", email); editor.apply();}
+    public void updateUser(String id, String name, String pass, String email) { repository.updateUser(id, name, pass, email);}
+    public void updateFireStoreUser(String user, String upUser, String upEmail, String upPass) { repository.updateFireStoreUser(user,upUser,upEmail,upPass);}
+    public void updateSharedPreference(String name, String email) { editor.putString("username", name); editor.putString("email", email); editor.apply();}
 
     public Boolean CheckUps(EditText etUser, EditText etEmail, EditText etPassword)
     {

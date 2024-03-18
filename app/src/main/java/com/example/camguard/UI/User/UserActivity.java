@@ -2,6 +2,7 @@ package com.example.camguard.UI.User;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -10,11 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.Data.FireBase.FirebaseHelper;
 import com.example.camguard.R;
@@ -26,16 +32,20 @@ import com.example.camguard.UI.Register.RegisterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.LinkedList;
 
 public class UserActivity extends AppCompatActivity implements View.OnClickListener {
 
     ModuleUser module;
     BottomNavigationView bottomNavigationView;
     TextView tvUsername, tvEmail, tvReports;
-    Button btnLogout, btnEdit;
+    Button btnLogout, btnEdit, btnMyMarkers;
+
     boolean passwordVisible = false;
 
     @Override
@@ -54,6 +64,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         btnLogout.setOnClickListener(this);
         btnEdit = findViewById(R.id.btnEdit);
         btnEdit.setOnClickListener(this);
+        btnMyMarkers = findViewById(R.id.btnMyMarkers);
+        btnMyMarkers.setOnClickListener(this);
 
 
             tvUsername.setText(CurrentUser.getName());
@@ -156,9 +168,11 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                         public void onCredentialsCheckComplete(boolean doesUserExist, boolean doesEmailExist) {
                             if(!doesUserExist && !doesEmailExist)
                             {
-                                module.UpdateSharedPreference(nameU, mailU);
-                                module.UpdateUser(CurrentUser.getId(), nameU, passU, mailU);
-                                module.UpdateFireStoreUser(tvUsername.getText().toString(), nameU, mailU, passU);
+                                module.updateSharedPreference(nameU, mailU);
+                                module.updateUser(CurrentUser.getId(), nameU, passU, mailU);
+                                module.updateFireStoreUser(tvUsername.getText().toString(), nameU, mailU, passU);
+                                CurrentUser.setName(nameU);
+                                CurrentUser.setEmail(mailU);
                                 tvUsername.setText(nameU);
                                 tvEmail.setText(mailU);
                                 dialog.dismiss();
@@ -184,6 +198,114 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.setCancelable(false);
             dialog.show();
+        }
+
+        if(view == btnMyMarkers)
+        {
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.my_markers);
+            TableLayout myMarkers = dialog.findViewById(R.id.markersList);
+            RelativeLayout myMarkersLayout = dialog.findViewById(R.id.myMarkersLayout);
+
+            Button btnClose = dialog.findViewById(R.id.btnClose);
+            btnClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            module.getMyMarkers(new FirebaseHelper.markersGotten() {
+                @Override
+                public void onMarkersGotten(Task<QuerySnapshot> task, LinkedList<Uri> photos) {
+                    boolean flag = false;
+
+                        for (int i = 0; i < photos.size(); i++) {
+
+                            DocumentSnapshot document = task.getResult().getDocuments().get(i);
+                            if (document.getData().get("Reporter").toString().equals(CurrentUser.getName())) {
+                                flag = true;
+                                TableRow Row = new TableRow(getBaseContext());
+                                Row.setLayoutParams(new TableRow.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        0.25f));
+
+                                // Create ImageView
+                                ImageView imageView = new ImageView(getBaseContext());
+                                imageView.setImageURI(photos.get(i)); // Replace with your image resource
+                                Glide.with(getBaseContext()).load(photos.get(i)).preload();
+                                Glide.with(getBaseContext()).load(photos.get(i)).into(imageView);
+                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                imageView.setAdjustViewBounds(true);
+                                imageView.setLayoutParams(new TableRow.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        0.25f));
+
+                                // Create TextView for description
+                                TextView descriptionTextView = new TextView(getBaseContext());
+                                descriptionTextView.setText(document.getData().get("Description").toString());
+                                descriptionTextView.setTextSize(16);
+                                descriptionTextView.setTextColor(getResources().getColor(android.R.color.black, null));
+                                descriptionTextView.setLayoutParams(new TableRow.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        1f));
+
+                                // Create TextView for ID
+                                TextView idTextView = new TextView(getBaseContext());
+                                idTextView.setText(document.getData().get("PictureKey").toString().substring(8));
+                                idTextView.setTextSize(16);
+                                idTextView.setTextColor(getResources().getColor(android.R.color.black, null));
+                                idTextView.setLayoutParams(new TableRow.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        1f));
+
+                                // Create Button
+                                Button actionButton = new Button(getBaseContext());
+                                actionButton.setText("Delete");
+                                actionButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        module.deleteMarkerByID(document.getData().get("PictureKey").toString().substring(8));
+                                    }
+                                });
+                                actionButton.setLayoutParams(new TableRow.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        1f));
+
+                                // add to TableRow
+                                Row.addView(imageView);
+                                Row.addView(descriptionTextView);
+                                Row.addView(idTextView);
+                                Row.addView(actionButton);
+
+                                myMarkers.addView(Row);
+
+                            }
+                        }
+
+
+                        if(!flag)
+                        {
+                                myMarkersLayout.removeAllViews();
+                                TextView tv = new TextView(getBaseContext());
+                                tv.setText("It Seems like you don't have any reports made yet!");
+                                tv.setTextSize(30);
+                                tv.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                                myMarkersLayout.addView(tv);
+                                myMarkersLayout.addView(btnClose);
+                        }
+
+                        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        dialog.setCancelable(false);
+                        dialog.show();
+                }
+            });
+
         }
     }
 
