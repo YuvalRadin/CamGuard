@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.camguard.Data.FireBase.FirebaseHelper;
 import com.example.camguard.Data.Repository.Repository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,9 +40,11 @@ public class moduleRegister {
         editor = sharedPreferences.edit();
         FireStore = FirebaseFirestore.getInstance();
     }
-    public boolean UserExistsNotLocal(String user, String email) { return repository.UserExistsNotLocal(user,email); }
+    public boolean UserExistsNotLocal(String user, String email) { return repository.userExistsNotLocal(user,email); }
     public void addUser(String Username, String Email, String Password) { repository.addUser(Username,Email,Password);}
-    public void AddUserToFireBase(String user, String email, String password) { repository.AddUserToFireBase(user,email,password);}
+    public void AddUserToFireBase(String user, String email, String password) { repository.addUserToFireBase(user,email,password);}
+
+    public void doesUserAndEmailExist(String user, String email, FirebaseHelper.CredentialsCheck callback) { repository.doesUserAndEmailExist(user, email, callback);}
     public Boolean CheckUps(EditText etUser, EditText etEmail, EditText etPassword, EditText etPasswordConfirmation)
     {
         // username validity checkups
@@ -102,12 +105,12 @@ public class moduleRegister {
 
 
         //Username & Email Availability checks
-        if(!(repository.FindUser(etUser.getText().toString())))
+        if(!(repository.findUser(etUser.getText().toString())))
         {
             etUser.setError("Username already exists");
             return false;
         }
-        if(!(repository.FindEmail(etEmail.getText().toString())))
+        if(!(repository.findEmail(etEmail.getText().toString())))
         {
             etEmail.setError("Email already exists");
             return false;

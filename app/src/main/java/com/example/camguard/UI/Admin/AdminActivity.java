@@ -84,7 +84,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             module.deleteAllData();
-                            module.DeleteAllFireStoreData();
+                            module.deleteAllFireStoreUsers();
                             module.DoNotRemember();
                             Intent intent = new Intent(AdminActivity.this, MainActivity.class);
                             Toast.makeText(getBaseContext(), "All data has been successfully deleted", Toast.LENGTH_SHORT).show();
@@ -111,7 +111,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     module.deleteOneRow(CurrentUser.getId());
-                                    module.DeleteFireStoreUser(CurrentUser.getName());
+                                    module.deleteFireStoreUser(CurrentUser.getName());
                                     module.DoNotRemember();
                                     Intent intent = new Intent(AdminActivity.this, MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -127,7 +127,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                 else {
                     String UserToDelete = module.getUserByName(etDeleteUser.getText().toString()).getString(0);
                     module.deleteOneRow(UserToDelete);
-                    module.DeleteFireStoreUser(CurrentUser.getName());
+                    module.deleteFireStoreUser(CurrentUser.getName());
                 }
             }
             else Toast.makeText(this, "User Does Not Exist!", Toast.LENGTH_SHORT).show();
@@ -135,16 +135,16 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         }
         if(view == btnDeleteMarker)
         {
-            module.DeleteMarkerByID(etDeleteMarker.getText().toString());
+            module.deleteMarkerByID(etDeleteMarker.getText().toString());
             etDeleteMarker.setText("");
         }
         if(view == btnDeleteAllMarkers)
         {
-            module.DeleteAllMarkers();
+            module.deleteAllMarkers();
         }
         if(view == btnDeleteMarkerByDesc)
         {
-            module.DeleteMarkerByDesc(etDeleteMarkerByDesc.getText().toString());
+            module.deleteMarkerByDesc(etDeleteMarkerByDesc.getText().toString());
             etDeleteMarkerByDesc.setText("");
         }
     }

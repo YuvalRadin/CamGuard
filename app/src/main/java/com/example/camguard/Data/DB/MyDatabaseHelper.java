@@ -112,21 +112,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return cursor.getString(0);
     }
 
-    public String getNameByEmail(String email)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT "+  COLUMN_USERNAME +" FROM "+ TABLE_NAME + " WHERE " + COLUMN_EMAIL + " = ?";
-
-        Cursor cursor = db.rawQuery(query, new String[]{email});
-        if(cursor.getCount() == -1)
-        {
-            return null;
-        }
-        cursor.moveToFirst();
-        return cursor.getString(0);
-    }
-
-    public boolean FindUser(String user)
+    public boolean findUser(String user)
     {
         boolean isUnique;
         Cursor cursor;
@@ -140,7 +126,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return isUnique;
     }
 
-    public boolean UserExistsNotLocal(String user, String email)
+    public boolean userExistsNotLocal(String user, String email)
     {
         boolean isUnique;
         Cursor cursor;
@@ -154,7 +140,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return isUnique;
     }
 
-    public boolean FindEmail(String email)
+    public boolean findEmail(String email)
     {
         boolean isUnique;
         Cursor cursor;
@@ -198,7 +184,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void AddReport(String id)
+    public void addReport(String id)
     {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -209,7 +195,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_REPORTS, cursor.getInt(0) + 1);
         db.update(TABLE_NAME, cv, "_id=?", new String[]{id});
     }
-    public void UpdateReports(String id, int reports)
+    public void updateReports(String id, int reports)
     {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -222,7 +208,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean LoginUser(String user, String password, int EmailLogin)
+    public boolean loginUser(String user, String password, int EmailLogin)
     {
         boolean isExist = false;
         Cursor cursor;

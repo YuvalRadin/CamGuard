@@ -30,6 +30,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.Data.CustomMarkerAdapter.CustomInfoWindowAdapter;
+import com.example.camguard.Data.FireBase.FirebaseHelper;
 import com.example.camguard.Data.Repository.Repository;
 import com.example.camguard.R;
 import com.example.camguard.UI.Admin.AdminActivity;
@@ -64,6 +65,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -192,13 +194,18 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
             reportImage = (Bitmap) getIntent().getParcelableExtra("Picture");
             addReport();
         }
-        module.getAllDocumentIds(new Repository.DocumentIdCallback() {
+        module.retrieveDocs(2, new FirebaseHelper.DocsRetrievedListener() {
             @Override
-            public void onDocumentIdListLoaded(List<String> documentIds) {
-                // Process the list of document IDs here
-                module.CreateCustomMarkers(documentIds,mMap);
+            public void onDocsRetrieved(Task<QuerySnapshot> task) {
+                LinkedList<String> documentsIds = new LinkedList<>();
+                for(QueryDocumentSnapshot document : task.getResult())
+                {
+                    documentsIds.add(document.getId());
+                }
+                module.CreateCustomMarkers(documentsIds, mMap);
             }
         });
+
 
     }
 

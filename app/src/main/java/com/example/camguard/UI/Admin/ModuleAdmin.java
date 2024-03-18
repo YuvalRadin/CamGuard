@@ -32,12 +32,12 @@ public class ModuleAdmin {
     public void deleteAllData() { repository.deleteAllData(); }
     public Cursor getUserByName(String user){ return repository.getUserByName(user);}
     public void deleteOneRow(String row_id){ repository.deleteOneRow(row_id);}
-    public boolean FindUser(String user) { return repository.FindUser(user);}
-    public void DeleteMarkerByID(String marker) { repository.DeleteMarkerByID(marker);}
-    public void DeleteMarkerByDesc(String marker) { repository.DeleteMarkerByDesc(marker);}
-    public void DeleteAllMarkers(){ repository.DeleteAllMarkers();}
-    public void DeleteAllFireStoreData() { repository.DeleteAllFireStoreData();}
-    public void DeleteFireStoreUser(String user){ repository.DeleteFireStoreUser(user);}
+    public boolean FindUser(String user) { return repository.findUser(user);}
+    public void deleteMarkerByID(String marker) { repository.deleteMarkerByID(marker);}
+    public void deleteMarkerByDesc(String marker) { repository.deleteMarkerByDesc(marker);}
+    public void deleteAllMarkers(){ repository.deleteAllMarkers();}
+    public void deleteAllFireStoreUsers() { repository.deleteAllFireStoreUsers();}
+    public void deleteFireStoreUser(String user){ repository.deleteFireStoreUser(user);}
 
 
 

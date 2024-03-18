@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.widget.EditText;
 
 import com.example.camguard.Data.CurrentUser.CurrentUser;
+import com.example.camguard.Data.FireBase.FirebaseHelper;
 import com.example.camguard.Data.Repository.Repository;
 
 public class ModuleUser {
@@ -24,13 +25,7 @@ public class ModuleUser {
         editor = sharedPreferences.edit();
     }
 
-    public boolean CredentialsExist()
-    {
-        return sharedPreferences.contains("username");
-    }
-
-    public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
-
+    public void checkUserAndEmailExistence(String user, String email , FirebaseHelper.CredentialsCheck callback) {repository.checkUserAndEmailExistence(user,email,callback); }
     public int getReports(String user) { return repository.getReportsByID(repository.getIdByName(user));}
 
     public void DoNotRemember()
@@ -45,8 +40,8 @@ public class ModuleUser {
     {
         return sharedPreferences.getBoolean("Remember", false);
     }
-    public void UpdateUser(String id, String name, String pass, String email) { repository.UpdateUser(id, name, pass, email);}
-    public void UpdateFireStoreUser(String user, String upUser, String upEmail, String upPass) { repository.UpdateFireStoreUser(user,upUser,upEmail,upPass);}
+    public void UpdateUser(String id, String name, String pass, String email) { repository.updateUser(id, name, pass, email);}
+    public void UpdateFireStoreUser(String user, String upUser, String upEmail, String upPass) { repository.updateFireStoreUser(user,upUser,upEmail,upPass);}
     public void UpdateSharedPreference(String name, String email) { editor.putString("username", name); editor.putString("email", email); editor.apply();}
 
     public Boolean CheckUps(EditText etUser, EditText etEmail, EditText etPassword)
@@ -104,12 +99,12 @@ public class ModuleUser {
 
 
         //Username & Email Availability checks
-        if(!(repository.FindUser(etUser.getText().toString())) && !etUser.getText().toString().equals(CurrentUser.getName()))
+        if(!(repository.findUser(etUser.getText().toString())) && !etUser.getText().toString().equals(CurrentUser.getName()))
         {
             etUser.setError("Username already exists");
             return false;
         }
-        if(!(repository.FindEmail(etEmail.getText().toString())) && !etEmail.getText().toString().equals(CurrentUser.getEmail()))
+        if(!(repository.findEmail(etEmail.getText().toString())) && !etEmail.getText().toString().equals(CurrentUser.getEmail()))
         {
             etEmail.setError("Email already exists");
             return false;

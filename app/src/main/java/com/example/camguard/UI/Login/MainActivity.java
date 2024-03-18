@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.camguard.Data.CurrentUser.CurrentUser;
+import com.example.camguard.Data.FireBase.FirebaseHelper;
 import com.example.camguard.Data.Repository.Repository;
 import com.example.camguard.R;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
@@ -43,8 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean passwordVisible = false;
     CheckBox cb;
     EditText etUser, etPass;
-    FirebaseFirestore FireStore = FirebaseFirestore.getInstance();
-    String ExistingPassword, ExistingName, ExistingEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //If not granted asking for permission:
         locationPermissionRequest.launch(new String[] {
                 Manifest.permission.ACCESS_FINE_LOCATION,
-//                Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION
         });
 
         //if username is already connected log-in immediately.
@@ -143,23 +142,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
             Intent intent = new Intent(MainActivity.this, FragmentMap.class);
-            getAllDocumentIds(new DocumentsRetrieved() {
+
+            //checking if user exists in firebase
+            module.doesUserExist(etUser.getText().toString(), etPass.getText().toString(), new FirebaseHelper.SearchComplete() {
                 @Override
-                public void onAllDocumentsRetrieved(boolean isExist) {
-                    if (isExist) {
+                public void onSearchComplete(String user, String email, String password, boolean doesExist) {
+                    //after the search is complete checking if he found one
+                    if(doesExist)
+                    {
+                        //if search was completed but he does not exist in local database add him
                         if (module.UserExistsNotLocal(etUser.getText().toString(), etPass.getText().toString())) {
-                            module.addUser(ExistingName, ExistingPassword, ExistingEmail);
+                            module.addUser(user, password, email);
                         }
+
+                        //log in the user + initialize him
                         module.RememberMe(cb.isChecked());
-                        CurrentUser.InitializeUser(module.getUserByName(etUser.getText().toString()).getString(1), module.getUserByName(etUser.getText().toString()).getString(3), module.getUserByName(etUser.getText().toString()).getString(0));
+                        CurrentUser.InitializeUser(module.getUserByName(user).getString(1), module.getUserByName(user).getString(3), module.getUserByName(user).getString(0));
                         module.SaveUser(etUser);
                         etUser.setText("");
                         etPass.setText("");
                         startActivity(intent);
                     }
-                    else Toast.makeText(MainActivity.this, "User Does Not Exist", Toast.LENGTH_SHORT).show();
-
+                    else Toast.makeText(MainActivity.this, "User was not found", Toast.LENGTH_SHORT).show();
                 }
+
             });
         }
 
@@ -168,43 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(intent);
         }
-    }
 
-    public void getAllDocumentIds(DocumentsRetrieved callback) {
-        FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        if(etUser.getText().toString().contains("@"))
-                        {
-                            if(document.getData().get("email").toString().equals(etUser.getText().toString()) && document.getData().get("password").toString().equals(etPass.getText().toString()))
-                            {
-                                ExistingPassword = document.getData().get("password").toString();
-                                ExistingName = document.getData().get("name").toString();
-                                ExistingEmail = document.getData().get("email").toString();
-                                callback.onAllDocumentsRetrieved(true);
-                                return;
-                            }
-
-                        }
-                        else if (document.getData().get("name").toString().equals(etUser.getText().toString()) && document.getData().get("password").toString().equals(etPass.getText().toString())){
-                            ExistingPassword = document.getData().get("password").toString();
-                            ExistingName = document.getData().get("name").toString();
-                            ExistingEmail = document.getData().get("email").toString();
-                            callback.onAllDocumentsRetrieved(true);
-                            return;
-                        }
-                    }
-                    callback.onAllDocumentsRetrieved(false);
-
-                }
-            }
-        });
-    }
-    public interface DocumentsRetrieved
-    {
-        void onAllDocumentsRetrieved(boolean isExist);
     }
 
 

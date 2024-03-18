@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.camguard.Data.CurrentUser.CurrentUser;
+import com.example.camguard.Data.FireBase.FirebaseHelper;
 import com.example.camguard.R;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Login.MainActivity;
@@ -35,7 +36,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     moduleRegister module;
     Button btnRegister;
     CheckBox cb;
-    FirebaseFirestore FireStore = FirebaseFirestore.getInstance();
     boolean passwordVisible = false, PasswordVisibleConfirmation = false;
     String ExistingPassword;
 
@@ -127,37 +127,43 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             {
                 return;
             }
-            CheckForFirebase(etUser,etEmail, new FirebaseCallback() {
+            module.doesUserAndEmailExist(etUser.getText().toString(), etEmail.getText().toString(), new FirebaseHelper.CredentialsCheck() {
                 @Override
-                public void onResult() {
-                    if(etUser.getError()!=null)
+                public void onCredentialsCheckComplete(boolean doesUserExist, boolean doesEmailExist) {
+                    if(!doesEmailExist && !doesEmailExist)
                     {
+                        module.addUser(etUser.getText().toString(),etPassword.getText().toString(),etEmail.getText().toString());
+                        module.AddUserToFireBase(etUser.getText().toString(),etEmail.getText().toString(),etPassword.getText().toString());
+                        CurrentUser.InitializeUser(module.getUserByName(etUser.getText().toString()).getString(1), module.getUserByName(etUser.getText().toString()).getString(3), module.getUserByName(etUser.getText().toString()).getString(0));
+                        module.SaveUser(etUser, etEmail);
+                        module.RememberMe(cb.isChecked());
+                        etPassword.setText("");
+                        etPasswordConfirmation.setText("");
+                        etUser.setText("");
+                        etEmail.setText("");
+                        Toast.makeText(RegisterActivity.this, "Added Successfully", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RegisterActivity.this, FragmentMap.class);
+                        startActivity(intent);
+                    }
+
+                    if(doesUserExist)
+                    {
+                        etUser.setError("Username already exists");
                         if(module.UserExistsNotLocal(etUser.getText().toString(), etEmail.getText().toString()))
                         {
                             module.addUser(etUser.getText().toString(),ExistingPassword,etEmail.getText().toString());
                         }
-                        return;
                     }
-                    if(etEmail.getError() !=null)
+
+                    if(doesEmailExist)
                     {
+                        etEmail.setError("Email already exists");
                         if(module.UserExistsNotLocal(etUser.getText().toString(), etEmail.getText().toString()))
                         {
                             module.addUser(etUser.getText().toString(),ExistingPassword,etEmail.getText().toString());
                         }
-                        return;
                     }
-                    module.addUser(etUser.getText().toString(),etPassword.getText().toString(),etEmail.getText().toString());
-                    module.AddUserToFireBase(etUser.getText().toString(),etEmail.getText().toString(),etPassword.getText().toString());
-                    CurrentUser.InitializeUser(module.getUserByName(etUser.getText().toString()).getString(1), module.getUserByName(etUser.getText().toString()).getString(3), module.getUserByName(etUser.getText().toString()).getString(0));
-                    module.SaveUser(etUser, etEmail);
-                    module.RememberMe(cb.isChecked());
-                    etPassword.setText("");
-                    etPasswordConfirmation.setText("");
-                    etUser.setText("");
-                    etEmail.setText("");
-                    Toast.makeText(RegisterActivity.this, "Added Successfully", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(RegisterActivity.this, FragmentMap.class);
-                    startActivity(intent);
+
                 }
             });
 
@@ -165,52 +171,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         }
     }
-    public interface FirebaseCallback {
-        void onResult();
-    }
-    public void CheckForFirebase(EditText etUser, EditText etEmail, FirebaseCallback firebaseCallback)
-    {
-        checkUserAndEmailExistence(etUser, etEmail, new FireStoreCallback() {
-            @Override
-            public void onCallback(boolean usernameExists, boolean emailExists) {
-                if (usernameExists) {
-                    etUser.setError("Username already exists");
-                }
-                if (emailExists) {
-                    etEmail.setError("Email already exists");
-                }
-                firebaseCallback.onResult();
-            }
-        });
-
-    }
 
 
-    public interface FireStoreCallback {
-        void onCallback(boolean usernameExists, boolean emailExists);
-    }
 
-    public void checkUserAndEmailExistence(EditText user, EditText email ,final FireStoreCallback callback) {
-        FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                boolean usernameExists = false;
-                boolean emailExists = false;
-
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    if (document.getData().get("name").toString().equals(user.getText().toString())) {
-                        user.setError("Username already exists");
-                        ExistingPassword = document.getData().get("password").toString();
-                        usernameExists = true;
-                    }
-                    if (document.getData().get("email").toString().equals(email.getText().toString())) {
-                        email.setError("Email already exists");
-                        ExistingPassword = document.getData().get("password").toString();
-                        emailExists = true;
-                    }
-                }
-                callback.onCallback(usernameExists, emailExists);
-            }
-        });
-    }
 }

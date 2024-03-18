@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 
+import com.example.camguard.Data.FireBase.FirebaseHelper;
 import com.example.camguard.Data.Repository.Repository;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -43,7 +44,7 @@ public class moduleMap {
         editor.apply();
     }
 
-    public void UpdateReports(String id, int reports) { repository.UpdateReports(id,reports);}
+    public void UpdateReports(String id, int reports) { repository.updateReports(id,reports);}
     public boolean DoesRemember()
     {
         return sharedPreferences.getBoolean("Remember", false);
@@ -53,8 +54,8 @@ public class moduleMap {
         return sharedPreferences.contains("username");
     }
     public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
-    public void AddReport(LatLng latLng, String Description, Bitmap reportImage, GoogleMap mMap) { repository.AddReport(latLng,Description,reportImage,mMap); }
-    public void CreateCustomMarkers(List<String> documentIds, GoogleMap mMap) { repository.CreateCustomMarkers(documentIds, mMap);}
-    public void getAllDocumentIds(Repository.DocumentIdCallback callback) { repository.getAllDocumentIds(callback);}
+    public void AddReport(LatLng latLng, String Description, Bitmap reportImage, GoogleMap mMap) { repository.addReport(latLng,Description,reportImage,mMap); }
+    public void CreateCustomMarkers(List<String> documentIds, GoogleMap mMap) { repository.createCustomMarkers(documentIds, mMap);}
+    public void retrieveDocs(int which, FirebaseHelper.DocsRetrievedListener callback) { repository.retrieveDocs(which, callback);}
 
 }
