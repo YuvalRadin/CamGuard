@@ -18,6 +18,9 @@
         android:theme="@style/Theme.CamGuard"
         tools:targetApi="31">
         <activity
+            android:name=".UI.EnableGPS.EnableGPSActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.Admin.AdminActivity"
             android:exported="false" />
         <activity
