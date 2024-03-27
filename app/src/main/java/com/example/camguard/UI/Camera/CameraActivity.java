@@ -118,7 +118,11 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         // There are no request codes
-
+                        if(!getContentResolver().getType((result.getData().getData())).startsWith("image/"))
+                        {
+                            Toast.makeText(CameraActivity.this, "Images only!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                             Uri uriPhoto = result.getData().getData();
                             imageView.setImageURI(uriPhoto);
                         try {
