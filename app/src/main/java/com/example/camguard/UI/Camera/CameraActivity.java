@@ -1,8 +1,10 @@
 package com.example.camguard.UI.Camera;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -17,18 +19,21 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.R;
 import com.example.camguard.UI.Admin.AdminActivity;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
+import com.example.camguard.UI.Login.MainActivity;
 import com.example.camguard.UI.User.UserActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.IOException;
+
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final int REQUEST_CODE = 22;
     ImageView imageView;
     Button btnSubmit;
     EditText etReport;
@@ -95,6 +100,35 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         imageView.setImageBitmap(photo);
                         imageView.setTag("Pic");
 
+
+                        int height = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 320)));
+                        int width = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 240)));
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width,height);
+                        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                        imageView.setLayoutParams(params);
+
+                    }
+                }
+            });
+
+    ActivityResultLauncher<Intent> GalleryResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+
+                            Uri uriPhoto = result.getData().getData();
+                            imageView.setImageURI(uriPhoto);
+                        try {
+                            photo = Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), uriPhoto),240,320, false);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        imageView.setTag("Pic");
+
+
                         int height = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 320)));
                         int width = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 240)));
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width,height);
@@ -109,8 +143,23 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         if(view == imageView)
         {
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            CameraResultLauncher.launch(cameraIntent);
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage("Which way would you prefer")
+                    .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent galleryIntent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+                            GalleryResultLauncher.launch(galleryIntent);
+                        }
+                    })
+                    .setNegativeButton("Camera", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            CameraResultLauncher.launch(cameraIntent);
+                        }
+                    }).show();
+
         }
         if(view == btnSubmit)
         {
