@@ -1,12 +1,15 @@
 package com.example.camguard.UI.Camera;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +20,12 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.R;
@@ -31,6 +36,8 @@ import com.example.camguard.UI.User.UserActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
+
+import io.grpc.Context;
 
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -111,6 +118,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 }
             });
 
+
     ActivityResultLauncher<Intent> GalleryResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -142,6 +150,27 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 }
             });
+    ActivityResultLauncher<PickVisualMediaRequest> OlderGalleryResultActivity =
+            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                if (uri != null) {
+                    // There are no request codes
+                    imageView.setImageURI(uri);
+                    try {
+                        photo = Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), uri), 240, 320, false);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    imageView.setTag("Pic");
+
+
+                    int height = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 320)));
+                    int width = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 240)));
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
+                    params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                    imageView.setLayoutParams(params);
+                }
+            });
+
 
     @Override
     public void onClick(View view) {
@@ -152,8 +181,18 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent galleryIntent = new Intent(MediaStore.ACTION_PICK_IMAGES);
-                            GalleryResultLauncher.launch(galleryIntent);
+                           if(ActivityCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                               Intent galleryIntent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+                               try {
+                               GalleryResultLauncher.launch(galleryIntent);
+                               } catch (Exception e)
+                               {
+                                   OlderGalleryResultActivity.launch(new PickVisualMediaRequest.Builder()
+                                           .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                                           .build());
+                                   Log.d("Error owo", e.toString());
+                               }
+                           }
                         }
                     })
                     .setNegativeButton("Camera", new DialogInterface.OnClickListener() {
@@ -161,6 +200,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             CameraResultLauncher.launch(cameraIntent);
+
+
                         }
                     }).show();
 
