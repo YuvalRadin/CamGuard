@@ -275,6 +275,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                                     @Override
                                     public void onClick(View view) {
                                         module.deleteMarkerByID(document.getData().get("PictureKey").toString().substring(8));
+                                        Row.removeAllViews();
                                     }
                                 });
                                 actionButton.setLayoutParams(new TableRow.LayoutParams(
