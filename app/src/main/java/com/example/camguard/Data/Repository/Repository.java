@@ -26,7 +26,6 @@ public class Repository {
     }
 
     //SQLite database
-
     public void updateUser(String id, String name, String pass, String email) { myDatabaseHelper.updateData(id, name, pass, email);}
     public boolean findUser(String user) { return myDatabaseHelper.findUser(user);}
     public boolean findEmail(String email) { return myDatabaseHelper.findEmail(email);}

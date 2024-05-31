@@ -36,30 +36,12 @@ public class moduleLogin {
 
     public void addUser(String Username, String Password, String Email) { repository.addUser(Username,Password,Email);}
     public boolean UserExistsNotLocal(String user, String email) { return repository.userExistsNotLocal(user,email); }
-    public int isExist(EditText etUser, EditText etPass)
-    {
-        if(etUser.getText().toString().contains("@"))
-        {
-            if (!repository.loginUser(etUser.getText().toString(), etPass.getText().toString(), 2)) {
-                return 2;
-            } else
-                return 0;
 
-        }
-        else {
-            if (!repository.loginUser(etUser.getText().toString(), etPass.getText().toString(), 1)) {
-                return 1;
-            } else
-                return 0;
-        }
-    }
     public void RememberMe(boolean flag){
         editor.putBoolean("Remember", flag);
         editor.apply();
     }
-
     public Cursor getUserByName(String user){ return repository.getUserByName(user);}
-
 
     public void SaveUser(EditText etUser)
     {
@@ -74,22 +56,7 @@ public class moduleLogin {
     public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
     public String getIdByName(String user) { return repository.getIdByName(user);}
     public boolean isExist(String user) { return !repository.findUser(user);}
-    public void deleteAllData() { repository.deleteAllData(); }
-    public void updateLocalDB() {
-        FirebaseFirestore FireStore = FirebaseFirestore.getInstance();
 
-        FireStore.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (QueryDocumentSnapshot document : task.getResult())
-                {
-                    repository.userExistsNotLocal(document.getData().get("name").toString(), document.getData().get("email").toString());
-                    repository.addUser(document.getData().get("name").toString(), document.getData().get("password").toString(), document.getData().get("email").toString());
-                }
-            }
-        });
-
-    }
 
 
 

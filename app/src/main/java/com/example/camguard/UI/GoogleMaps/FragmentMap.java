@@ -56,6 +56,35 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
 
     private FusedLocationProviderClient fusedLocationClient;
 
+
+
+
+    ActivityResultLauncher<String[]> locationPermissionRequest =
+            registerForActivityResult(new ActivityResultContracts
+                            .RequestMultiplePermissions(), result -> {
+                        Boolean fineLocationGranted = result.getOrDefault(
+                                Manifest.permission.ACCESS_FINE_LOCATION, false);
+                        Boolean coarseLocationGranted = result.getOrDefault(
+                                Manifest.permission.ACCESS_COARSE_LOCATION,false);
+                        if (fineLocationGranted != null && fineLocationGranted && coarseLocationGranted != null && coarseLocationGranted) {
+                            //location access granted.
+
+                            if(reloadMap && module.CredentialsExist()) {
+                                Intent intent = new Intent(FragmentMap.this, MainActivity.class);
+                                startActivity(intent);
+                                reloadMap = false;
+                            }
+                        } else {
+                            // No location access granted.
+                            Intent intent = new Intent(FragmentMap.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+
+            );
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,29 +92,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
         context = getBaseContext();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        ActivityResultLauncher<String[]> locationPermissionRequest =
-                registerForActivityResult(new ActivityResultContracts
-                                .RequestMultiplePermissions(), result -> {
-                            Boolean fineLocationGranted = result.getOrDefault(
-                                    Manifest.permission.ACCESS_FINE_LOCATION, false);
-                            Boolean coarseLocationGranted = result.getOrDefault(
-                                    Manifest.permission.ACCESS_COARSE_LOCATION,false);
-                            if (fineLocationGranted != null && fineLocationGranted && coarseLocationGranted != null && coarseLocationGranted) {
-                                //location access granted.
 
-                                if(reloadMap && module.CredentialsExist()) {
-                                    Intent intent = new Intent(FragmentMap.this, MainActivity.class);
-                                    startActivity(intent);
-                                    reloadMap = false;
-                                }
-                            } else {
-                                // No location access granted.
-                                Intent intent = new Intent(FragmentMap.this, MainActivity.class);
-                                startActivity(intent);
-                            }
-                        }
-
-                );
         locationPermissionRequest.launch(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
 
 

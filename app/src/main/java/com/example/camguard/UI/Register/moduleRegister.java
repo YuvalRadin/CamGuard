@@ -43,6 +43,7 @@ public class moduleRegister {
     public boolean UserExistsNotLocal(String user, String email) { return repository.userExistsNotLocal(user,email); }
     public void addUser(String Username, String Email, String Password) { repository.addUser(Username,Email,Password);}
     public void AddUserToFireBase(String user, String email, String password) { repository.addUserToFireBase(user,email,password);}
+    public void retrieveDocs(int which, FirebaseHelper.DocsRetrievedListener callback) { repository.retrieveDocs(which, callback);}
 
     public void doesUserAndEmailExist(String user, String email, FirebaseHelper.CredentialsCheck callback) { repository.doesUserAndEmailExist(user, email, callback);}
     public Boolean CheckUps(EditText etUser, EditText etEmail, EditText etPassword, EditText etPasswordConfirmation)

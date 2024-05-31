@@ -30,6 +30,7 @@ public class ModuleUser {
     public void deleteMarkerByID(String marker) { repository.deleteMarkerByID(marker); }
 
     public void checkUserAndEmailExistence(String user, String email , FirebaseHelper.CredentialsCheck callback) {repository.checkUserAndEmailExistence(user,email,callback); }
+
     public int getReports(String user) { return repository.getReportsByID(repository.getIdByName(user));}
 
     public void DoNotRemember()

@@ -27,7 +27,7 @@ import org.w3c.dom.Text;
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     Context context;
-     Uri url;
+    Uri url;
 
     ImageView imageView;
 

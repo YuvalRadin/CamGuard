@@ -44,7 +44,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     ImageView imageView;
     Button btnSubmit;
     EditText etReport;
-    ModuleCamera module;
     Bitmap photo;
     Intent intent;
     static BottomNavigationView bottomNavigationView;
@@ -60,7 +59,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         imageView.setTag("NoPic");
         btnSubmit = findViewById(R.id.btnSubmit);
         etReport = findViewById(R.id.etReport);
-        module = new ModuleCamera(this);
 
         btnSubmit.setOnClickListener(this);
         imageView.setClickable(true);
@@ -190,7 +188,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                                    OlderGalleryResultActivity.launch(new PickVisualMediaRequest.Builder()
                                            .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                                            .build());
-                                   Log.d("Error owo", e.toString());
                                }
                            }
                         }

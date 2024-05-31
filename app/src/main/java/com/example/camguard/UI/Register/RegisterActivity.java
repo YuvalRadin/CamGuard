@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -23,10 +22,8 @@ import com.example.camguard.Data.FireBase.FirebaseHelper;
 import com.example.camguard.R;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Login.MainActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -134,7 +131,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     {
                         module.addUser(etUser.getText().toString(),etPassword.getText().toString(),etEmail.getText().toString());
                         module.AddUserToFireBase(etUser.getText().toString(),etEmail.getText().toString(),etPassword.getText().toString());
-                        CurrentUser.InitializeUser(module.getUserByName(etUser.getText().toString()).getString(1), module.getUserByName(etUser.getText().toString()).getString(3), module.getUserByName(etUser.getText().toString()).getString(0));
+                        CurrentUser.initializeUser(module.getUserByName(etUser.getText().toString()).getString(1), module.getUserByName(etUser.getText().toString()).getString(3), module.getUserByName(etUser.getText().toString()).getString(0));
                         module.SaveUser(etUser, etEmail);
                         module.RememberMe(cb.isChecked());
                         etPassword.setText("");
@@ -151,7 +148,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         etUser.setError("Username already exists");
                         if(module.UserExistsNotLocal(etUser.getText().toString(), etEmail.getText().toString()))
                         {
-                            module.addUser(etUser.getText().toString(),ExistingPassword,etEmail.getText().toString());
+                            module.retrieveDocs(1, new FirebaseHelper.DocsRetrievedListener() {
+                                @Override
+                                public void onDocsRetrieved(Task<QuerySnapshot> task) {
+                                    for (DocumentSnapshot document : task.getResult()) {
+                                        if(document.getData().get("name").toString().equals(etUser.getText().toString()))
+                                        {
+                                            ExistingPassword = document.getData().get("password").toString();
+                                            module.addUser(etUser.getText().toString(), ExistingPassword, etEmail.getText().toString());
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }
 
@@ -160,7 +168,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         etEmail.setError("Email already exists");
                         if(module.UserExistsNotLocal(etUser.getText().toString(), etEmail.getText().toString()))
                         {
-                            module.addUser(etUser.getText().toString(),ExistingPassword,etEmail.getText().toString());
+                            module.retrieveDocs(1, new FirebaseHelper.DocsRetrievedListener() {
+                                @Override
+                                public void onDocsRetrieved(Task<QuerySnapshot> task) {
+                                    for (DocumentSnapshot document : task.getResult()) {
+                                        if(document.getData().get("email").toString().equals(etEmail.getText().toString()))
+                                        {
+                                            ExistingPassword = document.getData().get("password").toString();
+                                            module.addUser(etUser.getText().toString(), ExistingPassword, etEmail.getText().toString());
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }
 

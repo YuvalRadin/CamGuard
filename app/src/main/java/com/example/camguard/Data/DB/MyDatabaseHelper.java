@@ -55,17 +55,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_NAME,null, cv);
     }
 
-    public Cursor readAllData(){
-        String query = "SELECT * FROM " + TABLE_NAME;
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = null;
-        if(db != null){
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
-
     public void updateData(String row_id, String Username, String Password, String Email){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();

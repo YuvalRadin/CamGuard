@@ -17,24 +17,14 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.Data.FireBase.FirebaseHelper;
-import com.example.camguard.Data.Repository.Repository;
 import com.example.camguard.R;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Register.RegisterActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -59,11 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         etUser =findViewById(R.id.usernameEditText);
 
         etPass = findViewById(R.id.passwordEditText);
-        etPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
         etPass.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -124,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //if username is already connected log-in immediately.
         if(module.CredentialsExist() && module.isExist(module.getCredentials()[0]))
         {
-            CurrentUser.InitializeUser(module.getCredentials()[0], module.getCredentials()[1], module.getIdByName(module.getCredentials()[0]));
+            CurrentUser.initializeUser(module.getCredentials()[0], module.getCredentials()[1], module.getIdByName(module.getCredentials()[0]));
             Intent intent = new Intent(MainActivity.this, FragmentMap.class);
             startActivity(intent);
         }
@@ -157,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         //log in the user + initialize him
                         module.RememberMe(cb.isChecked());
-                        CurrentUser.InitializeUser(module.getUserByName(user).getString(1), module.getUserByName(user).getString(3), module.getUserByName(user).getString(0));
+                        CurrentUser.initializeUser(module.getUserByName(user).getString(1), module.getUserByName(user).getString(3), module.getUserByName(user).getString(0));
                         module.SaveUser(etUser);
                         etUser.setText("");
                         etPass.setText("");

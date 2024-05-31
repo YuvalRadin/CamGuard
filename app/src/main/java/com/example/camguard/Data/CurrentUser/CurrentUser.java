@@ -15,12 +15,7 @@ public class CurrentUser {
     static String Id;
     static String FireId;
 
-    public CurrentUser()
-    {
-
-    }
-
-    public static void InitializeUser(String name, String email, String id)
+    public static void initializeUser(String name, String email, String id)
     {
         Name = name;
         Email = email;
@@ -82,7 +77,4 @@ public class CurrentUser {
         return FireId;
     }
 
-    public static void setFireId(String FireId) {
-        CurrentUser.FireId = FireId;
-    }
 }
