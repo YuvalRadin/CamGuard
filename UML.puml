@@ -1,0 +1,182 @@
+@startuml
+class moduleMap {
+~ Context context
+~ Repository repository
+~ SharedPreferences sharedPreferences
+~ SharedPreferences.Editor editor
+}
+
+class CustomInfoWindowAdapter {
+~ Context context
+~ Uri url
+~ ImageView imageView
+}
+
+class RegisterActivity {
+~ TextView tvReg
+~ EditText etUser
+~ moduleRegister module
+~ Button btnRegister
+~ CheckBox cb
+~ boolean passwordVisible
+~ String ExistingPassword
+}
+
+class CameraActivity {
+~ ImageView imageView
+~ Button btnSubmit
+~ EditText etReport
+~ ModuleCamera module
+~ Bitmap photo
+~ Intent intent
+~ {static} BottomNavigationView bottomNavigationView
+~ ActivityResultLauncher<Intent> CameraResultLauncher
+~ ActivityResultLauncher<Intent> GalleryResultLauncher
+~ ActivityResultLauncher<PickVisualMediaRequest> OlderGalleryResultActivity
+}
+
+class moduleRegister {
+~ Context context
+~ Repository repository
+~ SharedPreferences sharedPreferences
+~ SharedPreferences.Editor editor
+~ FirebaseFirestore FireStore
+}
+
+class FirebaseHelper {
+~ FirebaseFirestore FireStore
+~ FirebaseStorage FireStorage
+~ Context context
+~ MyDatabaseHelper myDatabaseHelper
+}
+
+interface FirebaseHelper$DocsRetrievedListener {
+}
+interface FirebaseHelper$SearchComplete {
+}
+interface FirebaseHelper$CredentialsCheck {
+}
+interface FirebaseHelper$markersGotten {
+}
+interface FirebaseHelper$MyPhotos {
+}
+class EnableGPSActivity {
+~ Button enable_gps_continue
+}
+
+class ModuleUser {
+~ Repository repository
+~ Context context
+~ SharedPreferences sharedPreferences
+~ SharedPreferences.Editor editor
+}
+
+class MyDatabaseHelper {
+- Context context
+- {static} String DATABASE_NAME
+- {static} int DATABASE_VERSION
+- {static} String TABLE_NAME
+- {static} String COLUMN_ID
+- {static} String COLUMN_USERNAME
+- {static} String COLUMN_PASSWORD
+- {static} String COLUMN_EMAIL
+- {static} String COLUMN_REPORTS
+}
+
+class Repository {
+~ Context context
+~ MyDatabaseHelper myDatabaseHelper
+~ FirebaseHelper myFirebaseHelper
+}
+
+class MainActivity {
+~ TextView tvReg
+~ moduleLogin module
+~ Button btnLogin
+~ boolean passwordVisible
+~ CheckBox cb
+~ EditText etUser
+}
+
+class FragmentMap {
+~ BottomNavigationView bottomNavigationView
+~ {static} GoogleMap mMap
+~ Context context
+~ LatLng latLng
+~ Bitmap reportImage
+~ moduleMap module
+~ boolean isNewReport
+~ {static} boolean reloadMap
+- FusedLocationProviderClient fusedLocationClient
+~ ActivityResultLauncher<String[]> locationPermissionRequest
+}
+
+class ModuleCamera {
+~ Repository repository
+~ Context context
+~ SharedPreferences sharedPreferences
+~ SharedPreferences.Editor editor
+}
+
+class CurrentUser {
+~ {static} String Name
+~ {static} String Email
+~ {static} String Id
+~ {static} String FireId
+}
+
+interface CurrentUser$userFound {
+}
+class AdminActivity {
+~ BottomNavigationView bottomNavigationView
+~ Button btnDeleteAllUsers
+~ EditText etDeleteUser
+~ ModuleAdmin module
+}
+
+class moduleLogin {
+~ Context context
+~ Repository repository
+~ SharedPreferences sharedPreferences
+~ SharedPreferences.Editor editor
+}
+
+class ModuleAdmin {
+~ Repository repository
+~ Context context
+~ SharedPreferences sharedPreferences
+~ SharedPreferences.Editor editor
+}
+
+class UserActivity {
+~ ModuleUser module
+~ BottomNavigationView bottomNavigationView
+~ TextView tvUsername
+~ Button btnLogout
+~ boolean passwordVisible
+}
+
+
+
+InfoWindowAdapter <|.. CustomInfoWindowAdapter
+OnClickListener <|.. RegisterActivity
+AppCompatActivity <|-- RegisterActivity
+OnClickListener <|.. CameraActivity
+AppCompatActivity <|-- CameraActivity
+FirebaseHelper +.. FirebaseHelper$DocsRetrievedListener
+FirebaseHelper +.. FirebaseHelper$SearchComplete
+FirebaseHelper +.. FirebaseHelper$CredentialsCheck
+FirebaseHelper +.. FirebaseHelper$markersGotten
+FirebaseHelper +.. FirebaseHelper$MyPhotos
+AppCompatActivity <|-- EnableGPSActivity
+SQLiteOpenHelper <|-- MyDatabaseHelper
+OnClickListener <|.. MainActivity
+AppCompatActivity <|-- MainActivity
+OnMapReadyCallback <|.. FragmentMap
+AppCompatActivity <|-- FragmentMap
+CurrentUser +.. CurrentUser$userFound
+OnClickListener <|.. AdminActivity
+AppCompatActivity <|-- AdminActivity
+OnClickListener <|.. UserActivity
+AppCompatActivity <|-- UserActivity
+@enduml
