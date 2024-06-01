@@ -114,7 +114,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     String UserToDelete = module.getUserByName(etDeleteUser.getText().toString()).getString(0);
                     module.deleteOneRow(UserToDelete);
-                    module.deleteFireStoreUser(CurrentUser.getName());
+                    module.deleteFireStoreUser(etDeleteUser.getText().toString());
                 }
             } else {
                 Toast.makeText(this, "User Does Not Exist!", Toast.LENGTH_SHORT).show();
