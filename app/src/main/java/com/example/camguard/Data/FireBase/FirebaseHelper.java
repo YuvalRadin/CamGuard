@@ -541,7 +541,29 @@ public class FirebaseHelper {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if (document.getData().get("name").toString().equals(user)) {
-                            FireStore.collection("users").document(document.getId()).update(newUser);
+                            FireStore.collection("users").document(document.getId()).update(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful())
+                                    {
+                                        retrieveDocs(2, new DocsRetrievedListener() {
+                                            @Override
+                                            public void onDocsRetrieved(Task<QuerySnapshot> task) {
+                                                if(task.isSuccessful())
+                                                {
+                                                    for (DocumentSnapshot document : task.getResult())
+                                                    {
+                                                        if(document.getData().get("Reporter").toString().equals(user))
+                                                        {
+                                                            FireStore.collection("markers").document(document.getId()).update("Reporter", upUser);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
                         }
                     }
                 }

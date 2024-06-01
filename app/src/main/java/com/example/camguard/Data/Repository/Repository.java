@@ -117,6 +117,16 @@ public class Repository {
     }
 
     /**
+     * Retrieves a user from the SQLite database by email.
+     *
+     * @param email The email to search for.
+     * @return A cursor pointing to the retrieved user.
+     */
+    public Cursor getUserByEmail(String email) {
+        return myDatabaseHelper.getUserByEmail(email);
+    }
+
+    /**
      * Retrieves the number of reports for a user by their ID.
      *
      * @param ID The user's ID.

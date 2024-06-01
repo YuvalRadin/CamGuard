@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat;
 import com.example.camguard.Data.CurrentUser.CurrentUser;
 import com.example.camguard.Data.FireBase.FirebaseHelper;
 import com.example.camguard.R;
+import com.example.camguard.UI.Admin.ModuleAdmin;
 import com.example.camguard.UI.GoogleMaps.FragmentMap;
 import com.example.camguard.UI.Register.RegisterActivity;
 
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Initializing the login module
         module = new moduleLogin(this);
+
 
         // Asking for location permission
         ActivityResultLauncher<String[]> locationPermissionRequest =

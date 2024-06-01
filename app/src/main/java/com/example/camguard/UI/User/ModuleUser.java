@@ -185,15 +185,6 @@ public class ModuleUser {
             return false;
         }
 
-        // Username & Email Availability checks
-        if (!(repository.findUser(etUser.getText().toString())) && !etUser.getText().toString().equals(CurrentUser.getName())) {
-            etUser.setError("Username already exists");
-            return false;
-        }
-        if (!(repository.findEmail(etEmail.getText().toString())) && !etEmail.getText().toString().equals(CurrentUser.getEmail())) {
-            etEmail.setError("Email already exists");
-            return false;
-        }
 
         return true;
     }

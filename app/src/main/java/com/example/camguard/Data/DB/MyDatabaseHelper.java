@@ -241,6 +241,19 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getUserByEmail(String email) {
+        Cursor cursor;
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM "+ TABLE_NAME + " WHERE " + COLUMN_EMAIL + " = ?";
+
+        cursor = db.rawQuery(query, new String[]{email});
+        if(cursor == null) {
+            return null;
+        }
+        cursor.moveToFirst();
+        return cursor;
+    }
+
     /**
      * Increases the number of reports associated with a user identified by their ID.
      * @param id The ID of the user.

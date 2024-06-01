@@ -167,10 +167,10 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                     nameU = upname.getText().toString();
                     passU = uppass.getText().toString();
 
-                    if(!module.CheckUps(upname, upmail,uppass))
-                    {
-                        return;
-                    }
+                        if (!module.CheckUps(upname, upmail, uppass)) {
+                            return;
+                        }
+
                     module.checkUserAndEmailExistence(nameU, mailU, new FirebaseHelper.CredentialsCheck() {
                         @Override
                         public void onCredentialsCheckComplete(boolean doesUserExist, boolean doesEmailExist) {
