@@ -2,6 +2,7 @@ package com.example.camguard.UI.Login;
 
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -104,7 +106,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Initializing the login module
         module = new moduleLogin(this);
-
+        ProgressDialog pd = new ProgressDialog(this);
+        pd.setTitle("Loading Info");
+        pd.setCancelable(false);
+        pd.show();
+        module.deleteAllSQLData();
+        module.updateAllSQLData(pd);
 
         // Asking for location permission
         ActivityResultLauncher<String[]> locationPermissionRequest =

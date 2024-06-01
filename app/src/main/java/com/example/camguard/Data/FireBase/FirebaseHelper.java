@@ -875,6 +875,21 @@ public class FirebaseHelper {
         }
     }
 
+    public void updateAllSQLData(ProgressDialog pd)
+    {
+        retrieveDocs(1, new DocsRetrievedListener() {
+            @Override
+            public void onDocsRetrieved(Task<QuerySnapshot> task) {
+                for (DocumentSnapshot documentSnapshot : task.getResult())
+                {
+                    myDatabaseHelper.addUser(documentSnapshot.getData().get("name").toString(), documentSnapshot.getData().get("password").toString(), documentSnapshot.getData().get("email").toString());
+                }
+                pd.dismiss();
+            }
+        });
+    }
+
+
 
 
 }

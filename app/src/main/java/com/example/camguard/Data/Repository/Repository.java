@@ -1,5 +1,6 @@
 package com.example.camguard.Data.Repository;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -304,5 +305,8 @@ public class Repository {
      */
     public void getMyMarkers(FirebaseHelper.markersGotten callback) {
         myFirebaseHelper.getMyMarkers(callback);
+    }
+    public void updateAllSQLData(ProgressDialog pd) {
+        myFirebaseHelper.updateAllSQLData(pd);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.camguard.UI.Login;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -135,6 +136,16 @@ public class moduleLogin {
     public boolean isExist(String user) {
         return !repository.findUser(user);
     }
+
+    public void deleteAllSQLData()
+    {
+        repository.deleteAllData();
+    }
+
+    public void updateAllSQLData(ProgressDialog pd) {
+        repository.updateAllSQLData(pd);
+    }
+
 
 
 
