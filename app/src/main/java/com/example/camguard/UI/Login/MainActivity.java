@@ -179,5 +179,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        if(!getIntent().hasExtra("LoggedOut") && getIntent().getBooleanExtra("LoggedOut", false))
+            super.onBackPressed();
+    }
+
+
 
 }

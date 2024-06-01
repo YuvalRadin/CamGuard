@@ -155,15 +155,15 @@ public class moduleRegister {
             return false;
         }
 
-        // Username & Email availability checks
-        if (!(repository.findUser(etUser.getText().toString()))) {
-            etUser.setError("Username already exists");
-            return false;
-        }
-        if (!(repository.findEmail(etEmail.getText().toString()))) {
-            etEmail.setError("Email already exists");
-            return false;
-        }
+//        // Username & Email availability checks
+//        if (!(repository.findUser(etUser.getText().toString()))) {
+//            etUser.setError("Username already exists");
+//            return false;
+//        }
+//        if (!(repository.findEmail(etEmail.getText().toString()))) {
+//            etEmail.setError("Email already exists");
+//            return false;
+//        }
 
         return true;
     }

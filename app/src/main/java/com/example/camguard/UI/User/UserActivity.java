@@ -120,7 +120,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
             // Logout user and navigate to MainActivity
             module.DoNotRemember();
             Intent intent = new Intent(UserActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra("LoggedOut", true);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         } else if (view == btnEdit) {
             // Open a dialog for user profile editing
