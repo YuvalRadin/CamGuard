@@ -2,17 +2,21 @@ package com.example.camguard.UI.GoogleMaps;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.camguard.Data.CurrentUser.CurrentUser;
@@ -53,32 +57,10 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
     private Bitmap reportImage;
     private moduleMap module;
     private boolean isNewReport;
-    private static boolean reloadMap = true;
 
     // Location provider client
     private FusedLocationProviderClient fusedLocationClient;
 
-    // Activity result launcher for location permission request
-    private ActivityResultLauncher<String[]> locationPermissionRequest =
-            registerForActivityResult(new ActivityResultContracts
-                    .RequestMultiplePermissions(), result -> {
-                Boolean fineLocationGranted = result.getOrDefault(
-                        Manifest.permission.ACCESS_FINE_LOCATION, false);
-                Boolean coarseLocationGranted = result.getOrDefault(
-                        Manifest.permission.ACCESS_COARSE_LOCATION,false);
-                if (fineLocationGranted != null && fineLocationGranted && coarseLocationGranted != null && coarseLocationGranted) {
-                    // Location access granted
-                    if(reloadMap && module.CredentialsExist()) {
-                        Intent intent = new Intent(FragmentMap.this, MainActivity.class);
-                        startActivity(intent);
-                        reloadMap = false;
-                    }
-                } else {
-                    // No location access granted
-                    Intent intent = new Intent(FragmentMap.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            });
 
     /**
      * Initializes the activity when created.
@@ -93,13 +75,8 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
 
         // Initialize UI elements
         FragmentManager fragmentManager = getSupportFragmentManager();
-        locationPermissionRequest.launch(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        // Check if GPS is enabled
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            startActivity(new Intent(FragmentMap.this, EnableGPSActivity.class));
-        }
+        checkLocationPermission();
 
         module = new moduleMap(this);
 
@@ -214,6 +191,50 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
                         module.AddReport(latLng, getIntent().getStringExtra("Description"), reportImage, mMap);
                     }
                 });
+    }
+
+    AlertDialog.Builder locationAlert;
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Show an explanation to the user asynchronously -- don't block
+            // this thread waiting for the user's response! After the user
+            // sees the explanation, try again to request the permission.
+            String title = "Location Settings";
+            String text = "Please enable us to use your location in order for the app to function";
+            locationAlert = new AlertDialog.Builder(this);
+            locationAlert
+                    .setTitle(title)
+                    .setMessage(text)
+                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // Prompt the user once explanation has been shown
+
+                            startActivity(
+                                    new Intent(
+                                            android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                            Uri.fromParts("package", getPackageName(), null)
+                                    )
+                            );
+                        }
+                    })
+                    .create()
+                    .show();
+
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        if(checkLocationPermission())
+        {
+            startActivity(new Intent(FragmentMap.this, FragmentMap.class));
+        }
     }
 
 }

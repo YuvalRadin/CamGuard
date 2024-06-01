@@ -200,5 +200,13 @@ public class moduleRegister {
         return repository.getUserByName(user);
     }
 
+    public boolean findUser(String user) {
+        return repository.findUser(user);
+    }
+
+    public boolean findEmail(String email) {
+        return repository.findEmail(email);
+    }
+
 
 }

@@ -65,7 +65,9 @@ public class moduleMap {
      * @return True if the 'Remember' flag is set, false otherwise.
      */
     public boolean DoesRemember() {
+        if(sharedPreferences !=null)
         return sharedPreferences.getBoolean("Remember", false);
+        else return false;
     }
 
     /**
@@ -117,5 +119,8 @@ public class moduleMap {
     public void retrieveDocs(int which, FirebaseHelper.DocsRetrievedListener callback) {
         repository.retrieveDocs(which, callback);
     }
+
+
+
 
 }

@@ -166,7 +166,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     for (DocumentSnapshot document : task.getResult()) {
                                         if(document.getData().get("name").toString().equals(etUser.getText().toString())) {
                                             ExistingPassword = document.getData().get("password").toString();
-                                            module.addUser(etUser.getText().toString(), ExistingPassword, etEmail.getText().toString());
+                                            if (module.findUser(etUser.getText().toString())) {
+                                                module.addUser(etUser.getText().toString(), ExistingPassword, etEmail.getText().toString());
+                                            }
+                                            else etUser.setError("User Already Exists");
                                         }
                                     }
                                 }
@@ -184,7 +187,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     for (DocumentSnapshot document : task.getResult()) {
                                         if(document.getData().get("email").toString().equals(etEmail.getText().toString())) {
                                             ExistingPassword = document.getData().get("password").toString();
-                                            module.addUser(etUser.getText().toString(), ExistingPassword, etEmail.getText().toString());
+                                            if (module.findEmail(etEmail.getText().toString())) {
+                                                module.addUser(etUser.getText().toString(), ExistingPassword, etEmail.getText().toString());
+                                            }
+                                            else etEmail.setError("Email Already Exists");
                                         }
                                     }
                                 }
