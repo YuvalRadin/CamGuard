@@ -28,50 +28,72 @@ import com.example.camguard.UI.Register.RegisterActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    /**
+     * TextView for the registration link.
+     */
     TextView tvReg;
+
+    /**
+     * Object for handling login functionalities.
+     */
     moduleLogin module;
+
+    /**
+     * Button for login.
+     */
     Button btnLogin;
+
+    /**
+     * Boolean flag indicating password visibility.
+     */
     boolean passwordVisible = false;
+
+    /**
+     * CheckBox for the "Remember Me" option.
+     */
     CheckBox cb;
-    EditText etUser, etPass;
+
+    /**
+     * EditText for username input.
+     */
+    EditText etUser;
+
+    /**
+     * EditText for password input.
+     */
+    EditText etPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initializing UI components
         tvReg = findViewById(R.id.registerText);
         tvReg.setOnClickListener(this);
 
         btnLogin = findViewById(R.id.loginButton);
         btnLogin.setOnClickListener(this);
 
-        etUser =findViewById(R.id.usernameEditText);
+        etUser = findViewById(R.id.usernameEditText);
 
         etPass = findViewById(R.id.passwordEditText);
         etPass.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 final int DRAWABLE_RIGHT = 2;
-                if(motionEvent.getAction() == MotionEvent.ACTION_UP)
-                {
-                    if(motionEvent.getRawX() >= (etPass.getRight() - etPass.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()))
-                    {
-                        if(passwordVisible)
-                        {
-                            etPass.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_baseline_visibility,0);
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if (motionEvent.getRawX() >= (etPass.getRight() - etPass.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (passwordVisible) {
+                            etPass.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_visibility, 0);
                             etPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
                             passwordVisible = false;
-
-                        } else
-                        {
-                            etPass.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_baseline_visibility_on,0);
+                        } else {
+                            etPass.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_visibility_on, 0);
                             etPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                             passwordVisible = true;
-
                         }
                     }
-
                 }
                 return false;
             }
@@ -79,87 +101,80 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         cb = findViewById(R.id.rememberMeCheckbox);
 
-
+        // Initializing the login module
         module = new moduleLogin(this);
 
-
-        //Asking if Location Permission is Granted
+        // Asking for location permission
         ActivityResultLauncher<String[]> locationPermissionRequest =
-                registerForActivityResult(new ActivityResultContracts
-                                .RequestMultiplePermissions(), result -> {
-                            Boolean fineLocationGranted = result.getOrDefault(
-                                    Manifest.permission.ACCESS_FINE_LOCATION, false);
-                            Boolean coarseLocationGranted = result.getOrDefault(
-                                    Manifest.permission.ACCESS_COARSE_LOCATION,false);
-                            if (fineLocationGranted != null && fineLocationGranted) {
-                                // Precise location access granted.
-                            } else if (coarseLocationGranted != null && coarseLocationGranted) {
-                                // Only approximate location access granted.
-                            } else {
-                                // No location access granted.
-                            }
-                        }
-                );
-        //If not granted asking for permission:
-        locationPermissionRequest.launch(new String[] {
+                registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+                    Boolean fineLocationGranted = result.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
+                    Boolean coarseLocationGranted = result.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false);
+                    if (fineLocationGranted != null && fineLocationGranted) {
+                        // Precise location access granted.
+                    } else if (coarseLocationGranted != null && coarseLocationGranted) {
+                        // Only approximate location access granted.
+                    } else {
+                        // No location access granted.
+                    }
+                });
+
+        // Requesting location permissions if not granted
+        locationPermissionRequest.launch(new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
         });
 
-        //if username is already connected log-in immediately.
-        if(module.CredentialsExist() && module.isExist(module.getCredentials()[0]))
-        {
+        // Automatically logging in if user credentials exist and are valid
+        if (module.CredentialsExist() && module.isExist(module.getCredentials()[0])) {
             CurrentUser.initializeUser(module.getCredentials()[0], module.getCredentials()[1], module.getIdByName(module.getCredentials()[0]));
             Intent intent = new Intent(MainActivity.this, FragmentMap.class);
             startActivity(intent);
         }
-
     }
 
     @Override
     public void onClick(View view) {
-
-        if(view == btnLogin)
-        {
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
+        if (view == btnLogin) {
+            // Check if location permissions are granted
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Location is not enabled - can't proceed", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            // Intent for navigating to the map fragment
             Intent intent = new Intent(MainActivity.this, FragmentMap.class);
 
-            //checking if user exists in firebase
+            // Check if user exists in Firebase
             module.doesUserExist(etUser.getText().toString(), etPass.getText().toString(), new FirebaseHelper.SearchComplete() {
                 @Override
                 public void onSearchComplete(String user, String email, String password, boolean doesExist) {
-                    //after the search is complete checking if he found one
-                    if(doesExist)
-                    {
-                        //if search was completed but he does not exist in local database add him
+                    // After the search is complete, check if user exists
+                    if (doesExist) {
+                        // If the user exists in Firebase but not locally, add them
                         if (module.UserExistsNotLocal(etUser.getText().toString(), etPass.getText().toString())) {
                             module.addUser(user, password, email);
                         }
 
-                        //log in the user + initialize him
+                        // Log in the user and initialize them
                         module.RememberMe(cb.isChecked());
                         CurrentUser.initializeUser(module.getUserByName(user).getString(1), module.getUserByName(user).getString(3), module.getUserByName(user).getString(0));
                         module.SaveUser(etUser);
                         etUser.setText("");
                         etPass.setText("");
                         startActivity(intent);
+                    } else {
+                        Toast.makeText(MainActivity.this, "User was not found", Toast.LENGTH_SHORT).show();
                     }
-                    else Toast.makeText(MainActivity.this, "User was not found", Toast.LENGTH_SHORT).show();
                 }
-
             });
         }
 
-        if(view == tvReg)
-        {
+        if (view == tvReg) {
+            // Intent for navigating to the registration activity
             Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivity(intent);
         }
-
     }
 
 

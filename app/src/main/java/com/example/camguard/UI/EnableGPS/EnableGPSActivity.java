@@ -21,6 +21,11 @@ public class EnableGPSActivity extends AppCompatActivity {
 
     Button enable_gps_continue;
 
+    /**
+     * Initializes the activity when created.
+     *
+     * @param savedInstanceState The saved instance state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,29 +35,34 @@ public class EnableGPSActivity extends AppCompatActivity {
         enable_gps_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //send to settings
+                // Send to settings to enable GPS
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
             }
         });
     }
 
+    /**
+     * Handles the activity when it is restarted.
+     */
     @Override
     protected void onRestart() {
         super.onRestart();
 
-        //check if GPS is On
-        if (isGPSEnabled())
-        {
+        // Check if GPS is enabled
+        if (isGPSEnabled()) {
             Intent intent = new Intent(EnableGPSActivity.this, FragmentMap.class);
             startActivity(intent);
-        }
-        else {
+        } else {
             Toast.makeText(this, "Enable Location", Toast.LENGTH_SHORT).show();
         }
     }
 
+    /**
+     * Checks if GPS is enabled.
+     *
+     * @return True if GPS is enabled, false otherwise.
+     */
     private boolean isGPSEnabled() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);

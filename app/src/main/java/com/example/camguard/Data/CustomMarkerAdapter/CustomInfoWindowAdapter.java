@@ -26,24 +26,42 @@ import org.w3c.dom.Text;
 
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
+    // Context reference for accessing resources and system services
     Context context;
+
+    // URI for the image URL
     Uri url;
 
+    // ImageView for displaying marker image
     ImageView imageView;
 
-    public CustomInfoWindowAdapter(Context context, Uri url)
-    {
+    /**
+     * Constructor for CustomInfoWindowAdapter.
+     * @param context The context of the calling activity or fragment.
+     * @param url The URI of the marker image.
+     */
+    public CustomInfoWindowAdapter(Context context, Uri url) {
         this.context = context;
         this.url = Uri.parse(url.toString());
+
+        // Inflate the custom info window layout and initialize ImageView
         View view = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
         this.imageView = view.findViewById(R.id.MarkerImage);
-
     }
 
+    /**
+     * Retrieves the ImageView associated with the custom info window layout.
+     * @return The ImageView associated with the custom info window.
+     */
     public ImageView getImageView() {
         return imageView;
     }
 
+    /**
+     * Called when the contents of the InfoWindow are requested.
+     * @param marker The marker for which the InfoWindow is being populated.
+     * @return The contents of the InfoWindow as a View.
+     */
     @Nullable
     @Override
     public View getInfoContents(@NonNull Marker marker) {
@@ -52,41 +70,50 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         return view;
     }
 
-
+    /**
+     * Called when the entire InfoWindow is requested.
+     * @param marker The marker for which the InfoWindow is being populated.
+     * @return The entire InfoWindow as a View.
+     */
     @Nullable
     @Override
     public View getInfoWindow(@NonNull Marker marker) {
         // Inflate the custom info window layout
         View view = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null);
 
-//         Customize the content of the info window
+        // Retrieve references to views within the custom info window layout
         ImageView imageView = view.findViewById(R.id.MarkerImage);
-
-        Glide.with(context).load(marker.getTag().toString()).placeholder(context.getDrawable(R.drawable.ic_camera)).centerCrop().listener(new RequestListener<Drawable>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                Log.e("ImageLoading", "Image load failed: " + e.getMessage());
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                Log.d("ImageLoading", "Image load successful " + url.getLastPathSegment().toString());
-                imageView.setImageDrawable(resource);
-
-                return false;
-            }
-        }).into(imageView);
-
-
         TextView textView = view.findViewById(R.id.info_window_text);
-        textView.setText(marker.getTitle());
-
         TextView textView2 = view.findViewById(R.id.report_id);
-        textView2.append(marker.getSnippet().toString().substring(0, marker.getSnippet().indexOf(" ")));
+        TextView textView3 = view.findViewById(R.id.tvReporter);
 
-        TextView textview3 = view.findViewById(R.id.tvReporter);
-        textview3.setText(marker.getSnippet().substring(marker.getSnippet().indexOf(" ")+1));
+        // Load marker image using Glide library
+        Glide.with(context)
+                .load(marker.getTag().toString())
+                .placeholder(context.getDrawable(R.drawable.ic_camera))
+                .centerCrop()
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        // Log error if image loading fails
+                        Log.e("ImageLoading", "Image load failed: " + e.getMessage());
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        // Log success and set the image drawable
+                        Log.d("ImageLoading", "Image load successful " + url.getLastPathSegment().toString());
+                        imageView.setImageDrawable(resource);
+                        return false;
+                    }
+                })
+                .into(imageView);
+
+        // Set text for other views in the info window
+        textView.setText(marker.getTitle());
+        textView2.append(marker.getSnippet().toString().substring(0, marker.getSnippet().indexOf(" ")));
+        textView3.setText(marker.getSnippet().substring(marker.getSnippet().indexOf(" ") + 1));
 
         return view;
     }

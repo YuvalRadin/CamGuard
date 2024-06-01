@@ -17,45 +17,124 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class moduleLogin {
 
-    Context context;
-    Repository repository;
-    SharedPreferences sharedPreferences;
+    private Context context;
+    private Repository repository;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
-    SharedPreferences.Editor editor;
-
-
-    public moduleLogin(Context context)
-    {
+    /**
+     * Constructor for the moduleLogin class.
+     *
+     * @param context The context of the calling activity.
+     */
+    public moduleLogin(Context context) {
         this.context = context;
         repository = new Repository(this.context);
         sharedPreferences = context.getSharedPreferences("Main", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
 
-    public void doesUserExist(String user, String password, FirebaseHelper.SearchComplete callback) { repository.doesUserExist(user, password, callback);}
+    /**
+     * Checks if the user exists in Firebase authentication.
+     *
+     * @param user     The username to check.
+     * @param password The password to check.
+     * @param callback Callback interface for handling search completion.
+     */
+    public void doesUserExist(String user, String password, FirebaseHelper.SearchComplete callback) {
+        repository.doesUserExist(user, password, callback);
+    }
 
-    public void addUser(String Username, String Password, String Email) { repository.addUser(Username,Password,Email);}
-    public boolean UserExistsNotLocal(String user, String email) { return repository.userExistsNotLocal(user,email); }
+    /**
+     * Adds a new user to the Firebase database.
+     *
+     * @param Username The username of the new user.
+     * @param Password The password of the new user.
+     * @param Email    The email address of the new user.
+     */
+    public void addUser(String Username, String Password, String Email) {
+        repository.addUser(Username, Password, Email);
+    }
 
-    public void RememberMe(boolean flag){
+    /**
+     * Checks if the user exists in Firebase but not locally.
+     *
+     * @param user  The username to check.
+     * @param email The email address to check.
+     * @return True if the user exists in Firebase but not locally, false otherwise.
+     */
+    public boolean UserExistsNotLocal(String user, String email) {
+        return repository.userExistsNotLocal(user, email);
+    }
+
+    /**
+     * Sets the "Remember" flag in SharedPreferences.
+     *
+     * @param flag The boolean value to set for the "Remember" flag.
+     */
+    public void RememberMe(boolean flag) {
         editor.putBoolean("Remember", flag);
         editor.apply();
     }
-    public Cursor getUserByName(String user){ return repository.getUserByName(user);}
 
-    public void SaveUser(EditText etUser)
-    {
+    /**
+     * Retrieves user data from the database by username.
+     *
+     * @param user The username of the user to retrieve.
+     * @return A Cursor object containing the user data.
+     */
+    public Cursor getUserByName(String user) {
+        return repository.getUserByName(user);
+    }
+
+    /**
+     * Saves user data in SharedPreferences.
+     *
+     * @param etUser The EditText view containing the username.
+     */
+    public void SaveUser(EditText etUser) {
         editor.putString("username", etUser.getText().toString());
         editor.putString("email", getUserByName(etUser.getText().toString()).getString(3));
         editor.apply();
     }
-    public boolean CredentialsExist()
-        {
-            return sharedPreferences.contains("username");
-        }
-    public String[] getCredentials() { return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")}; }
-    public String getIdByName(String user) { return repository.getIdByName(user);}
-    public boolean isExist(String user) { return !repository.findUser(user);}
+
+    /**
+     * Checks if user credentials exist in SharedPreferences.
+     *
+     * @return True if user credentials exist, false otherwise.
+     */
+    public boolean CredentialsExist() {
+        return sharedPreferences.contains("username");
+    }
+
+    /**
+     * Retrieves user credentials from SharedPreferences.
+     *
+     * @return An array containing the username and email address.
+     */
+    public String[] getCredentials() {
+        return new String[]{sharedPreferences.getString("username", ""), sharedPreferences.getString("email", "")};
+    }
+
+    /**
+     * Retrieves the user ID from the database by username.
+     *
+     * @param user The username of the user.
+     * @return The ID of the user.
+     */
+    public String getIdByName(String user) {
+        return repository.getIdByName(user);
+    }
+
+    /**
+     * Checks if the user exists in the local database.
+     *
+     * @param user The username to check.
+     * @return True if the user exists in the local database, false otherwise.
+     */
+    public boolean isExist(String user) {
+        return !repository.findUser(user);
+    }
 
 
 

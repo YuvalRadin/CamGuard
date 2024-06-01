@@ -41,6 +41,7 @@ import io.grpc.Context;
 
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
 
+    // Instance variables
     ImageView imageView;
     Button btnSubmit;
     EditText etReport;
@@ -48,45 +49,43 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     Intent intent;
     static BottomNavigationView bottomNavigationView;
 
-
+    /**
+     * Initializes the activity when created.
+     *
+     * @param savedInstanceState The saved instance state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-
+        // Initialize views
         imageView = findViewById(R.id.ivCamera);
         imageView.setTag("NoPic");
         btnSubmit = findViewById(R.id.btnSubmit);
         etReport = findViewById(R.id.etReport);
 
+        // Set click listeners
         btnSubmit.setOnClickListener(this);
         imageView.setClickable(true);
         imageView.setOnClickListener(this);
 
-
-
+        // Initialize and customize the bottom navigation view
         bottomNavigationView = findViewById(R.id.bottom_navigation);
-        if(CurrentUser.getEmail().equals("s16131@nhs.co.il"))
-        {
-                    bottomNavigationView.getMenu().clear();
-                    bottomNavigationView.inflateMenu(R.menu.admin_bottom_navigation_menu);
+        if (CurrentUser.getEmail().equals("s16131@nhs.co.il")) {
+            bottomNavigationView.getMenu().clear();
+            bottomNavigationView.inflateMenu(R.menu.admin_bottom_navigation_menu);
         }
 
-
+        // Handle bottom navigation view item selection
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            if(item.getItemId() == R.id.menu_account)
-            {
+            if (item.getItemId() == R.id.menu_account) {
                 intent = new Intent(CameraActivity.this, UserActivity.class);
                 startActivity(intent);
-            }
-            else if(item.getItemId() == R.id.menu_map)
-            {
+            } else if (item.getItemId() == R.id.menu_map) {
                 Intent intent = new Intent(CameraActivity.this, FragmentMap.class);
                 startActivity(intent);
-            }
-            else if(item.getItemId() == R.id.menu_admin)
-            {
+            } else if (item.getItemId() == R.id.menu_admin) {
                 intent = new Intent(CameraActivity.this, AdminActivity.class);
                 startActivity(intent);
             }
@@ -94,6 +93,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         });
         bottomNavigationView.setSelectedItemId(R.id.menu_camera);
     }
+
+    // Activity result launcher for camera
     ActivityResultLauncher<Intent> CameraResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -105,18 +106,17 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         imageView.setImageBitmap(photo);
                         imageView.setTag("Pic");
 
-
+                        // Resize image view
                         int height = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 320)));
                         int width = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 240)));
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width,height);
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
                         params.addRule(RelativeLayout.CENTER_HORIZONTAL);
                         imageView.setLayoutParams(params);
-
                     }
                 }
             });
 
-
+    // Activity result launcher for gallery
     ActivityResultLauncher<Intent> GalleryResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -124,30 +124,30 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         // There are no request codes
-                        if(!getContentResolver().getType((result.getData().getData())).startsWith("image/"))
-                        {
+                        if (!getContentResolver().getType((result.getData().getData())).startsWith("image/")) {
                             Toast.makeText(CameraActivity.this, "Images only!", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                            Uri uriPhoto = result.getData().getData();
-                            imageView.setImageURI(uriPhoto);
+                        Uri uriPhoto = result.getData().getData();
+                        imageView.setImageURI(uriPhoto);
                         try {
-                            photo = Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), uriPhoto),240,320, false);
+                            photo = Bitmap.createScaledBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), uriPhoto), 240, 320, false);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                         imageView.setTag("Pic");
 
-
+                        // Resize image view
                         int height = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 320)));
                         int width = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 240)));
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width,height);
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
                         params.addRule(RelativeLayout.CENTER_HORIZONTAL);
                         imageView.setLayoutParams(params);
-
                     }
                 }
             });
+
+    // Activity result launcher for older versions of gallery
     ActivityResultLauncher<PickVisualMediaRequest> OlderGalleryResultActivity =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                 if (uri != null) {
@@ -160,7 +160,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     }
                     imageView.setTag("Pic");
 
-
+                    // Resize image view
                     int height = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 320)));
                     int width = Integer.parseInt(String.valueOf(Math.round(getBaseContext().getResources().getDisplayMetrics().density * 240)));
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
@@ -170,26 +170,29 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             });
 
 
+    /**
+     * Handles click events for buttons and image view.
+     *
+     * @param view The clicked view.
+     */
     @Override
     public void onClick(View view) {
-        if(view == imageView)
-        {
+        if (view == imageView) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setMessage("Which way would you prefer")
                     .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                           if(ActivityCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                               Intent galleryIntent = new Intent(MediaStore.ACTION_PICK_IMAGES);
-                               try {
-                               GalleryResultLauncher.launch(galleryIntent);
-                               } catch (Exception e)
-                               {
-                                   OlderGalleryResultActivity.launch(new PickVisualMediaRequest.Builder()
-                                           .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                                           .build());
-                               }
-                           }
+                            if (ActivityCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                Intent galleryIntent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+                                try {
+                                    GalleryResultLauncher.launch(galleryIntent);
+                                } catch (Exception e) {
+                                    OlderGalleryResultActivity.launch(new PickVisualMediaRequest.Builder()
+                                            .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                                            .build());
+                                }
+                            }
                         }
                     })
                     .setNegativeButton("Camera", new DialogInterface.OnClickListener() {
@@ -197,21 +200,15 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             CameraResultLauncher.launch(cameraIntent);
-
-
                         }
                     }).show();
-
         }
-        if(view == btnSubmit)
-        {
-            if(imageView.getTag().equals("NoPic"))
-            {
+        if (view == btnSubmit) {
+            if (imageView.getTag().equals("NoPic")) {
                 Toast.makeText(this, "you must add a picture before submitting!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if(etReport.getText().toString().isEmpty())
-            {
+            if (etReport.getText().toString().isEmpty()) {
                 etReport.setError("you must add a description");
                 return;
             }
