@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:hint="description"
                 android:layout_margin="25dp"
+                android:maxLength="250"
                 android:layout_below="@id/ivCamera"
                 />
 

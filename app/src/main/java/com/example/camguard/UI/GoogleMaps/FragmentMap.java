@@ -205,6 +205,7 @@ public class FragmentMap extends AppCompatActivity implements OnMapReadyCallback
             locationAlert
                     .setTitle(title)
                     .setMessage(text)
+                    .setCancelable(false)
                     .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {

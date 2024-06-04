@@ -10,6 +10,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:gravity="center"
+        android:maxLength="14"
         android:hint="Name"/>
 
     <EditText
@@ -19,6 +20,7 @@
         android:layout_below="@id/editTextName"
         android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:maxLength="30"
         android:layout_marginTop="16dp"
         android:hint="Email"/>
 
@@ -32,6 +34,7 @@
         android:layout_marginTop="16dp"
         android:drawableRight="@drawable/ic_baseline_visibility"
         android:hint="Password"
+        android:maxLength="14"
         android:inputType="textPassword"/>
 
     <LinearLayout

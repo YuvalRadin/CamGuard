@@ -94,9 +94,16 @@ public class moduleLogin {
      * @param etUser The EditText view containing the username.
      */
     public void SaveUser(EditText etUser) {
-        editor.putString("username", etUser.getText().toString());
-        editor.putString("email", getUserByName(etUser.getText().toString()).getString(3));
-        editor.apply();
+        if(!etUser.getText().toString().contains("@")) {
+            editor.putString("username", etUser.getText().toString());
+            editor.putString("email", getUserByName(etUser.getText().toString()).getString(3));
+            editor.apply();
+        }
+        else {
+            editor.putString("username", repository.getUserByEmail(etUser.getText().toString()).getString(1));
+            editor.putString("email", etUser.getText().toString());
+            editor.apply();
+        }
     }
 
     /**
